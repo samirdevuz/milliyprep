@@ -28,7 +28,7 @@ export async function sendEmailCode(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: process.env.MAIL_FROM ?? "MilliyPrep <no-reply@milliyprep.uz>",
+          from: process.env.MAIL_FROM ?? "MilliyPrep <no-reply@milliyprep.xyz>",
           to: email,
           subject: "MilliyPrep tasdiqlash kodi",
           text: `Tasdiqlash kodingiz: ${code}\nKod 10 daqiqa amal qiladi.`,

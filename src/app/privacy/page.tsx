@@ -28,7 +28,7 @@ export default function PrivacyPage() {
           </p>
           <p>
             Ma&apos;lumotlaringizni yangilash yoki o&apos;chirish bo&apos;yicha
-            so&apos;rovlar uchun salom@milliyprep.uz manziliga yozing.
+            so&apos;rovlar uchun salom@milliyprep.xyz manziliga yozing.
           </p>
         </div>
       </div>

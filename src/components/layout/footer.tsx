@@ -16,7 +16,7 @@ const COLUMNS = [
     links: [
       { href: "/about", label: "Biz haqimizda" },
       { href: "/blog", label: "Blog" },
-      { href: "mailto:salom@milliyprep.uz", label: "Aloqa" },
+      { href: "mailto:salom@milliyprep.xyz", label: "Aloqa" },
     ],
   },
   {

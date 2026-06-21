@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   },
   description:
     "Sun'iy intellektga asoslangan shaxsiy o'quv reja, minglab mashq savollari va real imtihonga yaqin testlar. DTM va Milliy Sertifikat uchun bir joyda.",
-  metadataBase: new URL("https://milliyprep.uz"),
+  metadataBase: new URL("https://milliyprep.xyz"),
   openGraph: {
     title: "MilliyPrep — DTM va Milliy Sertifikatga aqlli tayyorgarlik",
     description:

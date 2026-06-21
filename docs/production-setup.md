@@ -68,10 +68,10 @@ In Google Cloud:
 3. Select `Web application`.
 4. Add Authorized JavaScript origins:
    - `http://localhost:3000`
-   - `https://milliyprep.uz` when your domain is live
+   - `https://milliyprep.xyz` when your domain is live
 5. Add Authorized redirect URIs:
    - `http://localhost:3000/api/auth/google/callback`
-   - `https://milliyprep.uz/api/auth/google/callback`
+   - `https://milliyprep.xyz/api/auth/google/callback`
 6. Copy the Client ID and Client Secret.
 
 `.env`:
@@ -85,7 +85,7 @@ GOOGLE_CLIENT_SECRET=your-client-secret
 For production:
 
 ```env
-APP_URL=https://milliyprep.uz
+APP_URL=https://milliyprep.xyz
 ```
 
 Google only shows the client secret at creation time in some console flows, so
@@ -105,7 +105,7 @@ Email OTP uses Resend when `RESEND_API_KEY` is present. This is the recommended 
 ```env
 NEXT_PUBLIC_ENABLE_EMAIL_AUTH=true
 RESEND_API_KEY=re_xxx
-MAIL_FROM=MilliyPrep <no-reply@milliyprep.uz>
+MAIL_FROM=MilliyPrep <no-reply@milliyprep.xyz>
 ```
 
 Without `RESEND_API_KEY`, email OTP is dev-only: the code is logged and returned
@@ -188,14 +188,14 @@ When deploying, set these environment variables in the hosting platform:
 
 ```env
 AUTH_SECRET=
-APP_URL=https://milliyprep.uz
+APP_URL=https://milliyprep.xyz
 SUPABASE_URL=
 SUPABASE_SECRET_KEY=
 BOT_API_SECRET=
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 RESEND_API_KEY=
-MAIL_FROM=MilliyPrep <no-reply@milliyprep.uz>
+MAIL_FROM=MilliyPrep <no-reply@milliyprep.xyz>
 ESKIZ_TOKEN=
 ESKIZ_FROM=4546
 OPENAI_API_KEY=
