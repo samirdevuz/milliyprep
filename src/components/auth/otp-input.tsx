@@ -61,7 +61,7 @@ export function OtpInput({
   };
 
   return (
-    <div className="flex justify-between gap-2" onPaste={handlePaste}>
+    <div className="grid grid-cols-6 gap-1.5 min-[380px]:gap-2" onPaste={handlePaste}>
       {digits.map((d, i) => (
         <input
           key={i}
@@ -77,7 +77,7 @@ export function OtpInput({
           onKeyDown={(e) => handleKeyDown(i, e)}
           aria-label={`Kod ${i + 1}-raqami`}
           className={cn(
-            "h-12 w-full rounded-xl border bg-white text-center text-lg font-bold text-ink-900 transition focus:outline-none focus:ring-2 focus:ring-brand-500/30 sm:h-14 sm:text-xl",
+            "h-11 min-w-0 rounded-xl border bg-white text-center text-base font-bold text-ink-900 transition focus:outline-none focus:ring-2 focus:ring-brand-500/30 min-[380px]:h-12 min-[380px]:text-lg sm:h-14 sm:text-xl",
             invalid
               ? "border-rose-300 focus:border-rose-400"
               : "border-ink-200 focus:border-brand-400",

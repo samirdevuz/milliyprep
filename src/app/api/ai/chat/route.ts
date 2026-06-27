@@ -9,6 +9,7 @@ import {
 import { MockProvider } from "@/lib/ai/providers/mock";
 import { OpenAIProvider } from "@/lib/ai/providers/openai";
 import type { ChatContext, ChatMessage } from "@/lib/ai/types";
+import { subjectById } from "@/lib/onboarding/certificate";
 
 export const runtime = "nodejs";
 
@@ -48,15 +49,27 @@ function stringArray(value: unknown): string[] | undefined {
 
 function toContext(onboarding?: Record<string, unknown>): ChatContext {
   if (!onboarding) return {};
+  const subjectId =
+    typeof onboarding.subjectId === "string" ? onboarding.subjectId : undefined;
+  const subject = subjectById(subjectId);
   return {
-    examType:
-      typeof onboarding.examType === "string" ? onboarding.examType : undefined,
+    subjectId,
+    subjectLabel: subject?.label,
+    currentScore:
+      typeof onboarding.currentScore === "number"
+        ? onboarding.currentScore
+        : undefined,
     targetScore:
       typeof onboarding.targetScore === "number"
         ? onboarding.targetScore
         : undefined,
-    subjects: stringArray(onboarding.subjects),
-    weakAreas: stringArray(onboarding.weakAreas),
+    resultStatus:
+      typeof onboarding.resultStatus === "string"
+        ? onboarding.resultStatus
+        : undefined,
+    focusSkills: stringArray(onboarding.focusSkills),
+    worries:
+      typeof onboarding.worries === "string" ? onboarding.worries : undefined,
     language: "uz",
   };
 }

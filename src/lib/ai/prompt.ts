@@ -1,11 +1,5 @@
 import type { ChatContext } from "./types";
 
-const EXAM_LABEL: Record<string, string> = {
-  dtm: "DTM (universitetga kirish imtihoni)",
-  "milliy-sertifikat": "Milliy sertifikat (til imtihoni)",
-  ikkalasi: "DTM va Milliy sertifikat",
-};
-
 /**
  * Builds the system prompt for the MilliyPrep tutor, grounded in the
  * learner's onboarding context. Kept in Uzbek so the model replies in
@@ -13,7 +7,7 @@ const EXAM_LABEL: Record<string, string> = {
  */
 export function buildSystemPrompt(ctx: ChatContext): string {
   const lines: string[] = [
-    "Siz MilliyPrep platformasining AI tutori siz — O'zbekiston o'quvchilariga DTM va Milliy sertifikat imtihonlariga tayyorlanishda yordam berasiz.",
+    "Siz MilliyPrep platformasining AI tutori siz — O'zbekiston o'quvchilariga Milliy Sertifikat imtihoniga tayyorlanishda yordam berasiz.",
     "Qoidalar:",
     "- Javoblaringiz aniq, qisqa va o'quvchiga tushunarli bo'lsin.",
     "- Imkon qadar o'zbek tilida (lotin) javob bering, agar o'quvchi rus yoki ingliz tilida yozsa, o'sha tilda javob bering.",
@@ -22,19 +16,25 @@ export function buildSystemPrompt(ctx: ChatContext): string {
     "- Agar savol imtihon mavzularidan tashqarida bo'lsa, hurmat bilan mavzuga qaytaring.",
   ];
 
-  if (ctx.examType && EXAM_LABEL[ctx.examType]) {
-    lines.push(`O'quvchining maqsadi: ${EXAM_LABEL[ctx.examType]}.`);
+  if (ctx.subjectLabel) {
+    lines.push(`O'quvchi tayyorlanayotgan fan: ${ctx.subjectLabel}.`);
+  }
+  if (ctx.resultStatus) {
+    lines.push(`Hozirgi natija holati: ${ctx.resultStatus}.`);
+  }
+  if (ctx.currentScore) {
+    lines.push(`Hozirgi ball: ${ctx.currentScore}/100.`);
   }
   if (ctx.targetScore) {
-    lines.push(`Maqsadli ball: ${ctx.targetScore}.`);
+    lines.push(`Maqsadli ball: ${ctx.targetScore}/100.`);
   }
-  if (ctx.subjects?.length) {
-    lines.push(`Tayyorlanayotgan fanlar: ${ctx.subjects.join(", ")}.`);
-  }
-  if (ctx.weakAreas?.length) {
+  if (ctx.focusSkills?.length) {
     lines.push(
-      `Zaif tomonlari: ${ctx.weakAreas.join(", ")}. Shularni hisobga oling.`
+      `Asosiy e'tibor beriladigan ko'nikmalar: ${ctx.focusSkills.join(", ")}.`
     );
+  }
+  if (ctx.worries) {
+    lines.push(`O'quvchining asosiy xavotiri: ${ctx.worries}.`);
   }
 
   return lines.join("\n");

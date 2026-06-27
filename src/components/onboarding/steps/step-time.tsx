@@ -10,39 +10,65 @@ interface Props {
 }
 
 const TIME_OF_DAY: {
-  value: "ertalab" | "kunduzi" | "kechqurun" | "tunda";
+  value: "morning" | "day" | "evening" | "night";
   icon: LucideIcon;
   tone: "amber" | "brand" | "violet" | "sky";
   title: string;
   description: string;
 }[] = [
   {
-    value: "ertalab",
+    value: "morning",
     icon: Coffee,
     tone: "amber",
     title: "Ertalab",
     description: "06:00 — 11:00",
   },
   {
-    value: "kunduzi",
+    value: "day",
     icon: Sun,
     tone: "brand",
     title: "Kunduzi",
     description: "11:00 — 17:00",
   },
   {
-    value: "kechqurun",
+    value: "evening",
     icon: Sunset,
     tone: "violet",
     title: "Kechqurun",
     description: "17:00 — 22:00",
   },
   {
-    value: "tunda",
+    value: "night",
     icon: Moon,
     tone: "sky",
     title: "Tunda",
     description: "22:00 — 02:00",
+  },
+];
+
+const FREQUENCY: {
+  value: "1-2" | "3-4" | "5+";
+  title: string;
+  description: string;
+  tone: "brand" | "accent" | "violet";
+}[] = [
+  {
+    value: "1-2",
+    title: "Haftada 1-2 marta",
+    description: "Sekinroq, lekin barqaror reja.",
+    tone: "accent",
+  },
+  {
+    value: "3-4",
+    title: "Haftada 3-4 marta",
+    description: "Eng muvozanatli tayyorgarlik ritmi.",
+    tone: "brand",
+  },
+  {
+    value: "5+",
+    title: "Haftada 5+ marta",
+    description: "Tez natija uchun intensiv rejim.",
+    tone: "violet",
   },
 ];
 
@@ -54,11 +80,11 @@ export function StepTime({ errors }: Props) {
       <header>
         <h2 className="text-2xl font-bold text-ink-900">Vaqtingiz</h2>
         <p className="mt-1 text-sm text-ink-600">
-          Haftada qancha vaqt ajrata olasiz?
+          Reja real bo&apos;lishi uchun qancha vaqt ajrata olishingizni belgilang.
         </p>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div>
         <Input
           label="Haftada necha soat?"
           name="weeklyHours"
@@ -76,23 +102,29 @@ export function StepTime({ errors }: Props) {
           }
           error={errors.weeklyHours}
         />
-        <Input
-          label="Haftada necha kun?"
-          name="studyDays"
-          type="number"
-          min={1}
-          max={7}
-          placeholder="1–7"
-          hint="Eng kamida 4 kun tavsiya etiladi."
-          value={state.studyDays ?? ""}
-          onChange={(e) =>
-            set(
-              "studyDays",
-              e.target.value ? Number(e.target.value) : undefined
-            )
-          }
-          error={errors.studyDays}
-        />
+      </div>
+
+      <div>
+        <p className="mb-3 text-sm font-medium text-ink-800">
+          Qancha tez-tez o&apos;qishni xohlaysiz?
+        </p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {FREQUENCY.map(({ value, title, description, tone }) => (
+            <OptionCard
+              key={value}
+              selected={state.studyFrequency === value}
+              onSelect={() => set("studyFrequency", value)}
+              icon={<Coffee strokeWidth={2.25} />}
+              tone={tone}
+              title={title}
+              description={description}
+              showCheck={false}
+            />
+          ))}
+        </div>
+        {errors.studyFrequency && (
+          <p className="mt-2 text-xs text-rose-600">{errors.studyFrequency}</p>
+        )}
       </div>
 
       <div>

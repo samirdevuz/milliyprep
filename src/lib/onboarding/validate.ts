@@ -13,50 +13,43 @@ export function validateStep(step: number, state: OnboardingState): Errors {
       if (!state.fullName || state.fullName.trim().length < 2) {
         errors.fullName = "Ismingizni kiriting (kamida 2 belgi).";
       }
-      if (!state.age || state.age < 10 || state.age > 80) {
-        errors.age = "10 dan 80 gacha haqiqiy yoshni kiriting.";
-      }
-      if (!state.region) {
-        errors.region = "Hududingizni tanlang.";
-      }
       break;
     }
     case 1: {
-      if (!state.examType) {
-        errors.examType = "Imtihon turini tanlang.";
-      }
-      if (!state.targetScore) {
-        errors.targetScore = "Maqsadli ballni kiriting.";
-      } else {
-        const isMilliy = state.examType === "milliy-sertifikat";
-        const min = isMilliy ? 1 : 50;
-        const max = isMilliy ? 6 : 189;
-        if (state.targetScore < min || state.targetScore > max) {
-          errors.targetScore = `Ball ${min} dan ${max} gacha bo'lishi kerak.`;
-        }
-      }
-      if (!state.examDate) {
-        errors.examDate = "Imtihon sanasini kiriting.";
-      } else {
-        const d = new Date(state.examDate);
-        if (Number.isNaN(d.getTime()) || d.getTime() < Date.now() - 86400000) {
-          errors.examDate = "Sana bugun yoki kelajakda bo'lishi kerak.";
-        }
+      if (!state.subjectId) {
+        errors.subjectId = "Tayyorlanayotgan faningizni tanlang.";
       }
       break;
     }
     case 2: {
-      if (!state.currentLevel) {
-        errors.currentLevel = "Joriy darajangizni tanlang.";
+      if (!state.resultStatus) {
+        errors.resultStatus = "Hozirgi natijangiz holatini tanlang.";
       }
-      if (!state.subjects || state.subjects.length === 0) {
-        errors.subjects = "Kamida bitta fan tanlang.";
+      if (
+        state.resultStatus === "has-score" &&
+        (typeof state.currentScore !== "number" ||
+          state.currentScore < 0 ||
+          state.currentScore > 100)
+      ) {
+        errors.currentScore = "0 dan 100 gacha ball kiriting.";
       }
       break;
     }
     case 3: {
-      if (!state.weakAreas || state.weakAreas.length === 0) {
-        errors.weakAreas = "Kamida bitta variantni tanlang.";
+      if (
+        typeof state.targetScore !== "number" ||
+        state.targetScore < 31 ||
+        state.targetScore > 100
+      ) {
+        errors.targetScore = "Maqsadli ball 31 dan 100 gacha bo'lishi kerak.";
+      }
+      if (
+        state.resultStatus === "has-score" &&
+        typeof state.currentScore === "number" &&
+        typeof state.targetScore === "number" &&
+        state.targetScore <= state.currentScore
+      ) {
+        errors.targetScore = "Maqsadli ball hozirgi natijadan yuqori bo'lsin.";
       }
       break;
     }
@@ -65,19 +58,19 @@ export function validateStep(step: number, state: OnboardingState): Errors {
         errors.weeklyHours = "Haftalik soatlar sonini kiriting.";
       }
       if (!state.studyDays || state.studyDays < 1 || state.studyDays > 7) {
-        errors.studyDays = "1 dan 7 gacha kunlar sonini kiriting.";
-      }
-      if (!state.preferredTime) {
-        errors.preferredTime = "Qulay vaqtni tanlang.";
+        errors.studyDays = "Haftada 1 dan 7 gacha kun tanlang.";
       }
       break;
     }
     case 5: {
-      if (!state.motivation) {
-        errors.motivation = "Motivatsiyangizni tanlang.";
+      if (!state.examPurpose) {
+        errors.examPurpose = "Milliy Sertifikat maqsadingizni tanlang.";
       }
-      if (!state.studyStyle) {
-        errors.studyStyle = "Uslubingizni tanlang.";
+      if (
+        state.examPurpose === "other" &&
+        (!state.purposeOther || state.purposeOther.trim().length < 2)
+      ) {
+        errors.purposeOther = "Maqsadingizni qisqacha yozing.";
       }
       break;
     }

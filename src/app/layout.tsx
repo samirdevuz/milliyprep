@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Dancing_Script } from "next/font/google";
+import { SEO_KEYWORDS, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,19 +16,50 @@ const dancing = Dancing_Script({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   title: {
-    default: "MilliyPrep — DTM va Milliy Sertifikatga aqlli tayyorgarlik",
+    default: "MilliyPrep - Milliy Sertifikatga tayyorlash",
     template: "%s · MilliyPrep",
   },
-  description:
-    "Sun'iy intellektga asoslangan shaxsiy o'quv reja, minglab mashq savollari va real imtihonga yaqin testlar. DTM va Milliy Sertifikat uchun bir joyda.",
-  metadataBase: new URL("https://milliyprep.xyz"),
+  description: SITE_DESCRIPTION,
+  keywords: SEO_KEYWORDS,
+  alternates: {
+    canonical: SITE_URL,
+  },
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/icon.png",
+  },
+  manifest: "/manifest.webmanifest",
+  category: "education",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "MilliyPrep — DTM va Milliy Sertifikatga aqlli tayyorgarlik",
-    description:
-      "Shaxsiy o'quv reja, minglab mashqlar, AI tutor. Maqsad — siz xohlagan ball.",
+    title: "MilliyPrep - Milliy Sertifikatga tayyorlash",
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
     type: "website",
     locale: "uz_UZ",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MilliyPrep - Milliy Sertifikatga tayyorlash",
+    description: SITE_DESCRIPTION,
   },
 };
 

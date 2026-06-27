@@ -44,8 +44,8 @@ export function ProductShowcase() {
         <ShowcaseRow
           flip
           eyebrow="Mock testlar"
-          title="DTM formatidagi to'liq mock testlar"
-          description="Real imtihon vaqti, real tuzilma. Test qismlari avtomatik baholanadi, har bir xato uchun esa qadam-baqadam tushuntirish beriladi."
+          title="Milliy Sertifikat formatidagi mock testlar"
+          description="Real imtihon vaqti, CEFR ko'nikmalari va rasmiy formatga yaqin tuzilma. Test qismlari avtomatik baholanadi, har bir xato uchun esa qadam-baqadam tushuntirish beriladi."
           bullets={[
             "Vaqt cheklovi va imtihon kabi tuzilma",
             "Avtomatik baholash, batafsil sharh",
@@ -154,13 +154,13 @@ function PlanVisual() {
         {[
           {
             icon: Waypoints,
-            label: "Razminka · Tezkor hisoblash",
+            label: "Razminka · Lug'at va grammatika",
             time: "10 min",
             tone: "brand" as const,
           },
           {
             icon: Repeat2,
-            label: "Asosiy · Algebra · ildizlar",
+            label: "Asosiy · Reading · matn tahlili",
             time: "25 min",
             tone: "violet" as const,
           },
@@ -194,7 +194,7 @@ function MockVisual() {
     <div className="card relative space-y-3 p-5 sm:p-6">
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
-          DTM Mock · Matematika · 30 savol
+          Milliy Sertifikat Mock · Ingliz tili · 30 savol
         </p>
         <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700">
           <Timer className="h-3 w-3" />

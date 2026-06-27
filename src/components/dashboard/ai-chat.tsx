@@ -9,9 +9,9 @@ import type { ChatMessage } from "@/lib/ai/types";
 type UiMessage = ChatMessage & { id: string };
 
 const STARTER_PROMPTS = [
-  "Kvadrat tenglamani tushuntir",
-  "DTM rejamni qanday tuzaman?",
-  "Foiz masalasini yechib ber",
+  "Writing javobimni qanday yaxshilayman?",
+  "B2 rejamni qanday tuzaman?",
+  "Reading uchun vaqtni qanday taqsimlayman?",
 ];
 
 function newId(): string {
@@ -24,7 +24,7 @@ export function AiChat() {
       id: newId(),
       role: "assistant",
       content:
-        "Salom! Bugun qaysi mavzuni birga ochamiz? Savol yoki masala yuboring, qadam-baqadam tushuntiraman.",
+        "Salom! Bugun Milliy Sertifikat bo'yicha qaysi ko'nikmani birga ochamiz? Savol yoki mashq yuboring, qadam-baqadam tushuntiraman.",
     },
   ]);
   const [draft, setDraft] = useState("");

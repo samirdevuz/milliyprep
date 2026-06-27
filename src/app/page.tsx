@@ -13,6 +13,13 @@ import { SpotlightStory } from "@/components/sections/spotlight-story";
 import { Testimonials } from "@/components/sections/testimonials";
 import { Faq } from "@/components/sections/faq";
 import { Cta } from "@/components/sections/cta";
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  courseJsonLd,
+  faqJsonLd,
+  organizationJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo";
 
 export default function Home() {
   return (
@@ -34,6 +41,9 @@ export default function Home() {
         <Cta />
       </main>
       <Footer />
+      <JsonLd
+        data={[organizationJsonLd, websiteJsonLd, courseJsonLd, faqJsonLd]}
+      />
     </>
   );
 }

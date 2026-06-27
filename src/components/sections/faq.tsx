@@ -8,11 +8,11 @@ import { Reveal } from "@/components/motion/reveal";
 const FAQS = [
   {
     q: "MilliyPrep qaysi imtihonlarga tayyorlaydi?",
-    a: "Bizning platforma DTM (umumiy va ixtisoslik fanlari) hamda Milliy Sertifikat (chet tillari va ona tili) imtihonlariga to'liq mos. Matematika, fizika, kimyo, biologiya, tarix, ona tili, ingliz, rus va boshqa fanlar mavjud.",
+    a: "Bizning platforma Milliy Sertifikat imtihoniga tayyorlaydi. Ingliz tili, rus tili va ona tili bo'yicha CEFR darajalari, to'rtta ko'nikma va real imtihonga yaqin mashqlar mavjud.",
   },
   {
     q: "Boshlash uchun nima kerak?",
-    a: "Hisob yarating va 5 daqiqalik onboarding savollariga javob bering: maqsadli ballingiz, imtihon sanasi va zaif fanlaringiz haqida. Shundan keyin sizga tayyor reja taqdim etiladi.",
+    a: "Hisob yarating va qisqa onboarding savollariga javob bering: hozirgi CEFR darajangiz, maqsadli daraja, imtihon sanasi va kuchaytirish kerak bo'lgan ko'nikmalar haqida. Shundan keyin sizga tayyor reja taqdim etiladi.",
   },
   {
     q: "Reja qanday shakllanadi?",

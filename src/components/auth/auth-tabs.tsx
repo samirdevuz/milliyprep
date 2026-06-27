@@ -20,7 +20,7 @@ export function AuthTabs({ tabs }: { tabs: Tab[] }) {
   return (
     <div className="space-y-5">
       <div
-        className="flex border-b border-ink-200"
+        className="grid grid-cols-2 border-b border-ink-200"
         role="tablist"
         aria-label="Kirish usulini tanlang"
       >
@@ -34,7 +34,7 @@ export function AuthTabs({ tabs }: { tabs: Tab[] }) {
               aria-selected={isActive}
               onClick={() => setActive(t.id)}
               className={cn(
-                "-mb-px flex-1 border-b-2 px-4 py-2.5 text-sm font-semibold transition",
+                "-mb-px min-w-0 border-b-2 px-2 py-2.5 text-center text-xs font-semibold leading-snug transition min-[380px]:text-sm sm:px-4",
                 isActive
                   ? "border-brand-500 text-brand-700"
                   : "border-transparent text-ink-500 hover:text-ink-800"

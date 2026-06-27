@@ -10,7 +10,7 @@ export default function TermsPage() {
         </h1>
         <div className="space-y-4 text-sm leading-7 text-ink-700">
           <p>
-            MilliyPrep o&apos;quvchilarga DTM va Milliy sertifikatga
+            MilliyPrep o&apos;quvchilarga Milliy Sertifikatga
             tayyorlanishda mashqlar, testlar, reja va AI yordamchi vositalarini
             taqdim etadi. Platformadan qonuniy va halol o&apos;quv maqsadida
             foydalanishingiz kerak.

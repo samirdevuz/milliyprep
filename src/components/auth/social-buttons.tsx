@@ -17,7 +17,7 @@ export function SocialAuthButtons({ onTelegram, nextPath }: SocialAuthButtonsPro
     <div className="space-y-2">
       <a
         href={googleHref}
-        className="flex w-full items-center justify-center gap-2 rounded-full border border-ink-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-800 transition hover:bg-ink-50"
+        className="flex w-full min-w-0 items-center justify-center gap-2 rounded-full border border-ink-200 bg-white px-4 py-2.5 text-center text-sm font-semibold leading-snug text-ink-800 transition hover:bg-ink-50"
       >
         <GoogleMark />
         Google orqali davom etish
@@ -25,7 +25,7 @@ export function SocialAuthButtons({ onTelegram, nextPath }: SocialAuthButtonsPro
       <button
         type="button"
         onClick={onTelegram}
-        className="flex w-full items-center justify-center gap-2 rounded-full border border-ink-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-800 transition hover:bg-ink-50"
+        className="flex w-full min-w-0 items-center justify-center gap-2 rounded-full border border-ink-200 bg-white px-4 py-2.5 text-center text-sm font-semibold leading-snug text-ink-800 transition hover:bg-ink-50"
       >
         <Send className="h-4 w-4 text-sky-500" />
         Telegram orqali davom etish

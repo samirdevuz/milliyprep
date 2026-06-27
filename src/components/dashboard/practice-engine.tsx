@@ -34,10 +34,10 @@ type Answers = Record<string, number>;
 function modeCopy(mode: PracticeMode) {
   if (mode === "mock_test") {
     return {
-      title: "DTM mini-test",
+      title: "Milliy Sertifikat mini-test",
       eyebrow: "Real test rejimi",
       description:
-        "Fanlar aralash keladi. Yakunda natija saqlanadi va dashboard progressiga qo'shiladi.",
+        "Ko'nikmalar aralash keladi. Yakunda natija saqlanadi va dashboard progressiga qo'shiladi.",
       icon: ClipboardList,
       tone: "violet" as const,
       button: "Testni yakunlash",

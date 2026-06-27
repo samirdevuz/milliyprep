@@ -51,12 +51,14 @@ function craftReply(question: string, ctx: ChatContext): string {
     ].join("\n");
   }
 
-  const subjectHint = ctx.subjects?.length
-    ? ` Siz ${ctx.subjects[0]} faniga e'tibor qaratayotganingizni hisobga olaman.`
-    : "";
+  const focusHint = ctx.subjectLabel
+    ? ` Siz ${ctx.subjectLabel} faniga tayyorlanayotganingizni hisobga olaman.`
+    : ctx.focusSkills?.length
+      ? ` Siz ${ctx.focusSkills[0]} ko'nikmasiga e'tibor qaratayotganingizni hisobga olaman.`
+      : "";
 
   return [
-    `Yaxshi savol.${subjectHint} Keling, buni birgalikda ko'rib chiqaylik.`,
+    `Yaxshi savol.${focusHint} Keling, buni Milliy Sertifikat formatiga moslab ko'rib chiqaylik.`,
     "Avval savolning asosiy shartlarini ajratib olamiz, so'ng qadam-baqadam yechamiz. Iltimos, savol matnini to'liqroq yozing yoki rasmini yuboring — shunda aniq tushuntirib beraman.",
     "Eslatma: bu demo javob. Haqiqiy AI tutor server kalitlari sozlangach to'liq ishlaydi.",
   ].join("\n");

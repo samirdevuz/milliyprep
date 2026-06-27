@@ -36,7 +36,7 @@ export function Footer() {
           <div className="space-y-4 sm:col-span-2 md:col-span-1">
             <Logo />
             <p className="max-w-xs text-sm text-ink-600">
-              DTM va Milliy sertifikatga eng samarali yo&apos;l. Shaxsiy reja,
+              Milliy Sertifikatga eng samarali yo&apos;l. Shaxsiy reja,
               minglab mashqlar va AI tutor — bir joyda.
             </p>
             <div className="flex gap-3 text-sm">
@@ -82,8 +82,8 @@ export function Footer() {
             himoyalangan.
           </p>
           <p className="max-w-xl md:text-right">
-            DTM va Milliy sertifikat — O&apos;zbekiston Respublikasi Bilim va
-            malakalarni baholash agentligining rasmiy mahsulotlari. MilliyPrep —
+            Milliy Sertifikat — O&apos;zbekiston Respublikasi Bilim va
+            malakalarni baholash agentligining rasmiy imtihoni. MilliyPrep —
             mustaqil tayyorlov platformasi.
           </p>
         </div>

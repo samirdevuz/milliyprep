@@ -15,13 +15,13 @@ interface Testimonial {
 
 const TESTIMONIALS: Testimonial[] = [
   {
-    before: "115",
-    after: "175",
+    before: "B1",
+    after: "C1",
     quote:
-      "Bir yil mustaqil tayyorlanib charchadim. MilliyPrep aniq qaysi mavzuni qayta ko'rishim kerakligini ko'rsatdi va ikki oyda 60 ball o'sdim.",
+      "Bir yil mustaqil tayyorlanib charchadim. MilliyPrep aynan qaysi ko'nikmani qayta ishlashim kerakligini ko'rsatdi va uch oyda C1 oldim.",
     name: "Jasurbek Ergashev",
     city: "Toshkent",
-    target: "DTM · Iqtisodiyot",
+    target: "Milliy Sertifikat · Ingliz tili",
     avatar: STUDENT_AVATARS.jasurbek,
   },
   {
@@ -35,13 +35,13 @@ const TESTIMONIALS: Testimonial[] = [
     avatar: STUDENT_AVATARS.madina,
   },
   {
-    before: "98",
-    after: "168",
+    before: "A2",
+    after: "B2",
     quote:
-      "Maktabda matematikadan qiynalardim. Mashqlar bo'limi va statistika orqali eng zaif mavzularni topib, takrorlab chiqdim.",
+      "Readingda vaqt yetmasdi. Mashqlar bo'limi va statistika orqali eng zaif savol turlarini topib, takrorlab chiqdim.",
     name: "Doniyor Tursunov",
     city: "Farg'ona",
-    target: "DTM · Muhandislik",
+    target: "Milliy Sertifikat · Ingliz tili",
     avatar: STUDENT_AVATARS.doniyor,
   },
   {
@@ -55,23 +55,23 @@ const TESTIMONIALS: Testimonial[] = [
     avatar: STUDENT_AVATARS.yulduz,
   },
   {
-    before: "120",
-    after: "168",
+    before: "B1",
+    after: "B2",
     quote:
       "Mock testlarda bir necha marta o'tirib ko'rdim. Imtihon kuni o'sha hayajondan asar ham qolmadi.",
     name: "Saidkamol Yo'ldoshev",
     city: "Andijon",
-    target: "DTM · Tibbiyot",
+    target: "Milliy Sertifikat · Ona tili",
     avatar: STUDENT_AVATARS.saidkamol,
   },
   {
-    before: "70",
-    after: "152",
+    before: "A2",
+    after: "B1",
     quote:
       "Asl o'zgarish — har kuni o'sha tekis kichik mashqlardan keldi. Reja meni tashlab ketmadi.",
     name: "Nilufar Sharipova",
     city: "Namangan",
-    target: "DTM · Filologiya",
+    target: "Milliy Sertifikat · Rus tili",
     avatar: STUDENT_AVATARS.nilufar,
   },
 ];

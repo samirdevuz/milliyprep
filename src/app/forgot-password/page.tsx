@@ -9,7 +9,7 @@ import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="grid min-h-screen lg:grid-cols-[minmax(0,460px)_1fr]">
+    <div className="grid min-h-dvh w-full max-w-full overflow-x-hidden lg:grid-cols-[minmax(0,460px)_1fr]">
       <AuthSideIllustration
         title={
           <>
@@ -20,7 +20,7 @@ export default function ForgotPasswordPage() {
         }
       />
 
-      <main className="relative flex min-h-screen flex-col bg-ink-50/60">
+      <main className="relative flex min-h-dvh min-w-0 flex-col overflow-hidden bg-ink-50/60">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-soft-mesh" />
         <div
           aria-hidden="true"
@@ -36,8 +36,8 @@ export default function ForgotPasswordPage() {
           </Link>
         </header>
 
-        <div className="relative z-10 flex flex-1 items-center justify-center px-4 py-10 sm:px-8">
-          <div className="w-full max-w-md rounded-3xl bg-white p-7 shadow-soft ring-1 ring-ink-100 sm:p-8">
+        <div className="relative z-10 flex flex-1 items-start justify-center px-3 py-6 sm:px-6 sm:py-10 lg:items-center lg:px-8">
+          <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-soft ring-1 ring-ink-100 sm:rounded-3xl sm:p-8">
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-ink-900">Parolni tiklash</h2>
               <p className="mt-1 text-sm text-ink-600">

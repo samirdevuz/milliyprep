@@ -26,7 +26,7 @@ export function Hero() {
           <Reveal>
             <span className="pill">
               <Sparkles className="h-3.5 w-3.5" />
-              Milliy sertifikat va DTM uchun aqlli tayyorgarlik
+              Milliy Sertifikat uchun aqlli tayyorgarlik
             </span>
           </Reveal>
 

@@ -1,16 +1,13 @@
 "use client";
 
 import {
-  AlarmClock,
   Award,
-  Battery,
   Briefcase,
-  CircleSlash2,
-  Compass,
   GraduationCap,
-  HeartPulse,
   Home,
+  MessageCircle,
   Plane,
+  Search,
   Sparkles,
   Trophy,
   User,
@@ -84,32 +81,36 @@ const STYLE_OPTIONS: {
   },
 ];
 
-const OBSTACLES: {
-  value: string;
+const REFERRAL_OPTIONS: {
+  value: "friend" | "teacher" | "telegram" | "google" | "other";
   icon: LucideIcon;
-  tone: "brand" | "accent" | "amber" | "rose" | "violet" | "sky";
+  tone: "brand" | "accent" | "amber" | "rose" | "violet";
   title: string;
 }[] = [
   {
-    value: "vaqt-yetishmasligi",
-    icon: AlarmClock,
-    tone: "rose",
-    title: "Vaqt yetishmaydi",
+    value: "friend",
+    icon: Users,
+    tone: "brand",
+    title: "Do'st yoki oila",
   },
   {
-    value: "konsentratsiya",
-    icon: Compass,
+    value: "teacher",
+    icon: Award,
     tone: "violet",
-    title: "Konsentratsiya qiyin",
+    title: "O'qituvchi yoki kurs",
   },
-  { value: "motivatsiya", icon: Battery, tone: "amber", title: "Motivatsiyam tushadi" },
-  { value: "tushunmaslik", icon: Award, tone: "sky", title: "Mavzular qiyin keladi" },
-  { value: "stress", icon: HeartPulse, tone: "rose", title: "Imtihon stressi" },
   {
-    value: "yoq",
-    icon: CircleSlash2,
+    value: "telegram",
+    icon: MessageCircle,
     tone: "accent",
-    title: "Hech qanday muammo yo'q",
+    title: "Telegram yoki ijtimoiy tarmoq",
+  },
+  { value: "google", icon: Search, tone: "amber", title: "Google orqali" },
+  {
+    value: "other",
+    icon: Sparkles,
+    tone: "rose",
+    title: "Boshqa joydan",
   },
 ];
 
@@ -172,14 +173,14 @@ export function StepProfile({ errors }: Props) {
 
       <div>
         <p className="mb-2 text-sm font-medium text-ink-800">
-          Sizga ko&apos;p xalaqit beradigan narsa nima?
+          Oxirgi savol — bizni qayerdan eshitdingiz?
         </p>
         <div className="grid gap-2 sm:grid-cols-2">
-          {OBSTACLES.map((o) => (
+          {REFERRAL_OPTIONS.map((o) => (
             <OptionCard
               key={o.value}
-              selected={state.obstacle === o.value}
-              onSelect={() => set("obstacle", o.value)}
+              selected={state.referralSource === o.value}
+              onSelect={() => set("referralSource", o.value)}
               icon={<o.icon strokeWidth={2.25} />}
               tone={o.tone}
               title={o.title}

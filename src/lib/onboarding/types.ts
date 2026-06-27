@@ -1,35 +1,59 @@
+import type { CertificateSubjectId } from "./certificate";
+
 /**
  * Shape of the onboarding answers collected across all steps.
  * Persisted to localStorage and replayed at registration time.
  */
 export interface OnboardingState {
-  // Step 1 — Asosiy ma'lumotlar
+  // Step 1 — Ism
   fullName?: string;
-  age?: number;
-  region?: string;
 
-  // Step 2 — Maqsad
-  examType?: "dtm" | "milliy-sertifikat" | "ikkalasi";
-  targetScore?: number; // DTM: 0-189, Milliy: A1..C2 (encoded 1..6)
-  examDate?: string; // ISO yyyy-mm-dd
+  // Step 2 — Fan
+  subjectId?: CertificateSubjectId;
 
-  // Step 3 — Daraja
-  currentLevel?: "boshlovchi" | "orta" | "yuqori";
-  diagnosticScore?: number;
-  subjects?: string[]; // selected subject ids
+  // Step 3 — Hozirgi natija
+  resultStatus?: "has-score" | "not-taken" | "unknown";
+  currentScore?: number;
 
-  // Step 4 — Qiyinchiliklar
-  weakAreas?: string[];
+  // Step 4 — Maqsadli ball
+  targetScore?: number;
 
   // Step 5 — Vaqt
   weeklyHours?: number;
-  preferredTime?: "ertalab" | "kunduzi" | "kechqurun" | "tunda";
-  studyDays?: number; // 1..7
+  studyDays?: number;
 
-  // Step 6 — Psixologik profil
+  // Step 6 — Sabab
+  examPurpose?: "university" | "work" | "teacher" | "self" | "other";
+  purposeOther?: string;
+
+  // Step 7 — Referral
+  referralSource?: "instagram" | "telegram" | "friend" | "teacher" | "google" | "other";
+
+  // Legacy-compatible optional fields kept for saved old drafts.
+  age?: number;
+  region?: string;
+  hasTakenCertificate?: "yes" | "studying" | "no";
+
+  // Step 2 — Daraja va maqsad
+  currentLevel?: "a1" | "a2" | "b1" | "b2" | "c1";
+  targetLevel?: "b1" | "b2" | "c1";
+  examDate?: string; // ISO yyyy-mm-dd
+
+  // Step 3 — Ko'nikmalar
+  certificateLanguage?: "english" | "russian" | "uzbek";
+  skillLevels?: Partial<
+    Record<"listening" | "reading" | "writing" | "speaking", "a1" | "a2" | "b1" | "b2" | "c1">
+  >;
+  focusSkills?: string[];
+
+  // Legacy-compatible optional fields kept for saved old drafts.
+  worries?: "fail_exam" | "time" | "money" | "confidence";
+  studyFrequency?: "1-2" | "3-4" | "5+";
+  preferredTime?: "morning" | "day" | "evening" | "night";
+
+  // Legacy-compatible optional fields kept for saved old drafts.
   motivation?: string;
   studyStyle?: "yolgiz" | "guruh" | "aralash";
-  obstacle?: string;
 }
 
 export const ONBOARDING_STORAGE_KEY = "milliyprep:onboarding:v1";
@@ -52,10 +76,17 @@ export const REGIONS = [
 ];
 
 export const STEPS = [
-  { id: "asosiy", label: "Asosiy ma'lumotlar" },
+  { id: "ism", label: "Ism" },
+  { id: "fan", label: "Fan" },
+  { id: "hozirgi", label: "Hozirgi ball" },
   { id: "maqsad", label: "Maqsad" },
-  { id: "daraja", label: "Daraja" },
-  { id: "qiyinchiliklar", label: "Qiyinchiliklar" },
   { id: "vaqt", label: "Vaqt" },
-  { id: "profil", label: "Psixologik profil" },
+  { id: "sabab", label: "Sabab" },
+  { id: "ishonch", label: "Ishonch" },
+  { id: "xulosa", label: "Profil" },
+  { id: "manba", label: "Manba" },
+  { id: "reja", label: "Reja" },
+  { id: "timeline", label: "Yo'l xaritasi" },
+  { id: "hisob", label: "Hisob" },
+  { id: "tasdiq", label: "Tasdiq" },
 ];

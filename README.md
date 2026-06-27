@@ -1,6 +1,6 @@
 # MilliyPrep
 
-DTM va Milliy Sertifikatga aqlli tayyorlanish platformasi. Sun'iy intellekt
+Milliy Sertifikatga aqlli tayyorlanish platformasi. Sun'iy intellekt
 asosida shaxsiy o'quv reja, minglab mashqlar va real imtihon formatidagi
 testlar — bir joyda.
 
@@ -61,7 +61,7 @@ src/
 
 - [x] **1-sprint** — Landing page (Hero, Features, How it works, Testimonials, FAQ, CTA)
 - [x] **2-sprint** — Auth oqimi (Email + telefon + Google + Telegram), form primitivlari
-- [x] **3-sprint** — 6 qadamli onboarding (Asosiy ma'lumot → Maqsad → Daraja → Qiyinchiliklar → Vaqt → Psixologik profil)
+- [x] **3-sprint** — 6 qadamli onboarding (Tanishuv → CEFR maqsad → Ko'nikmalar → Sabablar → Vaqt → Profil)
 - [~] **4-sprint** — Dashboard qobig'i (Bugungi reja, Statistika, Streak, Imtihonga countdown); real data wiring keyingi bosqichda
 - [ ] **5-sprint** — Mashqlar va testlar oqimi (savol bank, javob baholash)
 - [x] **6-sprint** — AI tutor chat UI/API (OpenAI-compatible provider, dashboard streaming chat, mock fallback)

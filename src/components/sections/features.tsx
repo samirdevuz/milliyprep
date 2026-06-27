@@ -49,9 +49,9 @@ const FEATURES: Feature[] = [
   },
   {
     icon: GraduationCap,
-    title: "DTM va Milliy sertifikatga mos",
+    title: "Milliy Sertifikat formatiga mos",
     description:
-      "Platforma rasmiy imtihon formatlariga to'liq moslashtirilgan.",
+      "Platforma CEFR ko'nikmalari, mock testlar va rasmiy baholash mezonlariga moslashtirilgan.",
     tone: "violet",
   },
   {

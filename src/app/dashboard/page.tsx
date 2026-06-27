@@ -16,20 +16,20 @@ function firstNameOf(value?: string): string {
   return name.split(/\s+/)[0] ?? name;
 }
 
-function numberFromOnboarding(
-  onboarding: Record<string, unknown> | undefined,
-  key: string
-) {
-  const value = onboarding?.[key];
-  return typeof value === "number" ? value : undefined;
-}
-
 function stringFromOnboarding(
   onboarding: Record<string, unknown> | undefined,
   key: string
 ) {
   const value = onboarding?.[key];
   return typeof value === "string" ? value : undefined;
+}
+
+function numberFromOnboarding(
+  onboarding: Record<string, unknown> | undefined,
+  key: string
+) {
+  const value = onboarding?.[key];
+  return typeof value === "number" ? value : undefined;
 }
 
 export default async function DashboardHome() {
@@ -133,7 +133,7 @@ export default async function DashboardHome() {
               {
                 id: "target",
                 label: targetScore
-                  ? `${targetScore}+ ball maqsadga xizmat qiladigan mavzu ishlash`
+                  ? `${targetScore}+ ball maqsadiga xizmat qiladigan mashq ishlash`
                   : "Maqsad ballingizni onboardingda belgilang",
                 done: Boolean(progress && progress.averageScore >= 70),
               },

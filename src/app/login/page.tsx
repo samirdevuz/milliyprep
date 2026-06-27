@@ -65,7 +65,7 @@ function LoginPageContent() {
   ].filter((tab): tab is NonNullable<typeof tab> => Boolean(tab));
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-[minmax(0,460px)_1fr]">
+    <div className="grid min-h-dvh w-full max-w-full overflow-x-hidden lg:grid-cols-[minmax(0,460px)_1fr]">
       <AuthSideIllustration
         title={
           <>
@@ -77,7 +77,7 @@ function LoginPageContent() {
         }
       />
 
-      <main className="relative flex min-h-screen flex-col bg-ink-50/60">
+      <main className="relative flex min-h-dvh min-w-0 flex-col overflow-hidden bg-ink-50/60">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-soft-mesh" />
         <div
           aria-hidden="true"
@@ -88,13 +88,13 @@ function LoginPageContent() {
           <Link href="/" aria-label="Bosh sahifa">
             <Logo size={24} />
           </Link>
-          <Link href="/register" className="btn-ghost px-4 py-2 text-sm">
+          <Link href="/onboarding" className="btn-ghost px-4 py-2 text-sm">
             Ro&apos;yxatdan o&apos;tish
           </Link>
         </header>
 
-        <div className="relative z-10 flex flex-1 items-center justify-center px-4 py-10 sm:px-8">
-          <div className="w-full max-w-md rounded-3xl bg-white p-7 shadow-soft ring-1 ring-ink-100 sm:p-8">
+        <div className="relative z-10 flex flex-1 items-start justify-center px-3 py-6 sm:px-6 sm:py-10 lg:items-center lg:px-8">
+          <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-soft ring-1 ring-ink-100 sm:rounded-3xl sm:p-8">
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-ink-900">Kirish</h2>
               <p className="mt-1 text-sm text-ink-600">
@@ -120,7 +120,7 @@ function LoginPageContent() {
 
             <p className="mt-6 text-center text-sm text-ink-600">
               Hisobingiz yo&apos;qmi?{" "}
-              <Link href="/register" className="font-semibold text-brand-600 hover:underline">
+              <Link href="/onboarding" className="font-semibold text-brand-600 hover:underline">
                 Ro&apos;yxatdan o&apos;ting
               </Link>
             </p>
@@ -137,7 +137,7 @@ function SocialLogin({ nextPath }: { nextPath: string }) {
   return (
     <SocialAuthButtons
       nextPath={nextPath}
-      onTelegram={() => (window.location.href = "/register")}
+      onTelegram={() => (window.location.href = "/onboarding")}
     />
   );
 }

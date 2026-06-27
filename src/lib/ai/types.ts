@@ -7,10 +7,13 @@ export interface ChatMessage {
 
 export interface ChatContext {
   /** Optional learner profile, derived from onboarding answers. */
-  examType?: string;
+  subjectId?: string;
+  subjectLabel?: string;
+  currentScore?: number;
   targetScore?: number;
-  subjects?: string[];
-  weakAreas?: string[];
+  resultStatus?: string;
+  focusSkills?: string[];
+  worries?: string;
   language?: "uz" | "ru" | "en";
 }
 
