@@ -690,7 +690,7 @@ export function OnboardingFlow() {
   };
 
   return (
-    <div className="grid min-h-dvh overflow-hidden bg-ink-50 lg:grid-cols-[440px_minmax(0,1fr)]">
+    <div className="grid min-h-dvh overflow-hidden bg-ink-50 md:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[400px_minmax(0,1fr)]">
       <OnboardingSidePanel />
 
       <div
@@ -699,7 +699,7 @@ export function OnboardingFlow() {
       >
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-soft-mesh opacity-70" />
 
-        <header className="sticky top-0 z-20 border-b border-white/70 bg-white/85 px-4 py-3 backdrop-blur-xl lg:hidden">
+        <header className="sticky top-0 z-20 border-b border-white/70 bg-white/85 px-4 py-3 backdrop-blur-xl md:hidden">
           <div className="mx-auto flex max-w-3xl items-center justify-between">
             <Link href="/" aria-label="Bosh sahifa">
               <Logo size={24} />
@@ -716,7 +716,7 @@ export function OnboardingFlow() {
               <StepProgress steps={STEPS} current={step} />
             </div>
 
-            <div className="min-h-[560px] rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.55)] ring-1 ring-ink-100/60 backdrop-blur sm:p-7 lg:p-8">
+            <div className="min-h-[560px] rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.55)] ring-1 ring-ink-100/60 backdrop-blur sm:p-7 xl:p-8">
               <div className="mb-7">
                 <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-600">
                   {copy.eyebrow}

@@ -51,7 +51,7 @@ const FEATURES: Feature[] = [
     icon: GraduationCap,
     title: "Milliy Sertifikat formatiga mos",
     description:
-      "Platforma CEFR ko'nikmalari, mock testlar va rasmiy baholash mezonlariga moslashtirilgan.",
+      "Platforma fan, mavzu, mock test va 100 ballik natija tahliliga moslashtirilgan.",
     tone: "violet",
   },
   {

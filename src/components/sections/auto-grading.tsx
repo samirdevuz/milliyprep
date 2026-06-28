@@ -9,7 +9,7 @@ const TABS = [
   { id: "speaking", label: "Og'zaki", icon: Mic },
 ] as const;
 
-// Milliy sertifikat baholash: har bir ko'nikma foizda, yakuniy daraja CEFR (B1/B2/C1).
+// Demo feedback for language-subject constructed responses.
 const FEEDBACK = [
   { name: "Vazifa bajarilishi", pct: 78, note: "Aniq fikr, asosiy g'oya rivojlangan." },
   {
@@ -43,8 +43,8 @@ export function AutoGrading() {
             </h2>
             <p className="mt-3 text-ink-600">
               Ingliz va boshqa til imtihonlari uchun. Har bir mezon foizda
-              baholanadi, yakuniy daraja CEFR (B1, B2, C1) bo&apos;yicha
-              chiqariladi, har bir xato uchun aniq tuzatish taklif etiladi.
+              baholanadi, taxminiy natija chiqariladi, har bir xato uchun aniq
+              tuzatish taklif etiladi.
             </p>
           </div>
         </Reveal>
@@ -95,7 +95,7 @@ export function AutoGrading() {
                       </span>
                       , some argue that reliance on devices weakens memory and
                       concentration. Digital tools can also distract students
-                      from deep reading.
+                      from focused study.
                     </p>
                     <p>
                       <span className="rounded bg-amber-100 px-0.5 text-amber-800">

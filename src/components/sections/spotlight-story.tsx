@@ -21,9 +21,9 @@ export function SpotlightStory() {
               <Quote className="h-7 w-7 text-white/80" />
               <blockquote className="mt-4 text-lg leading-relaxed text-white/90 sm:text-xl">
                 Bir yil davomida Telegramdagi materiallar va taxminlar bilan
-                tayyorlanaverdim. MilliyPrep speaking va writingda nimani
-                tuzatishim kerakligini aniq ko&apos;rsatdi. Uch oydan keyin Milliy
-                Sertifikatdan C1 oldim.
+                tayyorlanaverdim. MilliyPrep qaysi mavzularda xato
+                qilayotganimni aniq ko&apos;rsatdi. Uch oydan keyin Milliy
+                Sertifikatdan 86 ball oldim.
               </blockquote>
               <div className="mt-6 flex items-center gap-3">
                 <Avatar src={STUDENT_AVATARS.ayden} alt="Aydina Nursultanova" size={44} />
@@ -38,18 +38,18 @@ export function SpotlightStory() {
               <div className="flex items-center justify-around text-center">
                 <div>
                   <p className="text-xs text-white/70">Boshlang&apos;ich</p>
-                  <p className="mt-1 text-3xl font-extrabold">B1</p>
+                  <p className="mt-1 text-3xl font-extrabold">62</p>
                 </div>
                 <span className="text-2xl text-white/50">→</span>
                 <div>
                   <p className="text-xs text-white/70">Yakuniy</p>
                   <p className="mt-1 text-3xl font-extrabold text-accent-300">
-                    C1
+                    86
                   </p>
                 </div>
               </div>
               <div className="mt-4 inline-flex items-center gap-1 rounded-full bg-accent-500/20 px-3 py-1 text-xs font-semibold text-accent-200 ring-1 ring-inset ring-accent-400/30">
-                +2 daraja · 12 hafta
+                +24 ball · 12 hafta
               </div>
               <p className="mt-4 text-xs text-white/70">
                 Bizga ishongan o&apos;quvchilardan biri. Ularning ballariga ham,

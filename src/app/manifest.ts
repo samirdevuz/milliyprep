@@ -3,7 +3,7 @@ import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${SITE_NAME} - Milliy Sertifikatga tayyorlash`,
+    name: `${SITE_NAME} - Milliy Sertifikatga tayyorlanish platformasi`,
     short_name: SITE_NAME,
     description: SITE_DESCRIPTION,
     start_url: "/",
@@ -12,7 +12,12 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#0f766e",
     icons: [
       {
-        src: "/icon.png",
+        src: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "/icon-512.png",
         sizes: "512x512",
         type: "image/png",
       },

@@ -8,11 +8,11 @@ import { Reveal } from "@/components/motion/reveal";
 const FAQS = [
   {
     q: "MilliyPrep qaysi imtihonlarga tayyorlaydi?",
-    a: "Bizning platforma Milliy Sertifikat imtihoniga tayyorlaydi. Ingliz tili, rus tili va ona tili bo'yicha CEFR darajalari, to'rtta ko'nikma va real imtihonga yaqin mashqlar mavjud.",
+    a: "Bizning platforma Milliy Sertifikat imtihonlariga tayyorlaydi. Matematika, ona tili, tarix, huquq, ingliz tili va boshqa asosiy fanlar bo'yicha testlar, mavzular va real imtihonga yaqin mock mashqlar mavjud.",
   },
   {
     q: "Boshlash uchun nima kerak?",
-    a: "Hisob yarating va qisqa onboarding savollariga javob bering: hozirgi CEFR darajangiz, maqsadli daraja, imtihon sanasi va kuchaytirish kerak bo'lgan ko'nikmalar haqida. Shundan keyin sizga tayyor reja taqdim etiladi.",
+    a: "Hisob yarating va qisqa onboarding savollariga javob bering: tanlagan faningiz, hozirgi natijangiz, maqsad ballingiz va haftalik o'qish vaqtingiz haqida. Shundan keyin sizga tayyor reja taqdim etiladi.",
   },
   {
     q: "Reja qanday shakllanadi?",

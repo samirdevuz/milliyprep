@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   creator: SITE_NAME,
   publisher: SITE_NAME,
   title: {
-    default: "MilliyPrep - Milliy Sertifikatga tayyorlash",
-    template: "%s · MilliyPrep",
+    default: "MilliyPrep — Milliy Sertifikatga tayyorlanish platformasi",
+    template: "%s | MilliyPrep",
   },
   description: SITE_DESCRIPTION,
   keywords: SEO_KEYWORDS,
@@ -31,12 +31,27 @@ export const metadata: Metadata = {
     canonical: SITE_URL,
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/icon.png",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+    other: [
+      {
+        rel: "icon",
+        url: "/icon-192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        rel: "icon",
+        url: "/icon-512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
   },
   manifest: "/manifest.webmanifest",
   category: "education",
+  themeColor: "#0f766e",
   robots: {
     index: true,
     follow: true,
@@ -49,17 +64,28 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "MilliyPrep - Milliy Sertifikatga tayyorlash",
-    description: SITE_DESCRIPTION,
+    title: "MilliyPrep — Milliy Sertifikatga tayyorlanish",
+    description:
+      "Barcha asosiy Milliy Sertifikat fanlari bo'yicha testlar, mavzular, mock imtihonlar va natija tahlili.",
     url: SITE_URL,
     siteName: SITE_NAME,
     type: "website",
     locale: "uz_UZ",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "MilliyPrep — Milliy Sertifikatga tayyorlanish",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "MilliyPrep - Milliy Sertifikatga tayyorlash",
-    description: SITE_DESCRIPTION,
+    title: "MilliyPrep — Milliy Sertifikatga tayyorlanish",
+    description:
+      "Milliy Sertifikat fanlari bo'yicha testlar, mavzular, mock imtihonlar va progress tracking.",
+    images: ["/og-image.png"],
   },
 };
 

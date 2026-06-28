@@ -45,7 +45,7 @@ export function ProductShowcase() {
           flip
           eyebrow="Mock testlar"
           title="Milliy Sertifikat formatidagi mock testlar"
-          description="Real imtihon vaqti, CEFR ko'nikmalari va rasmiy formatga yaqin tuzilma. Test qismlari avtomatik baholanadi, har bir xato uchun esa qadam-baqadam tushuntirish beriladi."
+          description="Real imtihon vaqti, fan bo'yicha mavzular va rasmiy formatga yaqin tuzilma. Test qismlari avtomatik baholanadi, har bir xato uchun esa qadam-baqadam tushuntirish beriladi."
           bullets={[
             "Vaqt cheklovi va imtihon kabi tuzilma",
             "Avtomatik baholash, batafsil sharh",
@@ -194,7 +194,7 @@ function MockVisual() {
     <div className="card relative space-y-3 p-5 sm:p-6">
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
-          Milliy Sertifikat Mock · Ingliz tili · 30 savol
+          Milliy Sertifikat Mock · Matematika · 30 savol
         </p>
         <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700">
           <Timer className="h-3 w-3" />
