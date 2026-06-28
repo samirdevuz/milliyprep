@@ -1,6 +1,11 @@
 # MilliyPrep Telegram bot
 
-Telegram orqali ro'yxatdan o'tishni boshqaradigan alohida bot (`@MilliyPrepBot`).
+Telegram orqali ro'yxatdan o'tishni boshqaradigan bot (`@MilliyPrepBot`).
+Productionda bot Vercel webhook orqali ishlaydi:
+`/api/telegram/webhook`.
+
+`bot/index.js` faqat local development yoki alohida long-running Node process
+kerak bo'lganda ishlatiladi.
 
 ## Ishlash tartibi
 
@@ -8,7 +13,7 @@ Telegram orqali ro'yxatdan o'tishni boshqaradigan alohida bot (`@MilliyPrepBot`)
 2. Sayt qadamlarni va `@MilliyPrepBot` havolasini ko'rsatadi.
 3. Foydalanuvchi botda `/start` yuboradi.
 4. Bot telefon raqamini so'raydi (kontakt ulashish tugmasi).
-5. Bot saytning `/api/telegram/issue-code` API'siga murojaat qilib, 6 xonali kod oladi va ko'rsatadi.
+5. Production webhook Supabasega 6 xonali kod yozadi va bot orqali ko'rsatadi.
 6. Foydalanuvchi kodni saytga kiritadi, login va kamida 8 belgili parol o'rnatadi.
 7. Hisob yaratiladi va dashboardga yo'naltiriladi.
 
@@ -27,3 +32,22 @@ npm run dev
 - `BOT_API_SECRET` — Next.js `.env` dagi `BOT_API_SECRET` bilan bir xil bo'lishi shart
 
 > Bot kodni har doim sayt API orqali yaratadi. Sayt Supabase env sozlangan bo'lsa Supabasega, aks holda local `data/` fallbackga yozadi.
+
+## Production webhook
+
+Vercel Production env:
+
+```env
+BOT_TOKEN=
+BOT_API_SECRET=
+TELEGRAM_WEBHOOK_SECRET=
+APP_URL=https://milliyprep.xyz
+```
+
+Webhook:
+
+```bash
+curl "https://api.telegram.org/bot$BOT_TOKEN/setWebhook" \
+  -d "url=https://milliyprep.xyz/api/telegram/webhook" \
+  -d "secret_token=$TELEGRAM_WEBHOOK_SECRET"
+```
