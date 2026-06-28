@@ -92,7 +92,7 @@ export function Pricing() {
 function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
   const price = yearly ? plan.yearly : plan.monthly;
   const Icon = plan.icon;
-  const onboardingHref = `/onboarding?plan=${encodeURIComponent(plan.id)}&billing=${
+  const registerHref = `/register?plan=${encodeURIComponent(plan.id)}&billing=${
     yearly ? "yearly" : "monthly"
   }`;
 
@@ -163,7 +163,7 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
       </div>
 
       <Link
-        href={onboardingHref}
+        href={registerHref}
         className={cn(
           "mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition",
           plan.highlighted

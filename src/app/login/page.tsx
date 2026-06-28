@@ -88,7 +88,7 @@ function LoginPageContent() {
           <Link href="/" aria-label="Bosh sahifa">
             <Logo size={24} />
           </Link>
-          <Link href="/onboarding" className="btn-ghost px-4 py-2 text-sm">
+          <Link href="/register" className="btn-ghost px-4 py-2 text-sm">
             Ro&apos;yxatdan o&apos;tish
           </Link>
         </header>
@@ -120,7 +120,7 @@ function LoginPageContent() {
 
             <p className="mt-6 text-center text-sm text-ink-600">
               Hisobingiz yo&apos;qmi?{" "}
-              <Link href="/onboarding" className="font-semibold text-brand-600 hover:underline">
+              <Link href="/register" className="font-semibold text-brand-600 hover:underline">
                 Ro&apos;yxatdan o&apos;ting
               </Link>
             </p>
@@ -137,7 +137,7 @@ function SocialLogin({ nextPath }: { nextPath: string }) {
   return (
     <SocialAuthButtons
       nextPath={nextPath}
-      onTelegram={() => (window.location.href = "/onboarding")}
+      onTelegram={() => (window.location.href = "/register")}
     />
   );
 }

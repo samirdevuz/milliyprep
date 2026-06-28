@@ -19,13 +19,13 @@ Do not reintroduce DTM flows, labels, metadata, or onboarding options.
 Done:
 
 - Landing, auth screens, dashboard shell, practice engine, AI chat UI/API, and onboarding exist.
-- Onboarding has been rebuilt into a site-native, mascot-free Milliy Sertifikat flow:
+- Onboarding has been rebuilt into an IELTS Nation-style, mascot-free Milliy Sertifikat flow:
   - name-only first step, then the learner's name is reused in later questions;
   - Milliy Sertifikat subject selection across language and general subjects;
   - current score status: has score, has not taken yet, or unknown;
   - target score on a 0-100 scale with grade-zone hints;
   - weekly study time and study days;
-  - certificate purpose, trust/explanation screen, profile summary, referral source, reveal screen, expectation timeline, and built-in email registration with OTP verification.
+  - certificate purpose, trust/explanation screen, profile summary, referral source, reveal screen, and expectation timeline.
 - Visible DTM references and old DTM onboarding keys have been removed from `src/`, `README.md`, and `docs/`.
 - AI tutor context now uses Milliy Sertifikat fields such as `subjectId`, `subjectLabel`, `currentScore`, `targetScore`, and `resultStatus`.
 
@@ -33,8 +33,8 @@ Not Done Yet:
 
 - Practice question content still uses the existing generic subject/topic catalog. It should be replaced or seeded with real Milliy Sertifikat language-skill content.
 - Dashboard widgets still rely on generic progress metrics and subject terminology in some internal component APIs. User-facing DTM text is removed, but deeper data modeling should be renamed when the practice catalog is rebuilt.
-- Standalone `/register` UI has been removed; the route redirects to `/onboarding`, and account creation now happens inside onboarding.
-- There is no paywall sequence. The onboarding has reveal and expectation screens, then saves the plan through built-in registration.
+- Registration currently does not visibly repeat the onboarding profile before account creation.
+- There is no paywall sequence. The onboarding has reveal and expectation screens, then routes to registration.
 - Production data, payment, observability, and complete Supabase RLS hardening remain roadmap items.
 
 ## Browser Research Note

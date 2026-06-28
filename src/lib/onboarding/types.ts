@@ -76,17 +76,10 @@ export const REGIONS = [
 ];
 
 export const STEPS = [
-  { id: "ism", label: "Ism" },
-  { id: "fan", label: "Fan" },
-  { id: "hozirgi", label: "Hozirgi ball" },
+  { id: "asosiy", label: "Asosiy ma'lumotlar" },
   { id: "maqsad", label: "Maqsad" },
+  { id: "daraja", label: "Daraja" },
+  { id: "qiyinchiliklar", label: "Qiyinchiliklar" },
   { id: "vaqt", label: "Vaqt" },
-  { id: "sabab", label: "Sabab" },
-  { id: "ishonch", label: "Ishonch" },
-  { id: "xulosa", label: "Profil" },
-  { id: "manba", label: "Manba" },
-  { id: "reja", label: "Reja" },
-  { id: "timeline", label: "Yo'l xaritasi" },
-  { id: "hisob", label: "Hisob" },
-  { id: "tasdiq", label: "Tasdiq" },
+  { id: "profil", label: "Psixologik profil" },
 ];
