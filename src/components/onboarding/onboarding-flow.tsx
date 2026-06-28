@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, HelpCircle, Lock } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { StepProgress } from "@/components/ui/step-progress";
@@ -75,57 +75,62 @@ export function OnboardingFlow() {
   };
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-[420px_1fr]">
+    <div className="grid min-h-dvh overflow-hidden bg-ink-50 lg:grid-cols-[440px_minmax(0,1fr)]">
       <OnboardingSidePanel />
 
       <div
         id="onboarding-form"
-        className="relative flex max-h-screen flex-col overflow-y-auto bg-ink-50/40"
+        className="relative flex max-h-dvh min-w-0 flex-col overflow-y-auto bg-ink-50"
       >
-        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-ink-100 bg-white/90 px-4 py-3 backdrop-blur lg:hidden">
-          <Link href="/" aria-label="Bosh sahifa">
-            <Logo size={24} />
-          </Link>
-          <Link href="/login" className="text-sm font-semibold text-brand-600">
-            Kirish
-          </Link>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-soft-mesh opacity-70" />
+
+        <header className="sticky top-0 z-20 border-b border-white/70 bg-white/85 px-4 py-3 backdrop-blur-xl lg:hidden">
+          <div className="mx-auto flex max-w-3xl items-center justify-between">
+            <Link href="/" aria-label="Bosh sahifa">
+              <Logo size={24} />
+            </Link>
+            <Link href="/login" className="btn-ghost px-4 py-2 text-sm">
+              Kirish
+            </Link>
+          </div>
         </header>
 
-        <div className="flex flex-1 flex-col">
-          <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-8 sm:px-8">
-            <div className="mb-8">
+        <div className="relative z-10 flex flex-1 flex-col">
+          <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-5 sm:px-6 sm:py-8 xl:px-10">
+            <div className="mb-5 rounded-[1.75rem] border border-white/70 bg-white/80 p-4 shadow-soft backdrop-blur sm:p-5">
               <StepProgress steps={STEPS} current={step} />
-              <p className="mt-3 text-xs text-ink-500 sm:hidden">
-                Qadam {step + 1} / {STEPS.length} ·{" "}
-                <span className="font-semibold text-brand-700">
-                  {STEPS[step].label}
-                </span>
-              </p>
             </div>
 
-            <div className="rounded-3xl bg-white p-6 shadow-soft ring-1 ring-ink-100 sm:p-8">
+            <div className="min-h-[520px] rounded-[2rem] border border-white/80 bg-white/95 p-5 shadow-[0_24px_80px_-48px_rgba(15,23,42,0.55)] ring-1 ring-ink-100/60 backdrop-blur sm:p-7 lg:p-8">
               {hydrated ? (
                 <StepComponent errors={errors} />
               ) : (
-                <div className="h-72 animate-pulse rounded-xl bg-ink-100" />
+                <div className="h-72 animate-pulse rounded-3xl bg-ink-100" />
               )}
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+            <div className="sticky bottom-0 z-10 -mx-4 mt-6 border-t border-white/70 bg-ink-50/85 px-4 py-4 backdrop-blur-xl sm:-mx-6 sm:px-6 xl:-mx-10 xl:px-10">
+              <div className="mx-auto flex max-w-4xl flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Button
+                type="button"
                 variant="outline"
                 onClick={handleBack}
                 leadingIcon={<ArrowLeft className="h-4 w-4" />}
+                className="w-full sm:w-auto"
               >
                 {isFirst ? "Bosh sahifa" : "Orqaga"}
               </Button>
 
               <Button
+                type="button"
+                size="lg"
                 onClick={handleNext}
                 trailingIcon={<ArrowRight className="h-4 w-4" />}
+                className="w-full bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 sm:w-auto"
               >
                 {isLast ? "Tugatish" : "Keyingi"}
               </Button>
+              </div>
             </div>
 
             <p className="mt-6 flex items-center justify-center gap-1.5 text-center text-xs text-ink-500">
@@ -134,9 +139,12 @@ export function OnboardingFlow() {
             </p>
           </div>
 
-          <div className="border-t border-ink-100 bg-white px-4 py-3">
+          <div className="relative z-10 border-t border-white/70 bg-white/85 px-4 py-3 backdrop-blur-xl">
             <div className="mx-auto flex max-w-2xl items-center justify-between gap-3 text-xs text-ink-600 sm:px-4">
-              <p>Yordam kerakmi? Biz har doim siz bilan.</p>
+              <p className="inline-flex items-center gap-1.5">
+                <HelpCircle className="h-3.5 w-3.5 text-brand-500" />
+                Yordam kerakmi? Biz har doim siz bilan.
+              </p>
               <div className="flex items-center gap-2">
                 <Link
                   href="https://t.me/milliyprep"
