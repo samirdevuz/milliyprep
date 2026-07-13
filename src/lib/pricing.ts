@@ -41,13 +41,11 @@ export const PLANS: Plan[] = [
     highlighted: true,
     cta: "Pro ga o'tish",
     features: [
-      "Cheksiz mock testlar",
-      "Cheksiz AI tutor savollari",
-      "Yozma ish va speaking avto-baholash",
-      "Savol banki to'liq ochiq",
-      "Haftalik shaxsiy tahlil hisoboti",
-      "Imtihon strategiyasi bo'yicha darslar",
-      "Telegram'da ustoz qo'llab-quvvatlashi",
+      "Mock testlar va natija tarixi",
+      "Profil kontekstidagi AI tutor",
+      "Mavzular bo'yicha savol banki",
+      "Kuchli va zaif mavzular tahlili",
+      "Haftalik mashg'ulot progressi",
     ],
   },
 ];

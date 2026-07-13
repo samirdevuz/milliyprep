@@ -24,8 +24,8 @@ export function Pricing() {
               Pro reja bilan tayyorgarlikni boshlang
             </h2>
             <p className="mt-3 text-ink-600">
-              Click yoki Payme sandbox orqali test to&apos;lov qiling. Production
-              kalitlari ulanganda shu oqim haqiqiy to&apos;lovga tayyor bo&apos;ladi.
+              Tarifni Click yoki Payme orqali faollashtiring. To&apos;lov holati
+              profilingizga avtomatik bog&apos;lanadi.
             </p>
           </div>
         </Reveal>
@@ -81,8 +81,8 @@ export function Pricing() {
         </div>
 
         <p className="mt-8 text-center text-xs text-ink-500">
-          Narxlar O&apos;zbekiston so&apos;mida. To&apos;lov Click, Payme va
-          Uzcard orqali qabul qilinadi.
+          Narxlar O&apos;zbekiston so&apos;mida. To&apos;lov Click yoki Payme orqali
+          qabul qilinadi.
         </p>
       </div>
     </section>

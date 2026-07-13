@@ -8,7 +8,6 @@ const COLUMNS = [
       { href: "#imkoniyatlar", label: "Imkoniyatlar" },
       { href: "#kurslar", label: "Mahsulot" },
       { href: "#narxlar", label: "Narxlar" },
-      { href: "#natijalar", label: "Natijalar" },
     ],
   },
   {
@@ -37,7 +36,7 @@ export function Footer() {
             <Logo />
             <p className="max-w-xs text-sm text-ink-600">
               Milliy Sertifikatga eng samarali yo&apos;l. Shaxsiy reja,
-              minglab mashqlar va AI tutor — bir joyda.
+              mavzuli mashqlar va AI tutor — bir joyda.
             </p>
             <div className="flex gap-3 text-sm">
               <Link

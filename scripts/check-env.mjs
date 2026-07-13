@@ -42,6 +42,28 @@ ok = line(
   "32+ byte random secret qo'ying"
 ) && ok;
 
+ok = line(
+  has(env, "BOT_TOKEN") &&
+    has(env, "TELEGRAM_WEBHOOK_SECRET") &&
+    env.TELEGRAM_WEBHOOK_SECRET.length >= 24,
+  "Telegram webhook",
+  "BOT_TOKEN va 24+ belgili TELEGRAM_WEBHOOK_SECRET kerak"
+) && ok;
+
+const paymentConfigured =
+  has(env, "CLICK_MERCHANT_ID") &&
+  has(env, "CLICK_SERVICE_ID") &&
+  has(env, "CLICK_SECRET_KEY") &&
+  has(env, "PAYME_MERCHANT_ID") &&
+  has(env, "PAYME_KEY");
+const subscriptionsEnforced = env.ENFORCE_SUBSCRIPTIONS !== "false";
+
+ok = line(
+  !subscriptionsEnforced || paymentConfigured,
+  "Payment providers",
+  "entitlement yoqilganida Click va Payme merchant kalitlari to'liq bo'lishi kerak"
+) && ok;
+
 ok = line(has(env, "APP_URL"), "APP_URL", "masalan http://localhost:3000 yoki https://milliyprep.uz") && ok;
 
 const hasSupabase = has(env, "SUPABASE_URL") && (has(env, "SUPABASE_SECRET_KEY") || has(env, "SUPABASE_SERVICE_ROLE_KEY"));
@@ -86,11 +108,11 @@ ok = line(
   "BOT_API_SECRET kuchli random qiymat bo'lsin va bot/.env bilan bir xil bo'lsin"
 ) && ok;
 
-line(
-  has(env, "OPENAI_API_KEY"),
+ok = line(
+  !subscriptionsEnforced || has(env, "OPENAI_API_KEY"),
   "AI tutor",
-  "OPENAI_API_KEY bo'lmasa chat mock/demo provider bilan ishlaydi"
-);
+  "pullik AI tutor uchun OPENAI_API_KEY kerak"
+) && ok;
 
 console.log("");
 if (!ok) {

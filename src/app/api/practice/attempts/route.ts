@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Avval hisobga kiring." }, { status: 401 });
   }
 
-  const limit = rateLimit(
+  const limit = await rateLimit(
     `practice:${normalizedRateKey(session.userId)}:${getClientIp(req)}`,
     40,
     10 * 60 * 1000

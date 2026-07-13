@@ -1,26 +1,19 @@
 import "server-only";
+import { createHash } from "node:crypto";
+import {
+  MemoryRateLimiter,
+  type RateLimitResult,
+} from "@/lib/rate-limit-memory";
+import { formatSupabaseError, getSupabaseAdmin } from "./supabase";
+import { logEvent } from "@/lib/observability";
 
-interface Bucket {
-  count: number;
-  resetAt: number;
-}
-
-interface RateLimitResult {
-  ok: boolean;
-  retryAfter: number;
-}
-
-const buckets = new Map<string, Bucket>();
-const MAX_BUCKETS = 5000;
-
-function cleanup(now: number): void {
-  if (buckets.size < MAX_BUCKETS) return;
-  for (const [key, bucket] of buckets.entries()) {
-    if (bucket.resetAt <= now) buckets.delete(key);
-  }
-}
+const memoryLimiter = new MemoryRateLimiter();
 
 export function getClientIp(req: Request): string {
+  const trusted =
+    req.headers.get("x-vercel-forwarded-for") ??
+    req.headers.get("cf-connecting-ip");
+  if (trusted) return trusted.split(",")[0]?.trim() || "unknown";
   const forwarded = req.headers.get("x-forwarded-for");
   if (forwarded) return forwarded.split(",")[0]?.trim() || "unknown";
   return (
@@ -30,30 +23,57 @@ export function getClientIp(req: Request): string {
   );
 }
 
-export function rateLimit(
+function bucketHash(key: string): string {
+  return createHash("sha256").update(key).digest("hex");
+}
+
+export async function rateLimit(
   key: string,
   limit: number,
   windowMs: number
-): RateLimitResult {
-  const now = Date.now();
-  cleanup(now);
+): Promise<RateLimitResult> {
+  const hashedKey = bucketHash(key);
+  const supabase = getSupabaseAdmin();
 
-  const existing = buckets.get(key);
-  if (!existing || existing.resetAt <= now) {
-    buckets.set(key, { count: 1, resetAt: now + windowMs });
-    return { ok: true, retryAfter: 0 };
+  if (supabase) {
+    const { data, error } = await supabase.rpc("consume_rate_limit", {
+      p_bucket_key: hashedKey,
+      p_limit: limit,
+      p_window_ms: windowMs,
+    });
+    if (!error) {
+      const row = Array.isArray(data) ? data[0] : data;
+      if (
+        row &&
+        typeof row.allowed === "boolean" &&
+        typeof row.retry_after === "number"
+      ) {
+        const result = { ok: row.allowed, retryAfter: row.retry_after };
+        if (!result.ok) {
+          logEvent("warn", "rate_limit.blocked", {
+            bucket: hashedKey.slice(0, 16),
+            retryAfter: result.retryAfter,
+          });
+        }
+        return result;
+      }
+      throw new Error("consume_rate_limit returned an invalid response.");
+    }
+
+    if (process.env.NODE_ENV === "production") {
+      throw formatSupabaseError("consume rate limit", error.message);
+    }
   }
 
-  if (existing.count >= limit) {
-    return {
-      ok: false,
-      retryAfter: Math.ceil((existing.resetAt - now) / 1000),
-    };
+  const result = memoryLimiter.consume(hashedKey, limit, windowMs);
+  if (!result.ok) {
+    logEvent("warn", "rate_limit.blocked", {
+      bucket: hashedKey.slice(0, 16),
+      retryAfter: result.retryAfter,
+      backend: "memory",
+    });
   }
-
-  existing.count += 1;
-  buckets.set(key, existing);
-  return { ok: true, retryAfter: 0 };
+  return result;
 }
 
 export function normalizedRateKey(input: string): string {

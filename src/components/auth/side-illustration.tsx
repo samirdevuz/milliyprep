@@ -13,12 +13,12 @@ const PERKS: {
     icon: Target,
     tone: "brand",
     title: "Shaxsiy o'quv reja",
-    text: "Sun'iy intellekt siz uchun moslashtirilgan reja tuzadi.",
+    text: "Profil va mashq natijalari tavsiya navbatini shakllantiradi.",
   },
   {
     icon: GraduationCap,
     tone: "violet",
-    title: "Minglab mashq va testlar",
+    title: "Mavzuli mashq va testlar",
     text: "Imtihon formatidagi savollar bilan mashq qiling.",
   },
   {
@@ -55,8 +55,8 @@ export function AuthSideIllustration({ title }: { title: React.ReactNode }) {
               {title}
             </h1>
             <p className="max-w-sm text-sm leading-relaxed text-white/75">
-              Minglab o&apos;quvchilar singari siz ham maqsadingizga biz bilan
-              erishing.
+              Profilingizni yarating, natijalarni kuzating va izchil mashq
+              qiling.
             </p>
           </div>
 

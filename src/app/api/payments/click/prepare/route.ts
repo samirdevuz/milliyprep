@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { paymentStore } from "@/lib/server/payments";
 import { verifyClickSignature } from "@/lib/payments/providers";
+import { logEvent } from "@/lib/observability";
 
 const OK = 0;
 const SIGN_ERROR = -1;
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
     payload.action !== "0"
   ) {
     error = SIGN_ERROR;
-  } else if (!order) {
+  } else if (!order || order.provider !== "click") {
     error = ORDER_NOT_FOUND;
   } else if (Math.round(Number(payload.amount) * 100) !== order.amountTiyin) {
     error = AMOUNT_ERROR;
@@ -48,6 +49,15 @@ export async function POST(req: Request) {
       providerState: 1,
     });
   }
+
+  logEvent(error === OK ? "info" : "warn", "payment.callback", {
+    provider: "click",
+    stage: "prepare",
+    orderId: payload.merchantTransId,
+    providerTransactionId: payload.clickTransId,
+    outcome: error === OK ? "prepared" : "rejected",
+    callbackError: error,
+  });
 
   return NextResponse.json({
     click_trans_id: payload.clickTransId,

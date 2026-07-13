@@ -191,7 +191,7 @@ export function DashboardPreview() {
           </div>
         </div>
         <p className="mt-2 text-[11px] text-ink-600">
-          AI tutor 24/7 yordam beradi
+          AI tutor savollaringizni tushuntiradi
         </p>
         <button
           type="button"

@@ -4,6 +4,7 @@ import { paymentStore } from "@/lib/server/payments";
 import { getSession } from "@/lib/server/auth";
 import type { PaymentBilling, PaymentProvider } from "@/lib/payments/types";
 import { clickCheckoutUrl, paymeCheckoutUrl } from "@/lib/payments/providers";
+import { logEvent } from "@/lib/observability";
 
 function isProvider(value: unknown): value is PaymentProvider {
   return value === "click" || value === "payme";
@@ -57,6 +58,12 @@ export async function POST(req: Request) {
     provider,
     amountTiyin,
   });
+  logEvent("info", "payment.order_created", {
+    orderId: order.id,
+    provider,
+    billing,
+    amountTiyin,
+  });
 
   try {
     const redirectUrl =
@@ -65,6 +72,11 @@ export async function POST(req: Request) {
         : paymeCheckoutUrl(order, req.url);
     return NextResponse.json({ ok: true, orderId: order.id, redirectUrl });
   } catch (error) {
+    logEvent("error", "payment.checkout_failed", {
+      orderId: order.id,
+      provider,
+      error,
+    });
     return NextResponse.json(
       {
         error:

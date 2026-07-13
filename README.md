@@ -1,8 +1,7 @@
 # MilliyPrep
 
-Milliy Sertifikatga aqlli tayyorlanish platformasi. Sun'iy intellekt
-asosida shaxsiy o'quv reja, minglab mashqlar va real imtihon formatidagi
-testlar — bir joyda.
+Milliy Sertifikatga tayyorlanish platformasi. Shaxsiy profil, mavzuli
+mashqlar, mock testlar, progress tahlili va AI tutor — bir joyda.
 
 ## Texnologiyalar
 
@@ -25,6 +24,7 @@ Build qilish:
 ```bash
 npm run lint
 npm run typecheck
+npm test
 npm run build
 npm run start
 ```
@@ -59,13 +59,16 @@ src/
 
 ## Yo'l xaritasi
 
-- [x] **1-sprint** — Landing page (Hero, Features, How it works, Testimonials, FAQ, CTA)
-- [x] **2-sprint** — Auth oqimi (Email + telefon + Google + Telegram), form primitivlari
-- [x] **3-sprint** — 6 qadamli onboarding (Tanishuv → CEFR maqsad → Ko'nikmalar → Sabablar → Vaqt → Profil)
-- [~] **4-sprint** — Dashboard qobig'i (Bugungi reja, Statistika, Streak, Imtihonga countdown); real data wiring keyingi bosqichda
-- [ ] **5-sprint** — Mashqlar va testlar oqimi (savol bank, javob baholash)
-- [x] **6-sprint** — AI tutor chat UI/API (OpenAI-compatible provider, dashboard streaming chat, mock fallback)
-- [ ] **7-sprint** — Backend (Postgres/Supabase, RLS), to'lov, production observability
+- [x] Landing, onboarding, auth va dashboard oqimlari
+- [x] Server baholaydigan mashqlar, mock testlar va progress
+- [x] AI tutor UI/API va onboarding konteksti
+- [x] Click/Payme orderlari va Pro entitlement lifecycle
+- [ ] Real Milliy Sertifikat kontentini ekspert tekshiruvidan o'tkazish
+- [ ] E2E testlar, distributed rate limit va observability
+- [ ] Production provider tasdiqlari, backup drill va launch QA
+
+Batafsil reja: [`docs/production-roadmap.md`](docs/production-roadmap.md).
+Operatsion runbook: [`docs/operations-runbook.md`](docs/operations-runbook.md).
 
 ## Brand
 

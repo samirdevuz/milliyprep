@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/motion/reveal";
-import { Bot, Camera, Globe2, Sparkles } from "lucide-react";
+import { Bot, MessageSquareText, Sparkles, Target } from "lucide-react";
 import { IconChip } from "@/components/ui/icon-chip";
 
 const MESSAGES = [
@@ -29,39 +29,37 @@ export function AiTutor() {
           <div>
             <span className="pill">
               <Sparkles className="h-3.5 w-3.5" />
-              24/7 AI tutor
+              Profil kontekstidagi AI tutor
             </span>
             <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
-              Sizning shaxsiy o&apos;qituvchingiz — har doim yoningizda
+              Savolingizga o&apos;zbekcha tushuntirish oling
             </h2>
             <p className="mt-4 max-w-lg text-ink-600">
-              Har qanday savol, har qanday xato, har qanday mavzu. AI tutor
-              sizning rejangiz, oxirgi natijalaringiz va zaif tomonlaringizni
-              biladi va o&apos;zbek, rus yoki ingliz tilida tushuntirib beradi.
-              Savol rasmini yuboring — bir zumda yechimni oling.
+              AI tutor matn ko&apos;rinishidagi savolingizga javob beradi va
+              onboarding profilingizdagi fan, hozirgi ball hamda maqsadli
+              ballni javob kontekstida hisobga oladi.
             </p>
 
             <ul className="mt-6 space-y-3">
               {[
                 {
-                  icon: Globe2,
+                  icon: MessageSquareText,
                   tone: "brand" as const,
-                  title: "Uch tilda javob beradi",
-                  text: "O'zbek (lotin va kirill), rus va ingliz tillarida.",
+                  title: "O'zbekcha muloqot",
+                  text: "Savolni matn ko'rinishida yuboring va o'zbekcha izoh oling.",
                 },
                 {
-                  icon: Camera,
+                  icon: Target,
                   tone: "violet" as const,
-                  title: "Rasmdan tushunadi",
-                  text:
-                    "Daftaringizdagi savolni rasmga oling — bir zumda yechimni qaytaradi.",
+                  title: "Maqsadni hisobga oladi",
+                  text: "Hozirgi va maqsadli ball profilingizdan olinadi.",
                 },
                 {
                   icon: Bot,
                   tone: "accent" as const,
-                  title: "Sizning rejangizni biladi",
+                  title: "Tanlangan faningizni biladi",
                   text:
-                    "Maqsadli ballingiz va zaif mavzularingizga moslab javob beradi.",
+                    "Javob tanlangan Milliy Sertifikat faningizga mos kontekstda beriladi.",
                 },
               ].map(({ icon: Icon, tone, title, text }) => (
                 <li key={title} className="flex items-start gap-3">
@@ -137,9 +135,8 @@ export function AiTutor() {
 
               <div className="border-t border-ink-100 bg-ink-50/60 p-3">
                 <div className="flex items-center gap-2 rounded-full bg-white px-3 py-2 ring-1 ring-ink-200">
-                  <Camera className="h-4 w-4 text-ink-400" />
                   <span className="flex-1 truncate text-xs text-ink-400">
-                    Savolingizni yozing yoki rasm yuboring…
+                    Savolingizni yozing…
                   </span>
                   <button
                     type="button"

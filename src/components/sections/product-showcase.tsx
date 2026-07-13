@@ -31,12 +31,12 @@ export function ProductShowcase() {
 
         <ShowcaseRow
           eyebrow="Shaxsiy reja"
-          title="Har hafta o'zgaradigan o'quv reja"
-          description="Imtihon sanasi va maqsadli ballingizni aytasiz, biz haftalik mashg'ulot jadvalini tuzamiz. Har bir mock natijangiz keyingi haftani avtomatik muvozanatlaydi: nimani yo'qotsangiz — ko'proq mashq, nimani egallasangiz — kamroq."
+          title="Natijaga qarab tartiblanadigan o'quv reja"
+          description="Maqsad ballingiz va haftalik vaqtingiz profilda saqlanadi. Mashq natijalari pastroq mavzularni tavsiya etilgan navbatda yuqoriga chiqaradi."
           bullets={[
-            "Aniq mavzu va qiyinlik darajasi tahlili",
-            "Har kuni qisqa, aniq mashqlar",
-            "Ko'rsatkichlar haftalik hisobotda",
+            "Mavzular kesimida aniqlik ko'rsatkichi",
+            "Haftalik bajarilgan mashqlar soni",
+            "Zaifroq mavzular uchun tavsiya navbati",
           ]}
           visual={<PlanVisual />}
         />
@@ -44,24 +44,24 @@ export function ProductShowcase() {
         <ShowcaseRow
           flip
           eyebrow="Mock testlar"
-          title="Milliy Sertifikat formatidagi mock testlar"
-          description="Real imtihon vaqti, fan bo'yicha mavzular va rasmiy formatga yaqin tuzilma. Test qismlari avtomatik baholanadi, har bir xato uchun esa qadam-baqadam tushuntirish beriladi."
+          title="Fanlar aralashmasidan tuzilgan mock testlar"
+          description="Savol bankidagi faol fan va mavzulardan test shakllanadi. Javoblar serverda tekshiriladi, natija tarixga yoziladi va har bir savol uchun izoh ko'rsatiladi."
           bullets={[
-            "Vaqt cheklovi va imtihon kabi tuzilma",
+            "Vaqt hisoblagichi va test navigatsiyasi",
             "Avtomatik baholash, batafsil sharh",
-            "Har bir xato uchun aniq tuzatish taklifi",
+            "Natija va javoblar tarixi",
           ]}
           visual={<MockVisual />}
         />
 
         <ShowcaseRow
           eyebrow="Savol banki"
-          title="Eng ko'p adashgan savollaringiz birinchi turadi"
-          description="Har bir noto'g'ri javob mavzu va savol turi bo'yicha teglanadi. Bank tasodifiy emas — sizning aniq zaif tomonlaringizni ustuvor qiladi."
+          title="Mavzular bo'yicha tartiblangan savol banki"
+          description="Savollar fan va mavzu bo'yicha guruhlanadi. Har bir urinishdan keyin mavzu aniqligi yangilanib, qaysi bo'limga qaytish kerakligi ko'rinadi."
           bullets={[
-            "Mavzular bo'yicha tartiblangan minglab savol",
-            "Sizning tarixingizga moslab tartib",
-            "Filtrlash: qiyinlik, fan, mavzu",
+            "Fan va mavzu bo'yicha katalog",
+            "Urinishlar soni va aniqlik foizi",
+            "Admin orqali savol qo'shish va tahrirlash",
           ]}
           visual={<QuestionBankVisual />}
         />
@@ -194,7 +194,7 @@ function MockVisual() {
     <div className="card relative space-y-3 p-5 sm:p-6">
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
-          Milliy Sertifikat Mock · Ingliz tili · 30 savol
+          Milliy Sertifikat Mock · Fanlar aralashmasi · 10 savol
         </p>
         <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700">
           <Timer className="h-3 w-3" />

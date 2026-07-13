@@ -169,7 +169,7 @@ export const websiteJsonLd = {
   alternateName: "Milliy Prep",
   url: SITE_URL,
   description:
-    "MilliyPrep - Milliy Sertifikat imtihonlariga barcha asosiy fanlar bo'yicha tayyorlanish platformasi.",
+    "MilliyPrep - Milliy Sertifikat uchun profil, mavzuli mashqlar, mock testlar, progress tahlili va AI tutor platformasi.",
 };
 
 export const courseJsonLd = {

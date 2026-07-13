@@ -12,7 +12,7 @@ Do not reintroduce DTM flows, labels, metadata, or onboarding options.
 - `npm run typecheck` - run TypeScript checks.
 - `npm run lint` - run ESLint.
 - `npm run build` - production build.
-- `npm test` - typecheck, lint, and bot tests.
+- `npm test` - typecheck, lint, unit tests, and bot syntax checks.
 
 ## Current Implementation Status
 
@@ -28,14 +28,17 @@ Done:
   - certificate purpose, trust/explanation screen, profile summary, referral source, reveal screen, and expectation timeline.
 - Visible DTM references and old DTM onboarding keys have been removed from `src/`, `README.md`, and `docs/`.
 - AI tutor context now uses Milliy Sertifikat fields such as `subjectId`, `subjectLabel`, `currentScore`, `targetScore`, and `resultStatus`.
+- Registration visibly repeats the onboarding profile, and email, phone, Telegram, and Google registration preserve a server-validated profile.
+- The plans page, Click/Payme checkout routes, and idempotent Pro subscription entitlement lifecycle exist.
+- Practice submissions are scored from the active server question bank and protected by database integrity constraints.
 
 Not Done Yet:
 
 - Practice question content still uses the existing generic subject/topic catalog. It should be replaced or seeded with real Milliy Sertifikat language-skill content.
 - Dashboard widgets still rely on generic progress metrics and subject terminology in some internal component APIs. User-facing DTM text is removed, but deeper data modeling should be renamed when the practice catalog is rebuilt.
-- Registration currently does not visibly repeat the onboarding profile before account creation.
-- There is no paywall sequence. The onboarding has reveal and expectation screens, then routes to registration.
-- Production data, payment, observability, and complete Supabase RLS hardening remain roadmap items.
+- Production-grade Milliy Sertifikat question content still needs subject-matter review and expansion.
+- Distributed rate limiting, observability, backup drills, full browser E2E coverage, and provider production approval remain roadmap items.
+- Payment production keys and live callback certification still need to be supplied and verified.
 
 ## Browser Research Note
 

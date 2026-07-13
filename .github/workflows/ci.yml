@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AUTH_SECRET: ci-only-auth-secret-at-least-32-characters
+      APP_URL: http://localhost:3000
+      BOT_API_SECRET: ci-only-bot-secret-at-least-24-characters
+      NEXT_PUBLIC_ENABLE_EMAIL_AUTH: "false"
+      NEXT_PUBLIC_ENABLE_PHONE_AUTH: "false"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production dependency audit
+        run: npm run audit:prod
+
+      - name: Test
+        run: npm test
+
+      - name: Production build
+        run: npm run build
+
+      - name: HTTP smoke test
+        shell: bash
+        run: |
+          npm run dev > /tmp/milliyprep-dev.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://localhost:3000 > /dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              cat /tmp/milliyprep-dev.log
+              exit 1
+            fi
+            sleep 1
+          done
+          npm run test:smoke

@@ -8,7 +8,7 @@ import { Reveal } from "@/components/motion/reveal";
 const FAQS = [
   {
     q: "MilliyPrep qaysi imtihonlarga tayyorlaydi?",
-    a: "Bizning platforma Milliy Sertifikat imtihonlariga tayyorlaydi. Matematika, ona tili, tarix, huquq, ingliz tili va boshqa asosiy fanlar bo'yicha testlar, mavzular va real imtihonga yaqin mock mashqlar mavjud.",
+    a: "Platforma faqat Milliy Sertifikat tayyorgarligiga qaratilgan. Fan va mavzular bo'yicha mashqlar, savol bankidan shakllanadigan mock testlar va natija tahlili mavjud.",
   },
   {
     q: "Boshlash uchun nima kerak?",
@@ -16,19 +16,19 @@ const FAQS = [
   },
   {
     q: "Reja qanday shakllanadi?",
-    a: "Har bir o'quvchi uchun joriy daraja, mavjud vaqt va maqsad asosida individual haftalik reja tuziladi. Har bir test natijasi keyingi hafta rejasini avtomatik moslaydi.",
+    a: "Profilingizdagi maqsad va vaqt saqlanadi. Mashq natijalariga ko'ra aniqligi pastroq mavzular tavsiya navbatida yuqoriga chiqadi, haftalik progress esa dashboardda yangilanadi.",
   },
   {
     q: "Pro tarifda nimalar bor?",
-    a: "Pro tarifda mock testlar, AI tutor, yozma ish va speaking avto-baholash, to'liq savol banki va haftalik shaxsiy tahlil mavjud.",
+    a: "Pro tarifda mock testlar, profil kontekstidagi AI tutor, mavzuli savol banki, natijalar tarixi va kuchli-zaif mavzular tahlili mavjud.",
   },
   {
     q: "Qanday tillarda ishlaydi?",
-    a: "Interfeys va AI tutor o'zbek (lotin), rus va ingliz tillarini qo'llab-quvvatlaydi. Imtihon savollari rasmiy formatga mos tarzda taqdim etiladi.",
+    a: "Asosiy interfeys o'zbek lotin tilida. AI tutor ham o'zbekcha javob beradi; mashq matni esa tanlangan fan mazmuniga bog'liq.",
   },
   {
     q: "Telefonda ham ishlaydimi?",
-    a: "Ha, MilliyPrep mobil va planshet uchun to'liq optimallashgan. Tez orada mustaqil iOS va Android ilovalari ham chiqadi.",
+    a: "Ha, sayt telefon, planshet va kompyuter ekranlariga moslashadi. Alohida mobil ilova talab qilinmaydi.",
   },
 ];
 

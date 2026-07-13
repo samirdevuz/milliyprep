@@ -54,12 +54,14 @@ export async function POST(req: Request) {
     );
   }
 
-  const ipLimit = rateLimit(`telegram-register:${getClientIp(req)}`, 20, 10 * 60 * 1000);
-  const codeLimit = rateLimit(
-    `telegram-register-code:${normalizedRateKey(code)}`,
-    5,
-    10 * 60 * 1000
-  );
+  const [ipLimit, codeLimit] = await Promise.all([
+    rateLimit(`telegram-register:${getClientIp(req)}`, 20, 10 * 60 * 1000),
+    rateLimit(
+      `telegram-register-code:${normalizedRateKey(code)}`,
+      5,
+      10 * 60 * 1000
+    ),
+  ]);
   if (!ipLimit.ok || !codeLimit.ok) {
     return NextResponse.json(
       { error: "Juda ko'p urinish. Birozdan so'ng qayta urinib ko'ring." },

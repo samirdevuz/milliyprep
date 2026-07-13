@@ -1,34 +1,40 @@
 # Production Checklist
 
-## Done In This Sprint
+## Kodda tayyor
 
-- Next/React dependencies patched.
-- ESLint 9 flat config working.
-- `npm audit` clean.
-- Supabase production schema created in `supabase/migrations/001_initial_auth.sql`.
-- Server-side Supabase adapter added with JSON fallback.
-- Register endpoint requires OTP server-side.
-- Auth routes have basic rate limiting.
-- Google OAuth callback uses normalized `APP_URL`.
-- AI tutor streaming API and dashboard chat UI added.
-- Click and Payme sandbox payment callbacks added.
-- Setup guide written in `docs/production-setup.md`.
+- Next.js production build, strict TypeScript, ESLint va unit testlar.
+- Supabase auth, practice, payment va subscription migratsiyalari.
+- Server-authoritative practice scoring va idempotent Pro activation.
+- Email/phone/Google/Telegram auth hamda server-validatsiyadan o'tgan onboarding.
+- Production security headerlari va majburiy env tekshiruvi.
 
-## You Need To Provide
+## Launchdan oldin berilishi shart
 
-- Supabase project URL and secret key.
-- Google OAuth client ID and client secret.
-- Resend API key and verified sending domain.
-- Eskiz SMS token / sender setup, if phone OTP must work in production.
-- Click merchant id, service id, secret key, and callback approval.
-- Payme merchant id and sandbox TEST_KEY.
-- Telegram bot token from BotFather.
-- Production domain and hosting env values.
-- OpenAI API key if AI tutor will be enabled.
+- Supabase production project URL va secret key.
+- Google OAuth production client va redirect URI.
+- Resend API key hamda verified sending domain.
+- Telegram bot token, webhook secret va ro'yxatdan o'tkazilgan webhook.
+- Click merchant/service/secret hamda tasdiqlangan callbacklar.
+- Payme merchant/production key hamda tasdiqlangan callback.
+- OpenAI API key, model limiti va billing alerti.
+- Production domain, hosting va support email/Telegram kanali.
 
-## Next Build Sprint
+## Stagingda dalil bilan tekshiriladi
 
-- Replace dashboard demo data with Supabase-backed study plan/progress tables.
-- Build practice/test question bank schema.
-- Add admin tools for questions and content.
-- Add subscription entitlement gating after provider sandbox approval.
+- `001` dan `006` gacha migratsiyalar yangi Supabase projectda ketma-ket o'tadi.
+- Email, Google va Telegram orqali yangi hisob ochilib, onboarding saqlanadi.
+- Practice natijasini brauzerdan soxtalashtirish 422 javob oladi.
+- Click va Payme: success, duplicate callback, wrong amount va cancel ssenariylari.
+- Paymentdan keyin `/api/payments/status` faol Pro obunani qaytaradi.
+- `npm test`, `npm run build` va mobil/desktop smoke test yashil.
+- Deploy qilingan URLga `SMOKE_BASE_URL=https://... npm run test:smoke` yashil.
+- GitHub Actions `CI` workflow pull requestda yashil.
+
+## Hali launch gate
+
+- Real Milliy Sertifikat savollarini ekspert reviewdan o'tkazish.
+- Distributed rate limit va error/payment observability ulash.
+- Auth/payment browser E2E testlarini CI'da ishlatish.
+- Backup restore drill, incident runbook va refund jarayonini sinash.
+- Provider tasdig'idan so'ng `PAYMENT_MODE=production` va
+  `ENFORCE_SUBSCRIPTIONS=true` ni yoqish.

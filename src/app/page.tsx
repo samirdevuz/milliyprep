@@ -7,10 +7,7 @@ import { Features } from "@/components/sections/features";
 import { Subjects } from "@/components/sections/subjects";
 import { ProductShowcase } from "@/components/sections/product-showcase";
 import { AiTutor } from "@/components/sections/ai-tutor";
-import { AutoGrading } from "@/components/sections/auto-grading";
 import { Pricing } from "@/components/sections/pricing";
-import { SpotlightStory } from "@/components/sections/spotlight-story";
-import { Testimonials } from "@/components/sections/testimonials";
 import { Faq } from "@/components/sections/faq";
 import { Cta } from "@/components/sections/cta";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -33,9 +30,6 @@ export default function Home() {
         <Subjects />
         <ProductShowcase />
         <AiTutor />
-        <AutoGrading />
-        <SpotlightStory />
-        <Testimonials />
         <Pricing />
         <Faq />
         <Cta />

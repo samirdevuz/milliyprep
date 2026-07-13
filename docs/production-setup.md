@@ -1,11 +1,12 @@
 # MilliyPrep Production Setup
 
-This app is now ready to run with Supabase Postgres as the production database.
+This app has a Supabase/Postgres production foundation and still requires the
+launch checks in `production-checklist.md` before public traffic.
 Without Supabase env values it still falls back to local `data/*.json` for dev.
 
 ## 1. Local Runtime
 
-Install Node.js `20.19.0` or newer. The current project declares this in
+Install Node.js `22.6.0` or newer. The current project declares this in
 `package.json`.
 
 Then run:
@@ -40,7 +41,13 @@ AUTH_SECRET=the-generated-value
 
 1. Create a Supabase project.
 2. Open `SQL Editor` -> `New Query`.
-3. Paste and run `supabase/migrations/001_initial_auth.sql`.
+3. Run every migration in filename order:
+   - `001_initial_auth.sql`
+   - `002_practice_engine.sql`
+   - `003_payments.sql`
+   - `004_practice_integrity.sql`
+   - `005_subscriptions.sql`
+   - `006_distributed_rate_limits.sql`
 4. Go to `Settings` -> `API Keys`.
 5. Copy:
    - Project URL -> `SUPABASE_URL`
@@ -144,16 +151,18 @@ NEXT_PUBLIC_ENABLE_PHONE_AUTH=false
 
 The app is wired for Click and Payme test flows before production launch.
 
-Run the payment migration after auth and practice migrations:
+Run the payment and subscription migrations after auth and practice migrations:
 
 ```sql
 -- supabase/migrations/003_payments.sql
+-- supabase/migrations/005_subscriptions.sql
 ```
 
 Set sandbox env values:
 
 ```env
 PAYMENT_MODE=sandbox
+ENFORCE_SUBSCRIPTIONS=false
 CLICK_MERCHANT_ID=
 CLICK_SERVICE_ID=
 CLICK_SECRET_KEY=
@@ -178,6 +187,10 @@ separate test endpoint for your service.
 
 Do not switch `PAYMENT_MODE=production` or production checkout URLs until both
 providers have accepted the callback tests and the production domain is HTTPS.
+Set `ENFORCE_SUBSCRIPTIONS=true` only after both callbacks have successfully
+activated a sandbox subscription for a real test account. In production the
+application enforces subscriptions by default unless this value is explicitly
+set to `false` for a controlled rollout.
 
 ## 8. Telegram Bot
 
@@ -189,6 +202,8 @@ Root `.env`:
 
 ```env
 BOT_API_SECRET=long-random-shared-secret
+BOT_TOKEN=123456:your-bot-token
+TELEGRAM_WEBHOOK_SECRET=another-long-random-secret
 ```
 
 `bot/.env`:
@@ -197,6 +212,7 @@ BOT_API_SECRET=long-random-shared-secret
 BOT_TOKEN=123456:your-bot-token
 APP_URL=http://localhost:3000
 BOT_API_SECRET=long-random-shared-secret
+TELEGRAM_WEBHOOK_SECRET=another-long-random-secret
 ```
 
 Run:
@@ -231,11 +247,14 @@ APP_URL=https://milliyprep.xyz
 SUPABASE_URL=
 SUPABASE_SECRET_KEY=
 BOT_API_SECRET=
+BOT_TOKEN=
+TELEGRAM_WEBHOOK_SECRET=
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 RESEND_API_KEY=
 MAIL_FROM=MilliyPrep <no-reply@milliyprep.xyz>
 PAYMENT_MODE=sandbox
+ENFORCE_SUBSCRIPTIONS=false
 CLICK_MERCHANT_ID=
 CLICK_SERVICE_ID=
 CLICK_SECRET_KEY=
@@ -266,4 +285,7 @@ npm run check:env
 - Telegram registration bot integration.
 - Email OTP via Resend and SMS OTP via Eskiz token.
 - Click and Payme sandbox payment callbacks.
+- Idempotent Pro subscription activation and cancellation from payment callbacks.
+- Server-side onboarding validation and Google OAuth onboarding continuity.
+- Server-authoritative practice scoring and database integrity constraints.
 - AI tutor streaming API and dashboard chat UI.

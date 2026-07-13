@@ -7,9 +7,9 @@ const STEPS = [
     n: "01",
     icon: MessageSquare,
     tone: "brand" as const,
-    title: "AI tutorga ayting",
+    title: "Profil yarating",
     description:
-      "Imtihon sanasi, maqsadli ball va zaif fanlaringizni 2 daqiqada aytib bering.",
+      "Fan, hozirgi natija, maqsad ball va haftalik vaqtingizni 2 daqiqada kiriting.",
   },
   {
     n: "02",

@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const limit = rateLimit(
+  const limit = await rateLimit(
     `password-login:${getClientIp(req)}:${method}:${normalizedRateKey(contact)}`,
     10,
     10 * 60 * 1000

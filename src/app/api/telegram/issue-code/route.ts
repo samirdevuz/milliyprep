@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const limit = rateLimit(
+  const limit = await rateLimit(
     `telegram-issue:${getClientIp(req)}:${normalizedRateKey(String(body.telegramId))}`,
     10,
     10 * 60 * 1000

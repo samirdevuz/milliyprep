@@ -97,7 +97,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const limit = rateLimit(
+  const limit = await rateLimit(
     `ai-chat:${normalizedRateKey(session.userId)}:${getClientIp(req)}`,
     30,
     10 * 60 * 1000

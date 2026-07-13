@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const limit = rateLimit(
+  const limit = await rateLimit(
     `otp-send:${getClientIp(req)}:${channel}:${normalizedRateKey(contact)}`,
     5,
     10 * 60 * 1000

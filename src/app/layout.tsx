@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MilliyPrep — Milliy Sertifikatga tayyorlanish",
     description:
-      "Barcha asosiy Milliy Sertifikat fanlari bo'yicha testlar, mavzular, mock imtihonlar va natija tahlili.",
+      "Milliy Sertifikat uchun profil, mavzuli mashqlar, mock testlar, natija tahlili va AI tutor.",
     url: SITE_URL,
     siteName: SITE_NAME,
     type: "website",
@@ -96,7 +96,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="uz" className={`${inter.variable} ${dancing.variable}`}>
+    <html
+      lang="uz"
+      data-scroll-behavior="smooth"
+      className={`${inter.variable} ${dancing.variable}`}
+    >
       <body className="min-h-screen bg-white">{children}</body>
     </html>
   );

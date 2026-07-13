@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Kodni kiriting." }, { status: 422 });
   }
 
-  const limit = rateLimit(
+  const limit = await rateLimit(
     `otp-login:${getClientIp(req)}:${channel}:${normalizedRateKey(contact)}`,
     10,
     10 * 60 * 1000

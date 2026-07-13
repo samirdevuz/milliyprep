@@ -97,8 +97,8 @@ export default function PlansPage() {
                   Yillik to&apos;lovda oyiga arzonroq
                 </p>
                 <p className="text-sm text-ink-600">
-                  Click yoki Payme orqali sandbox to&apos;lovni boshlang, yoki
-                  avval hisob yaratib keyin to&apos;lov qiling.
+                  Avval hisob yarating, keyin Click yoki Payme orqali Pro
+                  tarifni profilingizga faollashtiring.
                 </p>
               </div>
             </div>

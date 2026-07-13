@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { paymentStore } from "@/lib/server/payments";
 import { verifyPaymeAuth } from "@/lib/payments/providers";
 import type { PaymentOrder } from "@/lib/payments/types";
+import { logEvent } from "@/lib/observability";
 
 const STATE_CREATED = 1;
 const STATE_COMPLETED = 2;
@@ -63,6 +64,11 @@ export async function POST(req: Request) {
   }
 
   if (!verifyPaymeAuth(req.headers.get("authorization"))) {
+    logEvent("warn", "payment.callback_rejected", {
+      provider: "payme",
+      reason: "invalid_auth",
+      method: body.method ?? "unknown",
+    });
     return rpcError(body.id, -32504, "Insufficient privileges");
   }
 
@@ -72,7 +78,9 @@ export async function POST(req: Request) {
   if (body.method === "CheckPerformTransaction") {
     if (!orderId) return rpcError(body.id, -31050, "Order id is required");
     const order = await paymentStore.get(orderId);
-    if (!order) return rpcError(body.id, -31050, "Order not found");
+    if (!order || order.provider !== "payme") {
+      return rpcError(body.id, -31050, "Order not found");
+    }
     if (params.amount !== order.amountTiyin) {
       return rpcError(body.id, -31001, "Incorrect amount");
     }
@@ -85,12 +93,21 @@ export async function POST(req: Request) {
   if (body.method === "CreateTransaction") {
     if (!orderId) return rpcError(body.id, -31050, "Order id is required");
     const order = await paymentStore.get(orderId);
-    if (!order) return rpcError(body.id, -31050, "Order not found");
+    if (!order || order.provider !== "payme") {
+      return rpcError(body.id, -31050, "Order not found");
+    }
     if (params.amount !== order.amountTiyin) {
       return rpcError(body.id, -31001, "Incorrect amount");
     }
     if (order.status !== "pending") {
       return rpcError(body.id, -31008, "Operation cannot be performed");
+    }
+    if (!params.id) return rpcError(body.id, -31050, "Transaction id is required");
+    if (order.providerTransactionId) {
+      if (order.providerTransactionId !== params.id) {
+        return rpcError(body.id, -31008, "Operation cannot be performed");
+      }
+      return rpcResult(body.id, transaction(order));
     }
     await paymentStore.update(order.id, {
       providerTransactionId: params.id,
@@ -105,7 +122,18 @@ export async function POST(req: Request) {
       : undefined;
     if (!order) return rpcError(body.id, -31003, "Transaction not found");
     const paidAt = order.paidAt ?? new Date(nowMs()).toISOString();
-    await paymentStore.complete(order.id, order.providerTransactionId, STATE_COMPLETED);
+    const completed = await paymentStore.complete(
+      order.id,
+      order.providerTransactionId,
+      STATE_COMPLETED
+    );
+    if (!completed) return rpcError(body.id, -31008, "Operation cannot be performed");
+    logEvent("info", "payment.callback", {
+      provider: "payme",
+      orderId: order.id,
+      providerTransactionId: order.providerTransactionId,
+      outcome: "paid",
+    });
     return rpcResult(body.id, transaction({ ...order, status: "paid", paidAt }));
   }
 
@@ -115,7 +143,18 @@ export async function POST(req: Request) {
       : undefined;
     if (!order) return rpcError(body.id, -31003, "Transaction not found");
     const canceledAt = order.canceledAt ?? new Date(nowMs()).toISOString();
-    await paymentStore.cancel(order.id, order.providerTransactionId, STATE_CANCELED);
+    const canceled = await paymentStore.cancel(
+      order.id,
+      order.providerTransactionId,
+      STATE_CANCELED
+    );
+    if (!canceled) return rpcError(body.id, -31008, "Operation cannot be performed");
+    logEvent("warn", "payment.callback", {
+      provider: "payme",
+      orderId: order.id,
+      providerTransactionId: order.providerTransactionId,
+      outcome: "canceled",
+    });
     return rpcResult(
       body.id,
       transaction({ ...order, status: "canceled", canceledAt })

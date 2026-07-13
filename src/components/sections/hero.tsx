@@ -1,16 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, PlayCircle, Sparkles, Star } from "lucide-react";
+import { ArrowRight, PlayCircle, Sparkles } from "lucide-react";
 import { DashboardPreview } from "@/components/sections/dashboard-preview";
 import { Reveal } from "@/components/motion/reveal";
-import { Avatar } from "@/components/ui/avatar";
-import { STUDENT_AVATARS } from "@/lib/avatars";
-
-const PROOF = [
-  { src: STUDENT_AVATARS.proof1, alt: "Talaba 1" },
-  { src: STUDENT_AVATARS.proof2, alt: "Talaba 2" },
-  { src: STUDENT_AVATARS.proof3, alt: "Talaba 3" },
-  { src: STUDENT_AVATARS.proof4, alt: "Talaba 4" },
-];
 
 export function Hero() {
   return (
@@ -26,7 +17,7 @@ export function Hero() {
           <Reveal>
             <span className="pill">
               <Sparkles className="h-3.5 w-3.5" />
-              Barcha asosiy Milliy Sertifikat fanlari
+              Milliy Sertifikat uchun yagona profil
             </span>
           </Reveal>
 
@@ -38,18 +29,16 @@ export function Hero() {
 
           <Reveal delay={160}>
             <p className="max-w-xl text-base text-ink-600 sm:text-lg">
-              MilliyPrep barcha asosiy Milliy Sertifikat fanlari bo&apos;yicha
-              testlar, mavzular, mock imtihonlar va natija tahlili orqali
-              tayyorgarlikni tizimli qiladi.
+              MilliyPrep maqsad ball, mavzuli mashqlar, mock testlar va natija
+              tahlili orqali tayyorgarlikni tizimli qiladi.
             </p>
           </Reveal>
 
           <Reveal delay={200}>
             <p className="max-w-2xl text-sm leading-6 text-ink-500">
-              Matematika, ona tili, tarix, huquq, ingliz tili, biologiya,
-              kimyo, fizika va geografiya yo&apos;nalishlarida mavzulashtirilgan
-              mashqlar, shaxsiy tayyorgarlik rejasi va progress tracking bir
-              joyda jamlanadi.
+              Faningizni onboardingda tanlang. Dastlabki mashq katalogi
+              bosqichma-bosqich ekspert tekshiruvi bilan kengaytiriladi;
+              progress va AI tutor bitta profilda ishlaydi.
             </p>
           </Reveal>
 
@@ -66,31 +55,6 @@ export function Hero() {
             </div>
           </Reveal>
 
-          <Reveal delay={360}>
-            <div className="flex items-center gap-4 pt-2">
-              <div className="flex -space-x-2">
-                {PROOF.map((p) => (
-                  <Avatar
-                    key={p.src}
-                    src={p.src}
-                    alt={p.alt}
-                    size={36}
-                    ring
-                  />
-                ))}
-              </div>
-              <div>
-                <div className="flex items-center gap-1 text-amber-500">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-current" />
-                  ))}
-                </div>
-                <p className="text-sm font-medium text-ink-700">
-                  10 000+ o&apos;quvchi bizga ishongan
-                </p>
-              </div>
-            </div>
-          </Reveal>
         </div>
 
         <Reveal delay={120} from="right">

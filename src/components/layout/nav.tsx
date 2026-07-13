@@ -10,7 +10,6 @@ const NAV_LINKS = [
   { href: "#bosh-sahifa", label: "Bosh sahifa" },
   { href: "#imkoniyatlar", label: "Imkoniyatlar" },
   { href: "#kurslar", label: "Mahsulot" },
-  { href: "#natijalar", label: "Natijalar" },
   { href: "#narxlar", label: "Narxlar" },
   { href: "#faq", label: "FAQ" },
 ];

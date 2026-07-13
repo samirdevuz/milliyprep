@@ -23,12 +23,12 @@ const FEATURES: Feature[] = [
     icon: Target,
     title: "Shaxsiy o'quv reja",
     description:
-      "AI sizning maqsadingiz va darajangizdan kelib chiqib, individual reja tuzadi.",
+      "Profilingiz, maqsad ballingiz va natijalaringiz asosida mashg'ulot navbati shakllanadi.",
     tone: "brand",
   },
   {
     icon: BookOpen,
-    title: "Minglab mashq savollari",
+    title: "Mavzuli mashq savollari",
     description:
       "Har bir mavzu bo'yicha tuzilgan savollar bilan mustahkam bilim oling.",
     tone: "accent",
@@ -42,9 +42,9 @@ const FEATURES: Feature[] = [
   },
   {
     icon: Zap,
-    title: "Tezkor natija",
+    title: "Tushuntirilgan javoblar",
     description:
-      "Qisqa muddatda maksimal natija uchun eng samarali usullar.",
+      "Mashq yakunida to'g'ri javob va qisqa izohni ko'ring.",
     tone: "rose",
   },
   {
@@ -56,18 +56,18 @@ const FEATURES: Feature[] = [
   },
   {
     icon: ShieldCheck,
-    title: "Ishonchli platforma",
+    title: "Himoyalangan hisob",
     description:
-      "Ma'lumotlaringiz xavfsiz, platforma esa har doim siz bilan.",
+      "OTP, Google yoki Telegram orqali hisobingizga xavfsiz kiring.",
     tone: "sky",
   },
 ];
 
 const STATS = [
-  { value: 10000, suffix: "+", label: "Faol o'quvchi" },
-  { value: 1000000, suffix: "+", label: "Yechilgan savollar" },
-  { value: 95, suffix: "%", label: "Tavsiya qiladi" },
-  { value: 24, suffix: "/7", label: "Doim siz bilan" },
+  { value: 15, suffix: "", label: "Fan yo'nalishi" },
+  { value: 100, suffix: " ball", label: "Maqsad shkalasi" },
+  { value: 2, suffix: "", label: "Mashq rejimi" },
+  { value: 1, suffix: "", label: "AI tutor" },
 ];
 
 export function Features() {
@@ -80,8 +80,8 @@ export function Features() {
               Nega <span className="gradient-text">MilliyPrep</span>?
             </h2>
             <p className="mt-3 text-ink-600">
-              Imtihonga tayyorgarlik uchun kerakli barcha narsa: aqlli reja, real
-              testlar va har doim yoningizdagi AI tutor.
+              Tayyorlanish uchun asosiy vositalar: reja, mashqlar, progress va
+              AI tutor.
             </p>
           </div>
         </Reveal>
