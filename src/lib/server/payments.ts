@@ -15,6 +15,10 @@ import type {
   PaymentProvider,
   PaymentStatus,
 } from "@/lib/payments/types";
+import {
+  activateLocalSubscription,
+  cancelLocalSubscription,
+} from "./entitlements";
 
 interface PaymentRow {
   id: string;
@@ -252,5 +256,81 @@ export const paymentStore = {
     orders[index] = { ...orders[index], ...patch };
     await writeLocal(orders);
     return orders[index];
+  },
+
+  async complete(
+    id: string,
+    providerTransactionId: string | undefined,
+    providerState: number
+  ): Promise<boolean> {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { data, error } = await supabase.rpc("complete_payment_order", {
+        p_order_id: id,
+        p_provider_transaction_id: providerTransactionId ?? null,
+        p_provider_state: providerState,
+      });
+      if (error) {
+        if (!isSupabaseConnectionError(error.message)) {
+          throw formatSupabaseError("complete payment order", error.message);
+        }
+      } else {
+        return data === true;
+      }
+    }
+
+    const orders = await readLocal();
+    const index = orders.findIndex((order) => order.id === id);
+    if (index < 0 || !orders[index].userId || orders[index].status === "canceled") {
+      return false;
+    }
+    const paidAt = orders[index].paidAt ?? new Date().toISOString();
+    orders[index] = {
+      ...orders[index],
+      status: "paid",
+      providerTransactionId: providerTransactionId ?? orders[index].providerTransactionId,
+      providerState,
+      paidAt,
+      canceledAt: undefined,
+    };
+    await writeLocal(orders);
+    await activateLocalSubscription(orders[index]);
+    return true;
+  },
+
+  async cancel(
+    id: string,
+    providerTransactionId: string | undefined,
+    providerState: number
+  ): Promise<boolean> {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { data, error } = await supabase.rpc("cancel_payment_order", {
+        p_order_id: id,
+        p_provider_transaction_id: providerTransactionId ?? null,
+        p_provider_state: providerState,
+      });
+      if (error) {
+        if (!isSupabaseConnectionError(error.message)) {
+          throw formatSupabaseError("cancel payment order", error.message);
+        }
+      } else {
+        return data === true;
+      }
+    }
+
+    const orders = await readLocal();
+    const index = orders.findIndex((order) => order.id === id);
+    if (index < 0) return false;
+    orders[index] = {
+      ...orders[index],
+      status: "canceled",
+      providerTransactionId: providerTransactionId ?? orders[index].providerTransactionId,
+      providerState,
+      canceledAt: orders[index].canceledAt ?? new Date().toISOString(),
+    };
+    await writeLocal(orders);
+    await cancelLocalSubscription(orders[index]);
+    return true;
   },
 };

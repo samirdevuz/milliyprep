@@ -40,8 +40,18 @@ export async function POST(req: Request) {
 
   const amountTiyin = planPriceTiyin(plan, billing);
   const session = await getSession();
+  if (!session) {
+    const next = `/plans?checkout=1&plan=${plan.id}&billing=${billing}`;
+    return NextResponse.json(
+      {
+        error: "To'lovdan oldin hisob yarating yoki tizimga kiring.",
+        registerUrl: `/register?plan=${plan.id}&billing=${billing}&next=${encodeURIComponent(next)}`,
+      },
+      { status: 401 }
+    );
+  }
   const order = await paymentStore.create({
-    userId: session?.userId,
+    userId: session.userId,
     planId: plan.id,
     billing,
     provider,

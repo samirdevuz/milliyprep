@@ -1,26 +1,70 @@
 "use client";
 
 import { Send } from "lucide-react";
+import { useState, type MouseEvent } from "react";
+import { ONBOARDING_STORAGE_KEY } from "@/lib/onboarding/types";
 
 interface SocialAuthButtonsProps {
   /** Called when the user chooses Telegram (register page handles the step UI). */
   onTelegram?: () => void;
   nextPath?: string;
+  preserveOnboarding?: boolean;
 }
 
-export function SocialAuthButtons({ onTelegram, nextPath }: SocialAuthButtonsProps) {
+export function SocialAuthButtons({
+  onTelegram,
+  nextPath,
+  preserveOnboarding = false,
+}: SocialAuthButtonsProps) {
+  const [googlePending, setGooglePending] = useState(false);
+  const [googleError, setGoogleError] = useState("");
   const googleHref = nextPath
     ? `/api/auth/google?next=${encodeURIComponent(nextPath)}`
     : "/api/auth/google";
+
+  async function handleGoogle(event: MouseEvent<HTMLAnchorElement>) {
+    if (!preserveOnboarding || googlePending) return;
+    event.preventDefault();
+    setGooglePending(true);
+    setGoogleError("");
+
+    let onboarding: unknown;
+    try {
+      const raw = window.localStorage.getItem(ONBOARDING_STORAGE_KEY);
+      onboarding = raw ? JSON.parse(raw) : undefined;
+    } catch {
+      onboarding = undefined;
+    }
+
+    try {
+      const response = await fetch("/api/auth/google/context", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ onboarding }),
+      });
+      if (!response.ok) {
+        const data = (await response.json().catch(() => ({}))) as { error?: string };
+        setGoogleError(data.error ?? "Google orqali davom etib bo'lmadi.");
+        setGooglePending(false);
+        return;
+      }
+      window.location.assign(googleHref);
+    } catch {
+      setGoogleError("Tarmoq xatosi. Qayta urinib ko'ring.");
+      setGooglePending(false);
+    }
+  }
 
   return (
     <div className="space-y-2">
       <a
         href={googleHref}
+        onClick={handleGoogle}
+        aria-disabled={googlePending}
         className="flex w-full min-w-0 items-center justify-center gap-2 rounded-full border border-ink-200 bg-white px-4 py-2.5 text-center text-sm font-semibold leading-snug text-ink-800 transition hover:bg-ink-50"
       >
         <GoogleMark />
-        Google orqali davom etish
+        {googlePending ? "Google ochilmoqda..." : "Google orqali davom etish"}
       </a>
       <button
         type="button"
@@ -30,6 +74,11 @@ export function SocialAuthButtons({ onTelegram, nextPath }: SocialAuthButtonsPro
         <Send className="h-4 w-4 text-sky-500" />
         Telegram orqali davom etish
       </button>
+      {googleError && (
+        <p role="alert" className="text-center text-xs font-medium text-red-600">
+          {googleError}
+        </p>
+      )}
     </div>
   );
 }

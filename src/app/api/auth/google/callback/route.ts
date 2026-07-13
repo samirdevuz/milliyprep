@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
+import { Buffer } from "node:buffer";
 import { cookies } from "next/headers";
 import { userStore } from "@/lib/server/db";
 import { createSessionCookie } from "@/lib/server/auth";
 import { getAppUrl } from "@/lib/server/app-url";
+import { GOOGLE_ONBOARDING_COOKIE } from "@/lib/server/google-oauth";
+import { sanitizeOnboarding } from "@/lib/onboarding/server-validation";
 
 interface GoogleTokenResponse {
   access_token?: string;
@@ -18,6 +21,16 @@ interface GoogleUserInfo {
   picture?: string;
 }
 
+function readOnboardingCookie(value?: string): Record<string, unknown> | undefined {
+  if (!value) return undefined;
+  try {
+    const decoded = Buffer.from(value, "base64url").toString("utf8");
+    return sanitizeOnboarding(JSON.parse(decoded));
+  } catch {
+    return undefined;
+  }
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const appUrl = getAppUrl(req.url);
@@ -27,6 +40,9 @@ export async function GET(req: Request) {
   const store = await cookies();
   const savedState = store.get("g_oauth_state")?.value;
   const nextPath = store.get("g_oauth_next")?.value ?? "/dashboard";
+  const onboarding = readOnboardingCookie(
+    store.get(GOOGLE_ONBOARDING_COOKIE)?.value
+  );
 
   if (!code || !state || state !== savedState) {
     return NextResponse.redirect(`${appUrl}/login?error=google_state`);
@@ -73,28 +89,35 @@ export async function GET(req: Request) {
     user = emailVerified ? await userStore.findByEmail(info.email) : undefined;
     if (user) {
       // Link existing email account to Google.
-      await userStore.update(user.id, {
+      user = (await userStore.update(user.id, {
         provider: "google",
         externalId: info.sub,
         emailVerified: true,
-      });
+        onboarding: user.onboarding ?? onboarding,
+      })) ?? user;
     } else if (!emailVerified) {
       return NextResponse.redirect(`${appUrl}/login?error=google_unverified_email`);
     }
   }
   if (!user) {
     user = await userStore.create({
-      name: info.name ?? info.email?.split("@")[0] ?? "Foydalanuvchi",
+      name:
+        (typeof onboarding?.fullName === "string" ? onboarding.fullName : undefined) ??
+        info.name ??
+        info.email?.split("@")[0] ??
+        "Foydalanuvchi",
       email: info.email,
       passwordHash: "",
       provider: "google",
       externalId: info.sub,
       emailVerified: Boolean(info.email_verified),
+      onboarding,
     });
   }
 
   store.delete("g_oauth_state");
   store.delete("g_oauth_next");
+  store.delete(GOOGLE_ONBOARDING_COOKIE);
   await createSessionCookie(user.id, user.name);
 
   return NextResponse.redirect(`${appUrl}${nextPath}`);

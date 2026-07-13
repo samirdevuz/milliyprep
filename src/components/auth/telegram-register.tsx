@@ -17,7 +17,13 @@ const STEPS = [
   "Kodni quyiga kiriting, so'ng login va parol o'rnating.",
 ];
 
-export function TelegramRegister({ onBack }: { onBack: () => void }) {
+export function TelegramRegister({
+  onBack,
+  nextPath = "/dashboard",
+}: {
+  onBack: () => void;
+  nextPath?: string;
+}) {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
@@ -50,7 +56,7 @@ export function TelegramRegister({ onBack }: { onBack: () => void }) {
       setError(result.error ?? "Xatolik yuz berdi.");
       return;
     }
-    router.push("/dashboard");
+    router.push(nextPath);
     router.refresh();
   };
 

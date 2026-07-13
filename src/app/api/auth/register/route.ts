@@ -9,6 +9,10 @@ import {
   rateLimit,
 } from "@/lib/server/rate-limit";
 import { isEmail, isPhone } from "@/lib/validation";
+import {
+  OnboardingInputError,
+  sanitizeOnboarding,
+} from "@/lib/onboarding/server-validation";
 
 export async function POST(req: Request) {
   let body: {
@@ -17,7 +21,7 @@ export async function POST(req: Request) {
     contact?: string;
     code?: string;
     password?: string;
-    onboarding?: Record<string, unknown>;
+    onboarding?: unknown;
   };
 
   try {
@@ -26,7 +30,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Noto'g'ri so'rov." }, { status: 400 });
   }
 
-  const { name, method = "email", contact, code, password, onboarding } = body;
+  const { name, method = "email", contact, code, password } = body;
+  let onboarding: Record<string, unknown> | undefined;
+  try {
+    onboarding = sanitizeOnboarding(body.onboarding);
+  } catch (error) {
+    if (error instanceof OnboardingInputError) {
+      return NextResponse.json({ error: error.message }, { status: 422 });
+    }
+    throw error;
+  }
 
   // Validation
   if (!name || name.trim().length < 2) {

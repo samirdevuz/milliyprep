@@ -41,13 +41,11 @@ export async function POST(req: Request) {
   }
 
   if (order && error === OK) {
-    await paymentStore.update(order.id, {
-      status: errorCode === 0 ? "paid" : "canceled",
-      providerTransactionId: payload.clickTransId,
-      providerState: errorCode === 0 ? 2 : -2,
-      paidAt: errorCode === 0 ? new Date().toISOString() : order.paidAt,
-      canceledAt: errorCode === 0 ? order.canceledAt : new Date().toISOString(),
-    });
+    if (errorCode === 0) {
+      await paymentStore.complete(order.id, payload.clickTransId, 2);
+    } else {
+      await paymentStore.cancel(order.id, payload.clickTransId, -2);
+    }
   }
 
   return NextResponse.json({

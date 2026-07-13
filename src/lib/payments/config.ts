@@ -35,5 +35,5 @@ export function paymeConfig() {
 }
 
 export function paymentReturnUrl(requestUrl: string, orderId: string) {
-  return `${getAppUrl(requestUrl)}/register?from=payment&paid_order=${encodeURIComponent(orderId)}`;
+  return `${getAppUrl(requestUrl)}/dashboard/plan?payment_order=${encodeURIComponent(orderId)}`;
 }

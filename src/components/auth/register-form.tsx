@@ -12,7 +12,13 @@ import { registerUser, sendOtp } from "@/lib/auth-client";
 
 type Stage = "details" | "verify";
 
-export function RegisterForm({ method }: { method: "email" | "phone" }) {
+export function RegisterForm({
+  method,
+  nextPath = "/dashboard",
+}: {
+  method: "email" | "phone";
+  nextPath?: string;
+}) {
   const router = useRouter();
   const [stage, setStage] = useState<Stage>("details");
 
@@ -85,7 +91,7 @@ export function RegisterForm({ method }: { method: "email" | "phone" }) {
       setServerError(reg.error ?? "Xatolik yuz berdi.");
       return;
     }
-    router.push("/dashboard");
+    router.push(nextPath);
     router.refresh();
   };
 

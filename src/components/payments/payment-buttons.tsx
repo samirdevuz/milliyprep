@@ -29,8 +29,13 @@ export function PaymentButtons({
       });
       const data = (await res.json()) as {
         redirectUrl?: string;
+        registerUrl?: string;
         error?: string;
       };
+      if (res.status === 401 && data.registerUrl) {
+        window.location.assign(data.registerUrl);
+        return;
+      }
       if (!res.ok || !data.redirectUrl) {
         setError(data.error ?? "To'lovni boshlashda xatolik yuz berdi.");
         return;

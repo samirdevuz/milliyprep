@@ -105,11 +105,7 @@ export async function POST(req: Request) {
       : undefined;
     if (!order) return rpcError(body.id, -31003, "Transaction not found");
     const paidAt = order.paidAt ?? new Date(nowMs()).toISOString();
-    await paymentStore.update(order.id, {
-      status: "paid",
-      providerState: STATE_COMPLETED,
-      paidAt,
-    });
+    await paymentStore.complete(order.id, order.providerTransactionId, STATE_COMPLETED);
     return rpcResult(body.id, transaction({ ...order, status: "paid", paidAt }));
   }
 
@@ -119,11 +115,7 @@ export async function POST(req: Request) {
       : undefined;
     if (!order) return rpcError(body.id, -31003, "Transaction not found");
     const canceledAt = order.canceledAt ?? new Date(nowMs()).toISOString();
-    await paymentStore.update(order.id, {
-      status: "canceled",
-      providerState: STATE_CANCELED,
-      canceledAt,
-    });
+    await paymentStore.cancel(order.id, order.providerTransactionId, STATE_CANCELED);
     return rpcResult(
       body.id,
       transaction({ ...order, status: "canceled", canceledAt })

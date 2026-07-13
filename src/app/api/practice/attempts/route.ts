@@ -5,8 +5,15 @@ import {
   normalizedRateKey,
   rateLimit,
 } from "@/lib/server/rate-limit";
-import { practiceStore } from "@/lib/server/practice";
+import {
+  PracticeInputError,
+  practiceStore,
+} from "@/lib/server/practice";
 import type { PracticeMode, SubmittedAnswer } from "@/lib/practice/types";
+import {
+  entitlementEnforced,
+  entitlementStore,
+} from "@/lib/server/entitlements";
 
 export const runtime = "nodejs";
 
@@ -72,6 +79,16 @@ export async function POST(req: Request) {
   if (!isMode(body.mode)) {
     return NextResponse.json({ error: "Test turi noto'g'ri." }, { status: 422 });
   }
+  if (
+    body.mode === "mock_test" &&
+    entitlementEnforced() &&
+    !(await entitlementStore.hasPro(session.userId))
+  ) {
+    return NextResponse.json(
+      { error: "Mock testlar Pro tarifda mavjud." },
+      { status: 402 }
+    );
+  }
 
   const questionIds = cleanQuestionIds(body.questionIds);
   const answers = cleanAnswers(body.answers);
@@ -93,6 +110,9 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(result);
   } catch (error) {
+    if (error instanceof PracticeInputError) {
+      return NextResponse.json({ error: error.message }, { status: 422 });
+    }
     console.error("Practice submit error", error);
     return NextResponse.json(
       { error: "Natijani saqlashda muammo bo'ldi." },

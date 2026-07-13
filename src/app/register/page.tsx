@@ -46,13 +46,13 @@ export default function RegisterPage() {
 
         <div className="relative z-10 flex flex-1 items-start justify-center px-3 py-6 sm:px-6 sm:py-10 lg:items-center lg:px-8">
           <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-soft ring-1 ring-ink-100 sm:rounded-3xl sm:p-8">
-            {mode === "telegram" ? (
-              <TelegramRegister onBack={() => setMode("default")} />
-            ) : (
-              <Suspense fallback={null}>
+            <Suspense fallback={null}>
+              {mode === "telegram" ? (
+                <TelegramRegisterPanel onBack={() => setMode("default")} />
+              ) : (
                 <RegisterPanel onTelegram={() => setMode("telegram")} />
-              </Suspense>
-            )}
+              )}
+            </Suspense>
           </div>
         </div>
       </main>
@@ -63,19 +63,20 @@ export default function RegisterPage() {
 function RegisterPanel({ onTelegram }: { onTelegram: () => void }) {
   const params = useSearchParams();
   const planId = params.get("plan");
+  const nextPath = safeNextPath(params.get("next"));
   const registerTabs = [
     AUTH_FLAGS.email
       ? {
           id: "email",
           label: "Elektron pochta",
-          content: <RegisterForm method="email" />,
+          content: <RegisterForm method="email" nextPath={nextPath} />,
         }
       : null,
     AUTH_FLAGS.phone
       ? {
           id: "phone",
           label: "Telefon raqami",
-          content: <RegisterForm method="phone" />,
+          content: <RegisterForm method="phone" nextPath={nextPath} />,
         }
       : null,
   ].filter((tab): tab is NonNullable<typeof tab> => Boolean(tab));
@@ -107,7 +108,11 @@ function RegisterPanel({ onTelegram }: { onTelegram: () => void }) {
         <span className="h-px flex-1 bg-ink-200" />
       </div>
 
-      <SocialAuthButtons onTelegram={onTelegram} />
+      <SocialAuthButtons
+        onTelegram={onTelegram}
+        nextPath={nextPath}
+        preserveOnboarding
+      />
 
       <p className="mt-6 text-center text-sm text-ink-600">
         Hisobingiz bormi?{" "}
@@ -117,4 +122,19 @@ function RegisterPanel({ onTelegram }: { onTelegram: () => void }) {
       </p>
     </>
   );
+}
+
+function TelegramRegisterPanel({ onBack }: { onBack: () => void }) {
+  const params = useSearchParams();
+  return (
+    <TelegramRegister
+      onBack={onBack}
+      nextPath={safeNextPath(params.get("next"))}
+    />
+  );
+}
+
+function safeNextPath(value: string | null): string {
+  if (!value?.startsWith("/") || value.startsWith("//")) return "/dashboard";
+  return value;
 }

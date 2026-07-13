@@ -15,6 +15,10 @@ import {
   TOPICS,
   publicQuestion,
 } from "@/lib/practice/question-bank";
+import {
+  PracticeInputError,
+  validateAttemptSubmission,
+} from "@/lib/practice/attempt-validation";
 import type {
   AttemptResult,
   AdminQuestionBank,
@@ -73,6 +77,8 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const ATTEMPTS_FILE = path.join(DATA_DIR, "practice-attempts.json");
 const QUESTION_BANK_FILE = path.join(DATA_DIR, "question-bank.json");
 const WEEKLY_TARGET = 5;
+
+export { PracticeInputError };
 
 function colorClass(color: Subject["color"]): string {
   const map: Record<Subject["color"], string> = {
@@ -141,18 +147,14 @@ async function writeLocalQuestions(questions: Question[]): Promise<void> {
   );
 }
 
-function questionMap(questions: Question[]): Map<string, Question> {
-  return new Map(questions.map((question) => [question.id, question]));
-}
-
-function topicName(topicId?: string): string | undefined {
+function topicName(topics: Topic[], topicId?: string): string | undefined {
   if (!topicId) return undefined;
-  return TOPICS.find((topic) => topic.id === topicId)?.name;
+  return topics.find((topic) => topic.id === topicId)?.name;
 }
 
-function subjectName(subjectId?: string): string {
+function subjectName(subjects: Subject[], subjectId?: string): string {
   if (!subjectId) return "Aralash test";
-  return SUBJECTS.find((subject) => subject.id === subjectId)?.name ?? "Fan";
+  return subjects.find((subject) => subject.id === subjectId)?.name ?? "Fan";
 }
 
 function dateKey(value: string): string {
@@ -182,7 +184,11 @@ function calculateStreak(attempts: AttemptRecord[]): number {
   return streak;
 }
 
-function buildProgress(attempts: AttemptRecord[]): PracticeProgress {
+function buildProgress(
+  attempts: AttemptRecord[],
+  subjects: Subject[],
+  topics: Topic[]
+): PracticeProgress {
   const today = new Date().toISOString().slice(0, 10);
   const totalQuestions = attempts.reduce((sum, attempt) => sum + attempt.total, 0);
   const correctQuestions = attempts.reduce(
@@ -196,7 +202,7 @@ function buildProgress(attempts: AttemptRecord[]): PracticeProgress {
     isSameWeek(attempt.completedAt)
   ).length;
 
-  const subjectProgress: SubjectProgressItem[] = SUBJECTS.map((subject) => {
+  const subjectProgress: SubjectProgressItem[] = subjects.map((subject) => {
     const subjectAttempts = attempts.filter(
       (attempt) => attempt.subjectId === subject.id
     );
@@ -217,7 +223,7 @@ function buildProgress(attempts: AttemptRecord[]): PracticeProgress {
     };
   });
 
-  const topicProgress = TOPICS.map((topic) => {
+  const topicProgress = topics.map((topic) => {
     const topicAttempts = attempts.filter((attempt) => attempt.topicId === topic.id);
     const topicTotal = topicAttempts.reduce((sum, attempt) => sum + attempt.total, 0);
     const topicCorrect = topicAttempts.reduce(
@@ -232,7 +238,7 @@ function buildProgress(attempts: AttemptRecord[]): PracticeProgress {
       )[0];
     return {
       ...topic,
-      subjectName: subjectName(topic.subjectId),
+      subjectName: subjectName(subjects, topic.subjectId),
       attempts: topicAttempts.length,
       accuracy: topicTotal ? Math.round((topicCorrect / topicTotal) * 100) : 0,
       lastScore: lastAttempt?.score,
@@ -249,8 +255,8 @@ function buildProgress(attempts: AttemptRecord[]): PracticeProgress {
     .map((attempt) => ({
       id: attempt.id,
       mode: attempt.mode,
-      subjectName: subjectName(attempt.subjectId),
-      topicName: topicName(attempt.topicId),
+      subjectName: subjectName(subjects, attempt.subjectId),
+      topicName: topicName(topics, attempt.topicId),
       score: attempt.score,
       total: attempt.total,
       correctCount: attempt.correctCount,
@@ -299,11 +305,7 @@ function normalizeAttempt(row: PracticeAttemptRow, answers: PracticeAnswerRow[])
   } satisfies AttemptRecord;
 }
 
-async function getSupabaseBank(): Promise<{
-  subjects: Subject[];
-  topics: Topic[];
-  questions: Question[];
-} | null> {
+async function getSupabaseBank(): Promise<AdminQuestionBank | null> {
   const supabase = getSupabaseAdmin();
   if (!supabase) return null;
 
@@ -370,14 +372,20 @@ async function getBank() {
   );
 }
 
-function cleanQuestionDraft(input: QuestionDraft): Question {
-  const topic = TOPICS.find((item) => item.id === input.topicId);
-  const subject = SUBJECTS.find((item) => item.id === input.subjectId);
+function cleanQuestionDraft(
+  input: QuestionDraft,
+  bank: AdminQuestionBank
+): Question {
+  const topic = bank.topics.find((item) => item.id === input.topicId);
+  const subject = bank.subjects.find((item) => item.id === input.subjectId);
   if (!topic || !subject || topic.subjectId !== subject.id) {
     throw new Error("Fan yoki mavzu noto'g'ri tanlangan.");
   }
 
   const options = input.options.map((option) => option.trim()).filter(Boolean);
+  if (!input.prompt.trim()) {
+    throw new Error("Savol matnini kiriting.");
+  }
   if (options.length < 2) {
     throw new Error("Kamida 2 ta javob varianti kerak.");
   }
@@ -520,7 +528,15 @@ async function saveAttempt(attempt: AttemptRecord): Promise<void> {
     .insert(rows);
 
   if (answerError) {
-    if (isSupabaseConnectionError(answerError.message)) {
+    // The two PostgREST inserts are not automatically transactional. Remove
+    // the parent attempt before falling back or surfacing the error so a
+    // partially saved attempt cannot corrupt progress totals.
+    await supabase.from("practice_attempts").delete().eq("id", attempt.id);
+
+    if (
+      isMissingPracticeSchema(answerError.message) ||
+      isSupabaseConnectionError(answerError.message)
+    ) {
       const attempts = await readLocalAttempts();
       attempts.push(attempt);
       await writeLocalAttempts(attempts);
@@ -536,7 +552,8 @@ export const practiceStore = {
   },
 
   async upsertQuestion(input: QuestionDraft): Promise<Question> {
-    const question = cleanQuestionDraft(input);
+    const bank = await getBank();
+    const question = cleanQuestionDraft(input, bank);
     const supabase = getSupabaseAdmin();
 
     if (supabase) {
@@ -593,48 +610,18 @@ export const practiceStore = {
 
   async getCatalog(userId: string): Promise<PracticeCatalog> {
     const [bank, attempts] = await Promise.all([getBank(), getAttempts(userId)]);
-    const progress = buildProgress(attempts);
-    const subjectNames = new Map(
-      bank.subjects.map((subject) => [subject.id, subject.name])
-    );
-    const topicProgress = bank.topics.map((topic) => {
-      const existing = progress.topicProgress.find((item) => item.id === topic.id);
-      return {
-        ...topic,
-        subjectName: subjectNames.get(topic.subjectId) ?? "Fan",
-        attempts: existing?.attempts ?? 0,
-        accuracy: existing?.accuracy ?? 0,
-        lastScore: existing?.lastScore,
-      };
-    });
+    const progress = buildProgress(attempts, bank.subjects, bank.topics);
 
     return {
       subjects: bank.subjects,
-      topics: topicProgress,
-      progress: {
-        ...progress,
-        subjectProgress: bank.subjects.map((subject) => {
-          const existing = progress.subjectProgress.find(
-            (item) => item.subjectId === subject.id
-          );
-          return (
-            existing ?? {
-              subjectId: subject.id,
-              name: subject.name,
-              value: 0,
-              colorClass: colorClass(subject.color),
-              attempts: 0,
-            }
-          );
-        }),
-        topicProgress,
-      },
+      topics: progress.topicProgress,
+      progress,
     };
   },
 
   async getProgress(userId: string): Promise<PracticeProgress> {
-    const attempts = await getAttempts(userId);
-    return buildProgress(attempts);
+    const [bank, attempts] = await Promise.all([getBank(), getAttempts(userId)]);
+    return buildProgress(attempts, bank.subjects, bank.topics);
   },
 
   async getQuestionsForTopic(topicId: string, limit = 5) {
@@ -678,27 +665,14 @@ export const practiceStore = {
     startedAt?: string;
   }): Promise<AttemptResult> {
     const bank = await getBank();
-    const byId = questionMap(bank.questions);
-    const submitted = new Map(
-      input.answers.map((answer) => [answer.questionId, answer.selectedIndex])
-    );
-    const questions = input.questionIds
-      .map((questionId) => byId.get(questionId))
-      .filter((question): question is Question => Boolean(question));
-
-    if (!questions.length) {
-      throw new Error("Test uchun savollar topilmadi.");
-    }
+    const { questions, topic, submitted } = validateAttemptSubmission(bank, input);
 
     const subjectId =
-      input.mode === "mock_test" ? undefined : questions[0]?.subjectId;
+      input.mode === "mock_test" ? undefined : topic?.subjectId;
     const completedAt = new Date().toISOString();
     const answers = questions.map((question) => {
       const selectedIndex = submitted.get(question.id);
-      const safeSelected =
-        typeof selectedIndex === "number" && Number.isInteger(selectedIndex)
-          ? selectedIndex
-          : -1;
+      const safeSelected = selectedIndex as number;
       return {
         questionId: question.id,
         selectedIndex: safeSelected,

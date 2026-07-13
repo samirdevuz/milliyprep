@@ -10,6 +10,10 @@ import { MockProvider } from "@/lib/ai/providers/mock";
 import { OpenAIProvider } from "@/lib/ai/providers/openai";
 import type { ChatContext, ChatMessage } from "@/lib/ai/types";
 import { subjectById } from "@/lib/onboarding/certificate";
+import {
+  entitlementEnforced,
+  entitlementStore,
+} from "@/lib/server/entitlements";
 
 export const runtime = "nodejs";
 
@@ -84,6 +88,13 @@ export async function POST(req: Request) {
   const session = await getSession();
   if (!session) {
     return NextResponse.json({ error: "Avval hisobga kiring." }, { status: 401 });
+  }
+
+  if (entitlementEnforced() && !(await entitlementStore.hasPro(session.userId))) {
+    return NextResponse.json(
+      { error: "AI tutor Pro tarifda mavjud." },
+      { status: 402 }
+    );
   }
 
   const limit = rateLimit(

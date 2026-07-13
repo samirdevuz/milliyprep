@@ -8,6 +8,10 @@ import {
   normalizedRateKey,
   rateLimit,
 } from "@/lib/server/rate-limit";
+import {
+  OnboardingInputError,
+  sanitizeOnboarding,
+} from "@/lib/onboarding/server-validation";
 
 /**
  * Completes Telegram registration. The user entered the 6-digit code the
@@ -18,7 +22,7 @@ export async function POST(req: Request) {
     code?: string;
     name?: string;
     password?: string;
-    onboarding?: Record<string, unknown>;
+    onboarding?: unknown;
   };
   try {
     body = await req.json();
@@ -26,7 +30,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Noto'g'ri so'rov." }, { status: 400 });
   }
 
-  const { code, name, password, onboarding } = body;
+  const { code, name, password } = body;
+  let onboarding: Record<string, unknown> | undefined;
+  try {
+    onboarding = sanitizeOnboarding(body.onboarding);
+  } catch (error) {
+    if (error instanceof OnboardingInputError) {
+      return NextResponse.json({ error: error.message }, { status: 422 });
+    }
+    throw error;
+  }
 
   if (!code || code.length !== 6) {
     return NextResponse.json({ error: "6 xonali kodni kiriting." }, { status: 422 });
