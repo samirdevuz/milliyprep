@@ -1,8 +1,8 @@
 import type { LucideIcon } from "lucide-react";
-import { Rocket, Sparkles, Crown } from "lucide-react";
+import { Crown } from "lucide-react";
 
 export interface Plan {
-  id: "bepul" | "premium" | "pro";
+  id: "pro";
   name: string;
   icon: LucideIcon;
   tagline: string;
@@ -12,7 +12,6 @@ export interface Plan {
   highlighted?: boolean;
   cta: string;
   features: string[];
-  notIncluded?: string[];
 }
 
 /** Format a UZS amount with non-breaking thousands separators. */
@@ -21,48 +20,16 @@ export function formatUzs(amount: number): string {
   return amount.toLocaleString("uz-UZ").replace(/,/g, "\u00a0");
 }
 
+export function planPriceTiyin(
+  plan: Plan,
+  billing: "monthly" | "yearly"
+): number {
+  const monthly = billing === "yearly" ? plan.yearly : plan.monthly;
+  const months = billing === "yearly" && monthly > 0 ? 12 : 1;
+  return monthly * months * 100;
+}
+
 export const PLANS: Plan[] = [
-  {
-    id: "bepul",
-    name: "Bepul",
-    icon: Sparkles,
-    tagline: "Platforma bilan tanishish uchun",
-    monthly: 0,
-    yearly: 0,
-    tone: "ink",
-    cta: "Bepul boshlash",
-    features: [
-      "Kuniga 5 ta mashq savoli",
-      "Cheklangan AI tutor (kuniga 3 ta savol)",
-      "Asosiy o'quv reja",
-    ],
-    notIncluded: [
-      "Mock testlar",
-      "Yozma ish avto-baholash",
-      "Savol banki to'liq",
-      "Batafsil statistika",
-    ],
-  },
-  {
-    id: "premium",
-    name: "Premium",
-    icon: Rocket,
-    tagline: "Jiddiy tayyorgarlik ko'rayotganlar uchun",
-    monthly: 79_000,
-    yearly: 59_000,
-    tone: "brand",
-    highlighted: true,
-    cta: "Premiumni tanlash",
-    features: [
-      "Cheksiz mock testlar",
-      "Cheksiz AI tutor savollari",
-      "Yozma ish avto-baholash",
-      "Batafsil statistika va tahlil",
-      "Savol banki to'liq ochiq",
-      "Aralash takror lug'at",
-      "Reklamasiz tajriba",
-    ],
-  },
   {
     id: "pro",
     name: "Pro",
@@ -71,12 +38,14 @@ export const PLANS: Plan[] = [
     monthly: 149_000,
     yearly: 119_000,
     tone: "accent",
+    highlighted: true,
     cta: "Pro ga o'tish",
     features: [
-      "Premium'dagi barcha imkoniyatlar",
+      "Cheksiz mock testlar",
+      "Cheksiz AI tutor savollari",
+      "Yozma ish va speaking avto-baholash",
+      "Savol banki to'liq ochiq",
       "Haftalik shaxsiy tahlil hisoboti",
-      "Og'zaki nutq avto-baholash",
-      "Prioritet AI tutor (tezroq javob)",
       "Imtihon strategiyasi bo'yicha darslar",
       "Telegram'da ustoz qo'llab-quvvatlashi",
     ],

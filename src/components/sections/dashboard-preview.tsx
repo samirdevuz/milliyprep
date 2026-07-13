@@ -24,9 +24,9 @@ const SIDEBAR_ITEMS = [
 ];
 
 const SUBJECTS = [
-  { name: "Algebra", value: 72, color: "bg-brand-500" },
-  { name: "Geometriya", value: 55, color: "bg-accent-500" },
-  { name: "Arifmetika", value: 31, color: "bg-amber-400" },
+  { name: "Listening", value: 72, color: "bg-brand-500" },
+  { name: "Reading", value: 55, color: "bg-accent-500" },
+  { name: "Writing", value: 31, color: "bg-amber-400" },
 ];
 
 const DAYS = ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"];
@@ -98,13 +98,13 @@ export function DashboardPreview() {
                 Bugungi reja · 28-may
               </p>
               <p className="mt-1 text-sm font-bold text-white sm:text-base">
-                25 min · Algebra
+                25 min · Reading
               </p>
               <div className="mt-2 flex items-center gap-2 rounded-lg bg-white/15 p-2">
                 <PlayCircle className="h-5 w-5" />
                 <div className="flex-1 text-[10px]">
                   <p className="font-semibold">Davom etish</p>
-                  <p className="opacity-80">Darajalar va ildizlar</p>
+                  <p className="opacity-80">Dalil va detal</p>
                 </div>
                 <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[9px] font-medium">
                   15 min

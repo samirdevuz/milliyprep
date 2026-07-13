@@ -194,7 +194,7 @@ function MockVisual() {
     <div className="card relative space-y-3 p-5 sm:p-6">
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
-          Milliy Sertifikat Mock · Matematika · 30 savol
+          Milliy Sertifikat Mock · Ingliz tili · 30 savol
         </p>
         <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700">
           <Timer className="h-3 w-3" />
@@ -202,13 +202,12 @@ function MockVisual() {
         </span>
       </div>
       <div className="rounded-xl border border-ink-100 p-4 text-sm text-ink-800">
-        <p className="font-semibold">34-savol</p>
+        <p className="font-semibold">12-savol</p>
         <p className="mt-2">
-          Agar AB ⊥ BD va ∠DBC = 118° bo&apos;lsa, ∠ABC ni toping.
+          The word &quot;however&quot; in the passage usually signals what relationship?
         </p>
-        <AngleDiagram />
         <ul className="mt-3 space-y-1.5 text-sm">
-          {["A) 162°", "B) 152°", "C) 157°", "D) 147°"].map((opt, i) => (
+          {["A) Cause", "B) Contrast", "C) Example", "D) Sequence"].map((opt, i) => (
             <li
               key={opt}
               className={[
@@ -241,48 +240,12 @@ function MockVisual() {
   );
 }
 
-function AngleDiagram() {
-  return (
-    <svg
-      viewBox="0 0 240 150"
-      className="mx-auto mt-3 h-auto w-full max-w-[260px]"
-      role="img"
-      aria-label="Burchak masalasi chizmasi: AB perpendikulyar BD, DBC burchagi 118 daraja"
-    >
-      {/* Rays from B (120,80) */}
-      <line x1="120" y1="80" x2="55" y2="30" stroke="#475569" strokeWidth="2" />
-      <line x1="120" y1="80" x2="205" y2="40" stroke="#475569" strokeWidth="2" />
-      <line x1="120" y1="80" x2="100" y2="140" stroke="#475569" strokeWidth="2" />
-      {/* Right-angle marker between BA and BD */}
-      <path
-        d="M101 64 L113 55 L122 67"
-        fill="none"
-        stroke="#ec4899"
-        strokeWidth="2"
-      />
-      {/* Angle arc for DBC */}
-      <path
-        d="M150 67 A 34 34 0 0 1 132 113"
-        fill="rgba(16,185,129,0.18)"
-        stroke="#10b981"
-        strokeWidth="1.5"
-      />
-      {/* Labels */}
-      <text x="44" y="26" className="fill-ink-700" fontSize="13" fontWeight="700">A</text>
-      <text x="210" y="40" className="fill-ink-700" fontSize="13" fontWeight="700">D</text>
-      <text x="92" y="148" className="fill-ink-700" fontSize="13" fontWeight="700">C</text>
-      <text x="106" y="86" className="fill-ink-900" fontSize="12" fontWeight="700">B</text>
-      <text x="150" y="100" className="fill-ink-500" fontSize="11">118°</text>
-    </svg>
-  );
-}
-
 function QuestionBankVisual() {
   const items = [
-    { topic: "Trigonometriya · Sin/Cos", missed: 8, total: 12, color: "bg-rose-500" },
-    { topic: "Algebra · Tenglamalar", missed: 5, total: 14, color: "bg-amber-500" },
-    { topic: "Geometriya · Ko'pburchaklar", missed: 3, total: 18, color: "bg-brand-500" },
-    { topic: "Arifmetika · Foiz", missed: 1, total: 22, color: "bg-accent-500" },
+    { topic: "Listening · asosiy fikr", missed: 8, total: 12, color: "bg-rose-500" },
+    { topic: "Reading · dalil va detal", missed: 5, total: 14, color: "bg-amber-500" },
+    { topic: "Writing · bog'lovchilar", missed: 3, total: 18, color: "bg-brand-500" },
+    { topic: "Speaking · javob tuzish", missed: 1, total: 22, color: "bg-accent-500" },
   ];
   return (
     <div className="card p-5 sm:p-6">

@@ -15,11 +15,11 @@ interface PlanProps {
 const DEFAULT: PlanProps = {
   date: "28-may, Yakshanba",
   totalMinutes: 25,
-  topic: "Algebra",
+  topic: "Reading",
   goal: { current: 0, total: 2 },
   current: {
     title: "Davom etish",
-    subtitle: "Algebra · Darajalar va ildizlar",
+    subtitle: "Reading · dalil va detal",
     minutes: 15,
   },
 };

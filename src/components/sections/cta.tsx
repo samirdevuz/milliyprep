@@ -16,8 +16,8 @@ export function Cta() {
                   Tayyorgarlikni bugundan boshla.
                 </h2>
                 <p className="mt-3 max-w-xl text-white/85">
-                  2 daqiqa onboarding, 0 so&apos;m boshlash. Bepul mashqlar va
-                  shaxsiy reja darhol qo&apos;lingizda bo&apos;ladi.
+                  2 daqiqa onboardingdan keyin Pro reja va to&apos;lov oqimi
+                  tayyor bo&apos;ladi.
                 </p>
               </div>
               <div className="flex flex-wrap gap-3 lg:justify-end">
@@ -25,7 +25,7 @@ export function Cta() {
                   href="/onboarding"
                   className="btn bg-white text-brand-700 hover:bg-ink-50"
                 >
-                  Bepul boshlash
+                  Boshlash
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link

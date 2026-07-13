@@ -2,30 +2,15 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Logo } from "@/components/brand/logo";
 import { AuthSideIllustration } from "@/components/auth/side-illustration";
 import { SocialAuthButtons } from "@/components/auth/social-buttons";
 import { AuthTabs } from "@/components/auth/auth-tabs";
 import { RegisterForm } from "@/components/auth/register-form";
 import { TelegramRegister } from "@/components/auth/telegram-register";
+import { OnboardingProfileSummary } from "@/components/auth/onboarding-profile-summary";
 import { AUTH_FLAGS } from "@/lib/auth-flags";
-
-const REGISTER_TABS = [
-  AUTH_FLAGS.email
-    ? {
-        id: "email",
-        label: "Elektron pochta",
-        content: <RegisterForm method="email" />,
-      }
-    : null,
-  AUTH_FLAGS.phone
-    ? {
-        id: "phone",
-        label: "Telefon raqami",
-        content: <RegisterForm method="phone" />,
-      }
-    : null,
-].filter((tab): tab is NonNullable<typeof tab> => Boolean(tab));
 
 export default function RegisterPage() {
   const [mode, setMode] = useState<"default" | "telegram">("default");
@@ -64,45 +49,72 @@ export default function RegisterPage() {
             {mode === "telegram" ? (
               <TelegramRegister onBack={() => setMode("default")} />
             ) : (
-              <>
-                <div className="mb-6">
-                  <h2 className="text-2xl font-bold text-ink-900">
-                    Ro&apos;yxatdan o&apos;tish
-                  </h2>
-                  <p className="mt-1 text-sm text-ink-600">
-                    Hisob yaratib o&apos;qishni boshlang.
-                  </p>
-                </div>
-
-                <Suspense fallback={null}>
-                  {REGISTER_TABS.length > 0 && <AuthTabs tabs={REGISTER_TABS} />}
-                </Suspense>
-
-                <div
-                  className={
-                    REGISTER_TABS.length > 0
-                      ? "my-5 flex items-center gap-3 text-xs text-ink-400"
-                      : "mb-5 flex items-center gap-3 text-xs text-ink-400"
-                  }
-                >
-                  <span className="h-px flex-1 bg-ink-200" />
-                  {REGISTER_TABS.length > 0 ? "yoki" : "orqali"}
-                  <span className="h-px flex-1 bg-ink-200" />
-                </div>
-
-                <SocialAuthButtons onTelegram={() => setMode("telegram")} />
-
-                <p className="mt-6 text-center text-sm text-ink-600">
-                  Hisobingiz bormi?{" "}
-                  <Link href="/login" className="font-semibold text-brand-600 hover:underline">
-                    Kirish
-                  </Link>
-                </p>
-              </>
+              <Suspense fallback={null}>
+                <RegisterPanel onTelegram={() => setMode("telegram")} />
+              </Suspense>
             )}
           </div>
         </div>
       </main>
     </div>
+  );
+}
+
+function RegisterPanel({ onTelegram }: { onTelegram: () => void }) {
+  const params = useSearchParams();
+  const planId = params.get("plan");
+  const registerTabs = [
+    AUTH_FLAGS.email
+      ? {
+          id: "email",
+          label: "Elektron pochta",
+          content: <RegisterForm method="email" />,
+        }
+      : null,
+    AUTH_FLAGS.phone
+      ? {
+          id: "phone",
+          label: "Telefon raqami",
+          content: <RegisterForm method="phone" />,
+        }
+      : null,
+  ].filter((tab): tab is NonNullable<typeof tab> => Boolean(tab));
+
+  return (
+    <>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-ink-900">
+          Ro&apos;yxatdan o&apos;tish
+        </h2>
+        <p className="mt-1 text-sm text-ink-600">
+          Hisob yaratib o&apos;qishni boshlang.
+        </p>
+      </div>
+
+      <OnboardingProfileSummary planId={planId} />
+
+      {registerTabs.length > 0 && <AuthTabs tabs={registerTabs} />}
+
+      <div
+        className={
+          registerTabs.length > 0
+            ? "my-5 flex items-center gap-3 text-xs text-ink-400"
+            : "mb-5 flex items-center gap-3 text-xs text-ink-400"
+        }
+      >
+        <span className="h-px flex-1 bg-ink-200" />
+        {registerTabs.length > 0 ? "yoki" : "orqali"}
+        <span className="h-px flex-1 bg-ink-200" />
+      </div>
+
+      <SocialAuthButtons onTelegram={onTelegram} />
+
+      <p className="mt-6 text-center text-sm text-ink-600">
+        Hisobingiz bormi?{" "}
+        <Link href="/login" className="font-semibold text-brand-600 hover:underline">
+          Kirish
+        </Link>
+      </p>
+    </>
   );
 }

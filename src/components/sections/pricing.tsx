@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Check, X } from "lucide-react";
+import { Check } from "lucide-react";
 import { Reveal } from "@/components/motion/reveal";
 import { IconChip } from "@/components/ui/icon-chip";
+import { PaymentButtons } from "@/components/payments/payment-buttons";
 import { PLANS, formatUzs, type Plan } from "@/lib/pricing";
 import { cn } from "@/lib/cn";
 
@@ -21,11 +21,11 @@ export function Pricing() {
           <div className="mx-auto max-w-2xl text-center">
             <span className="pill">Narxlar</span>
             <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
-              Maqsadingizga mos tarifni tanlang
+              Pro reja bilan tayyorgarlikni boshlang
             </h2>
             <p className="mt-3 text-ink-600">
-              Bepul boshlang, xohlagan vaqtda yangilang yoki bekor qiling. Hech
-              qanday yashirin to&apos;lov yo&apos;q.
+              Click yoki Payme sandbox orqali test to&apos;lov qiling. Production
+              kalitlari ulanganda shu oqim haqiqiy to&apos;lovga tayyor bo&apos;ladi.
             </p>
           </div>
         </Reveal>
@@ -72,7 +72,7 @@ export function Pricing() {
           </div>
         </Reveal>
 
-        <div className="mx-auto mt-12 grid max-w-5xl items-stretch gap-5 lg:grid-cols-3">
+        <div className="mx-auto mt-12 grid max-w-md items-stretch gap-5">
           {PLANS.map((plan, i) => (
             <Reveal key={plan.id} delay={i * 80} className="h-full">
               <PlanCard plan={plan} yearly={yearly} />
@@ -92,9 +92,6 @@ export function Pricing() {
 function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
   const price = yearly ? plan.yearly : plan.monthly;
   const Icon = plan.icon;
-  const registerHref = `/register?plan=${encodeURIComponent(plan.id)}&billing=${
-    yearly ? "yearly" : "monthly"
-  }`;
 
   const toneChip =
     plan.tone === "brand" ? "brand" : plan.tone === "accent" ? "accent" : "violet";
@@ -162,19 +159,11 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
         )}
       </div>
 
-      <Link
-        href={registerHref}
-        className={cn(
-          "mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition",
-          plan.highlighted
-            ? "bg-white text-ink-900 hover:bg-ink-100"
-            : plan.tone === "accent"
-              ? "bg-accent-500 text-white hover:bg-accent-600"
-              : "bg-brand-500 text-white hover:bg-brand-600"
-        )}
-      >
-        {plan.cta}
-      </Link>
+      <PaymentButtons
+        plan={plan}
+        billing={yearly ? "yearly" : "monthly"}
+        className="mt-6"
+      />
 
       <ul className="mt-6 space-y-2.5 text-sm">
         {plan.features.map((f) => (
@@ -188,12 +177,6 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
             <span className={plan.highlighted ? "text-white/90" : "text-ink-700"}>
               {f}
             </span>
-          </li>
-        ))}
-        {plan.notIncluded?.map((f) => (
-          <li key={f} className="flex items-start gap-2 opacity-60">
-            <X className="mt-0.5 h-4 w-4 shrink-0 text-ink-400" />
-            <span className="text-ink-500 line-through">{f}</span>
           </li>
         ))}
       </ul>

@@ -11,7 +11,7 @@ interface Goal {
 }
 
 const INITIAL: Goal[] = [
-  { id: "1", label: "Algebra mashg'ulotini yakunlash", done: false },
+  { id: "1", label: "Reading mashg'ulotini yakunlash", done: false },
   { id: "2", label: "15 ta test savol yechish", done: true },
   { id: "3", label: "Yangi so'zlarni o'rganish (10 ta)", done: true },
   { id: "4", label: "AI chatda 1 ta savol berish", done: false },

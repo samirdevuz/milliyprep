@@ -33,7 +33,7 @@ export function SeoLanding({
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/onboarding" className="btn-primary">
-                Bepul reja olish
+                Reja olish
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link href="/#imkoniyatlar" className="btn-ghost">

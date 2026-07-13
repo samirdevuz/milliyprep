@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Dancing_Script } from "next/font/google";
 import { SEO_KEYWORDS, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
@@ -51,7 +51,6 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.webmanifest",
   category: "education",
-  themeColor: "#0f766e",
   robots: {
     index: true,
     follow: true,
@@ -87,6 +86,10 @@ export const metadata: Metadata = {
       "Milliy Sertifikat fanlari bo'yicha testlar, mavzular, mock imtihonlar va progress tracking.",
     images: ["/og-image.png"],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0f766e",
 };
 
 export default function RootLayout({

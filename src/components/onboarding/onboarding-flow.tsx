@@ -232,7 +232,7 @@ function ChoiceCard({
         </IconChip>
       )}
       <span className="min-w-0 flex-1">
-        <span className={cn("block text-sm font-extrabold", selected ? "text-brand-800" : "text-ink-950")}>
+        <span className={cn("block text-sm font-extrabold", selected ? "text-brand-800" : "text-ink-900")}>
           {title}
         </span>
         {caption && (
@@ -284,7 +284,7 @@ function StatRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-ink-100 px-5 py-4 last:border-b-0">
       <span className="text-sm text-ink-600">{label}</span>
-      <span className="text-right text-sm font-extrabold text-ink-950">{value}</span>
+      <span className="text-right text-sm font-extrabold text-ink-900">{value}</span>
     </div>
   );
 }
@@ -313,7 +313,7 @@ function TimelineItem({
         </span>
       </div>
       <div className="rounded-2xl bg-white p-4 shadow-soft ring-1 ring-ink-100">
-        <p className="font-extrabold text-ink-950">{title}</p>
+        <p className="font-extrabold text-ink-900">{title}</p>
         <p className="mt-1 text-sm leading-6 text-ink-600">{children}</p>
       </div>
     </div>
@@ -476,7 +476,7 @@ function StepBody({
     return (
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-ink-100 bg-white p-4 shadow-soft">
-          <p className="mb-4 font-extrabold text-ink-950">Haftalik soat</p>
+          <p className="mb-4 font-extrabold text-ink-900">Haftalik soat</p>
           <div className="flex flex-wrap gap-2">
             {[3, 5, 8, 10, 14, 20].map((hours) => (
               <PillButton
@@ -491,7 +491,7 @@ function StepBody({
           <FieldError>{errors.weeklyHours}</FieldError>
         </div>
         <div className="rounded-2xl border border-ink-100 bg-white p-4 shadow-soft">
-          <p className="mb-4 font-extrabold text-ink-950">Haftalik kun</p>
+          <p className="mb-4 font-extrabold text-ink-900">Haftalik kun</p>
           <div className="flex flex-wrap gap-2">
             {[2, 3, 4, 5, 6, 7].map((days) => (
               <PillButton
@@ -566,7 +566,7 @@ function StepBody({
               {item.icon}
             </IconChip>
             <div>
-              <p className="font-extrabold text-ink-950">{item.title}</p>
+              <p className="font-extrabold text-ink-900">{item.title}</p>
               <p className="mt-1 text-sm leading-6 text-ink-600">{item.text}</p>
             </div>
           </div>
@@ -616,7 +616,7 @@ function StepBody({
           <p className="text-sm font-bold uppercase tracking-[0.24em] text-brand-600">
             Shaxsiy prognoz
           </p>
-          <p className="mt-4 text-7xl font-black tracking-tight text-ink-950">
+          <p className="mt-4 text-7xl font-black tracking-tight text-ink-900">
             {projection}
           </p>
           <p className="mt-2 text-sm text-ink-600">
@@ -669,7 +669,7 @@ export function OnboardingFlow() {
     }
     setErrors({});
     if (isLast) {
-      router.push("/register?from=onboarding");
+      router.push("/plans?from=onboarding");
     } else {
       setStep((s) => Math.min(STEPS.length - 1, s + 1));
       requestAnimationFrame(() => {
@@ -721,7 +721,7 @@ export function OnboardingFlow() {
                 <p className="text-xs font-bold uppercase tracking-[0.22em] text-brand-600">
                   {copy.eyebrow}
                 </p>
-                <h1 className="mt-3 max-w-3xl text-3xl font-black tracking-tight text-ink-950 sm:text-4xl">
+                <h1 className="mt-3 max-w-3xl text-3xl font-black tracking-tight text-ink-900 sm:text-4xl">
                   {copy.title}
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-600 sm:text-base">
@@ -761,7 +761,7 @@ export function OnboardingFlow() {
                   trailingIcon={<ArrowRight className="h-4 w-4" />}
                   className="w-full bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 sm:w-auto"
                 >
-                  {isLast ? "Ro'yxatdan o'tish" : "Keyingi"}
+                  {isLast ? "Tarifni tanlash" : "Keyingi"}
                 </Button>
               </div>
             </div>

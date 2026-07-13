@@ -1,0 +1,133 @@
+- generic [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - complementary [ref=f1e3]:
+      - generic [ref=f1e7]:
+        - generic [ref=f1e9]:
+          - img "MilliyPrep logo" [ref=f1e11]
+          - generic [ref=f1e12]: MilliyPrep
+        - generic [ref=f1e13]:
+          - paragraph [ref=f1e14]: Shaxsiy reja
+          - heading "Milliy Sertifikat uchun aniq yo'l xarita." [level=1] [ref=f1e15]
+          - paragraph [ref=f1e16]: Bir nechta savol orqali darajangiz, vaqtingiz va maqsadingizni aniqlaymiz. Keyin reja dashboardda saqlanadi.
+        - generic [ref=f1e24]:
+          - paragraph [ref=f1e25]: 2 daqiqalik onboarding
+          - paragraph [ref=f1e26]: Javoblar avtomatik saqlanadi
+        - list [ref=f1e29]:
+          - listitem [ref=f1e30]:
+            - paragraph [ref=f1e38]: Shaxsiy yondashuv
+          - listitem [ref=f1e39]:
+            - paragraph [ref=f1e45]: Aqlli tahlil
+          - listitem [ref=f1e46]:
+            - paragraph [ref=f1e53]: Vaqtga moslashgan
+          - listitem [ref=f1e54]:
+            - paragraph [ref=f1e61]: Natijaga yo'naltirilgan
+    - generic [ref=f1e63]:
+      - generic [ref=f1e64]:
+        - generic [ref=f1e66]:
+          - generic [ref=f1e67]:
+            - generic [ref=f1e68]:
+              - paragraph [ref=f1e69]: Qadam 2 / 11
+              - paragraph [ref=f1e70]: Fan
+            - paragraph [ref=f1e71]: 18%
+          - list [ref=f1e72]:
+            - listitem [ref=f1e73]:
+              - generic "Ism" [ref=f1e74]
+            - listitem [ref=f1e76]:
+              - generic "Fan" [ref=f1e77]: "2"
+            - listitem [ref=f1e79]:
+              - generic "Hozirgi ball" [ref=f1e80]: "3"
+            - listitem [ref=f1e82]:
+              - generic "Maqsad" [ref=f1e83]: "4"
+            - listitem [ref=f1e85]:
+              - generic "Vaqt" [ref=f1e86]: "5"
+            - listitem [ref=f1e88]:
+              - generic "Sabab" [ref=f1e89]: "6"
+            - listitem [ref=f1e91]:
+              - generic "Ishonch" [ref=f1e92]: "7"
+            - listitem [ref=f1e94]:
+              - generic "Profil" [ref=f1e95]: "8"
+            - listitem [ref=f1e97]:
+              - generic "Manba" [ref=f1e98]: "9"
+            - listitem [ref=f1e100]:
+              - generic "Reja" [ref=f1e101]: "10"
+            - listitem [ref=f1e103]:
+              - generic "Yo'l xaritasi" [ref=f1e104]: "11"
+        - generic [ref=f1e105]:
+          - generic [ref=f1e106]:
+            - paragraph [ref=f1e107]: Salom, Samir
+            - heading "Qaysi fan bo'yicha Milliy Sertifikatga tayyorlanyapsiz?" [level=1] [ref=f1e149]
+            - paragraph [ref=f1e109]: Reja fan formatiga, baholash mezoniga va savol turiga moslashadi.
+          - generic [ref=f1e150]:
+            - radio "Ingliz tili Listening, Reading, Writing va Speaking. CEFR ko'nikmalari va 100 ballik umumiy natija." [checked] [active] [ref=f1e151] [cursor=pointer]:
+              - generic [ref=f1e156]:
+                - generic [ref=f1e157]: Ingliz tili
+                - generic [ref=f1e158]: Listening, Reading, Writing va Speaking. CEFR ko'nikmalari va 100 ballik umumiy natija.
+            - radio "Rus tili Til ko'nikmalari va grammatik aniqlik. CEFR ko'nikmalari va 100 ballik umumiy natija." [ref=f1e162] [cursor=pointer]:
+              - generic [ref=f1e167]:
+                - generic [ref=f1e168]: Rus tili
+                - generic [ref=f1e169]: Til ko'nikmalari va grammatik aniqlik. CEFR ko'nikmalari va 100 ballik umumiy natija.
+            - radio "Nemis tili CEFR formatidagi til ko'nikmalari. CEFR ko'nikmalari va 100 ballik umumiy natija." [ref=f1e173] [cursor=pointer]:
+              - generic [ref=f1e178]:
+                - generic [ref=f1e179]: Nemis tili
+                - generic [ref=f1e180]: CEFR formatidagi til ko'nikmalari. CEFR ko'nikmalari va 100 ballik umumiy natija.
+            - radio "Fransuz tili CEFR formatidagi til ko'nikmalari. CEFR ko'nikmalari va 100 ballik umumiy natija." [ref=f1e184] [cursor=pointer]:
+              - generic [ref=f1e189]:
+                - generic [ref=f1e190]: Fransuz tili
+                - generic [ref=f1e191]: CEFR formatidagi til ko'nikmalari. CEFR ko'nikmalari va 100 ballik umumiy natija.
+            - radio "Arab tili Matn, lug'at va nutq ko'nikmalari. CEFR ko'nikmalari va 100 ballik umumiy natija." [ref=f1e195] [cursor=pointer]:
+              - generic [ref=f1e200]:
+                - generic [ref=f1e201]: Arab tili
+                - generic [ref=f1e202]: Matn, lug'at va nutq ko'nikmalari. CEFR ko'nikmalari va 100 ballik umumiy natija.
+            - radio "Turk tili CEFR formatidagi til ko'nikmalari. CEFR ko'nikmalari va 100 ballik umumiy natija." [ref=f1e206] [cursor=pointer]:
+              - generic [ref=f1e211]:
+                - generic [ref=f1e212]: Turk tili
+                - generic [ref=f1e213]: CEFR formatidagi til ko'nikmalari. CEFR ko'nikmalari va 100 ballik umumiy natija.
+            - radio "Ona tili Imlo, uslub, matn va til qoidalari. 100 ballik fan natijasi." [ref=f1e217] [cursor=pointer]:
+              - generic [ref=f1e223]:
+                - generic [ref=f1e224]: Ona tili
+                - generic [ref=f1e225]: Imlo, uslub, matn va til qoidalari. 100 ballik fan natijasi.
+            - radio "Adabiyot Asar tahlili, nazariya va mualliflar. 100 ballik fan natijasi." [ref=f1e229] [cursor=pointer]:
+              - generic [ref=f1e235]:
+                - generic [ref=f1e236]: Adabiyot
+                - generic [ref=f1e237]: Asar tahlili, nazariya va mualliflar. 100 ballik fan natijasi.
+            - radio "Matematika Algebra, geometriya va mantiqiy masalalar. 100 ballik fan natijasi." [ref=f1e241] [cursor=pointer]:
+              - generic [ref=f1e247]:
+                - generic [ref=f1e248]: Matematika
+                - generic [ref=f1e249]: Algebra, geometriya va mantiqiy masalalar. 100 ballik fan natijasi.
+            - radio "Fizika Nazariya, formulalar va amaliy masalalar. 100 ballik fan natijasi." [ref=f1e253] [cursor=pointer]:
+              - generic [ref=f1e259]:
+                - generic [ref=f1e260]: Fizika
+                - generic [ref=f1e261]: Nazariya, formulalar va amaliy masalalar. 100 ballik fan natijasi.
+            - radio "Kimyo Reaksiyalar, hisoblash va nazariya. 100 ballik fan natijasi." [ref=f1e265] [cursor=pointer]:
+              - generic [ref=f1e271]:
+                - generic [ref=f1e272]: Kimyo
+                - generic [ref=f1e273]: Reaksiyalar, hisoblash va nazariya. 100 ballik fan natijasi.
+            - radio "Biologiya Botanika, zoologiya, odam anatomiyasi. 100 ballik fan natijasi." [ref=f1e277] [cursor=pointer]:
+              - generic [ref=f1e283]:
+                - generic [ref=f1e284]: Biologiya
+                - generic [ref=f1e285]: Botanika, zoologiya, odam anatomiyasi. 100 ballik fan natijasi.
+            - radio "Tarix O'zbekiston va jahon tarixi. 100 ballik fan natijasi." [ref=f1e289] [cursor=pointer]:
+              - generic [ref=f1e295]:
+                - generic [ref=f1e296]: Tarix
+                - generic [ref=f1e297]: O'zbekiston va jahon tarixi. 100 ballik fan natijasi.
+            - radio "Geografiya Tabiiy va iqtisodiy geografiya. 100 ballik fan natijasi." [ref=f1e301] [cursor=pointer]:
+              - generic [ref=f1e307]:
+                - generic [ref=f1e308]: Geografiya
+                - generic [ref=f1e309]: Tabiiy va iqtisodiy geografiya. 100 ballik fan natijasi.
+            - radio "Huquq Konstitutsiya, huquq tarmoqlari va amaliy holatlar. 100 ballik fan natijasi." [ref=f1e313] [cursor=pointer]:
+              - generic [ref=f1e319]:
+                - generic [ref=f1e320]: Huquq
+                - generic [ref=f1e321]: Konstitutsiya, huquq tarmoqlari va amaliy holatlar. 100 ballik fan natijasi.
+        - generic [ref=f1e112]:
+          - button "Orqaga" [ref=f1e325] [cursor=pointer]
+          - button "Keyingi" [ref=f1e116] [cursor=pointer]
+        - paragraph [ref=f1e119]: Ma'lumotlaringiz xavfsizligini ta'minlaymiz.
+      - generic [ref=f1e124]:
+        - paragraph [ref=f1e125]: Yordam kerakmi? Biz har doim siz bilan.
+        - generic [ref=f1e129]:
+          - link "Chat" [ref=f1e130] [cursor=pointer]:
+            - /url: https://t.me/milliyprep
+          - link "FAQ" [ref=f1e131] [cursor=pointer]:
+            - /url: /#faq
+  - button "Open Next.js Dev Tools" [ref=f1e137] [cursor=pointer]
+  - alert [ref=f1e145]

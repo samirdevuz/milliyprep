@@ -56,7 +56,7 @@ export function Hero() {
           <Reveal delay={280}>
             <div className="flex flex-wrap items-center gap-3">
               <Link href="/onboarding" className="btn-primary">
-                Bepul boshlash
+                Boshlash
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link href="#imkoniyatlar" className="btn-ghost">

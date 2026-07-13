@@ -69,6 +69,7 @@ export function AuthSideIllustration({ title }: { title: React.ReactNode }) {
               height={360}
               className="mx-auto w-full max-w-[240px] drop-shadow-[0_20px_35px_rgba(0,0,0,0.25)]"
               fallbackClassName="bg-white/20"
+              priority
             />
           </div>
 

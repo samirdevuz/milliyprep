@@ -12,22 +12,22 @@ interface Lesson {
 
 const LESSONS: Lesson[] = [
   {
-    subject: "Algebra",
-    title: "Tenglamalar va tengsizliklar",
+    subject: "Listening",
+    title: "Asosiy fikrni ajratish",
     minutes: 15,
     progress: 0,
     tone: "brand",
   },
   {
-    subject: "Geometriya",
-    title: "Uchburchaklar",
+    subject: "Reading",
+    title: "Dalil va detalni topish",
     minutes: 20,
     progress: 0,
     tone: "accent",
   },
   {
-    subject: "Arifmetika",
-    title: "Foiz va proporsiyalar",
+    subject: "Writing",
+    title: "Bog'lovchilar va izchillik",
     minutes: 15,
     progress: 0,
     tone: "amber",

@@ -83,9 +83,9 @@ export default async function DashboardHome() {
         <div className="space-y-5 lg:col-span-2">
           <TodayPlan
             date={today}
-            subject={nextTopic?.subjectName ?? "Matematika"}
+            subject={nextTopic?.subjectName ?? "Ingliz tili"}
             minutes={nextTopic?.estimatedMinutes ?? 15}
-            topic={nextTopic?.name ?? "Chiziqli tenglamalar"}
+            topic={nextTopic?.name ?? "Listening: asosiy fikr"}
             doneTasks={progress?.completedToday ?? 0}
             totalTasks={2}
             href="/dashboard/practice"

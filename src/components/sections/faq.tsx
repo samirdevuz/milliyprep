@@ -19,8 +19,8 @@ const FAQS = [
     a: "Har bir o'quvchi uchun joriy daraja, mavjud vaqt va maqsad asosida individual haftalik reja tuziladi. Har bir test natijasi keyingi hafta rejasini avtomatik moslaydi.",
   },
   {
-    q: "Bepul foydalansa bo'ladimi?",
-    a: "Ha. Asosiy mashqlar, kunlik test va AI tutorning bazaviy funksiyalari bepul. To'liq mock testlar va kengaytirilgan tahlil Premium tariflarda mavjud.",
+    q: "Pro tarifda nimalar bor?",
+    a: "Pro tarifda mock testlar, AI tutor, yozma ish va speaking avto-baholash, to'liq savol banki va haftalik shaxsiy tahlil mavjud.",
   },
   {
     q: "Qanday tillarda ishlaydi?",

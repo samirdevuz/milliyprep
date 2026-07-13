@@ -18,7 +18,7 @@ export function StepProgress({ steps, current }: StepProgressProps) {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-400">
             Qadam {current + 1} / {steps.length}
           </p>
-          <p className="mt-1 text-sm font-bold text-ink-950">
+          <p className="mt-1 text-sm font-bold text-ink-900">
             {steps[current]?.label}
           </p>
         </div>

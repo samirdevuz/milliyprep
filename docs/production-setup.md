@@ -140,7 +140,46 @@ launch and use Google, Telegram, and email registration first.
 NEXT_PUBLIC_ENABLE_PHONE_AUTH=false
 ```
 
-## 7. Telegram Bot
+## 7. Click and Payme Sandbox Payments
+
+The app is wired for Click and Payme test flows before production launch.
+
+Run the payment migration after auth and practice migrations:
+
+```sql
+-- supabase/migrations/003_payments.sql
+```
+
+Set sandbox env values:
+
+```env
+PAYMENT_MODE=sandbox
+CLICK_MERCHANT_ID=
+CLICK_SERVICE_ID=
+CLICK_SECRET_KEY=
+CLICK_CHECKOUT_URL=https://my.click.uz/services/pay
+PAYME_MERCHANT_ID=
+PAYME_KEY=
+PAYME_CHECKOUT_URL=https://test.paycom.uz
+```
+
+Provider callback URLs:
+
+```text
+Click Prepare:  {APP_URL}/api/payments/click/prepare
+Click Complete: {APP_URL}/api/payments/click/complete
+Payme Merchant: {APP_URL}/api/payments/payme
+```
+
+Payme sandbox uses the web-cashbox `TEST_KEY` and official sandbox checkout at
+`https://test.paycom.uz`. Click uses the official Click checkout URL from the
+merchant settings; keep the URL Click Business gives you if they issue a
+separate test endpoint for your service.
+
+Do not switch `PAYMENT_MODE=production` or production checkout URLs until both
+providers have accepted the callback tests and the production domain is HTTPS.
+
+## 8. Telegram Bot
 
 1. Create a bot through `@BotFather`.
 2. Copy the token into `bot/.env`.
@@ -168,7 +207,7 @@ npm install
 npm run dev
 ```
 
-## 8. AI Tutor
+## 9. AI Tutor
 
 AI tutor works in demo/mock mode without an API key. For real AI responses,
 set an OpenAI-compatible API key:
@@ -182,7 +221,7 @@ OPENAI_BASE_URL=https://api.openai.com/v1
 `OPENAI_BASE_URL` can point to any OpenAI-compatible gateway if you later route
 models through another provider.
 
-## 9. Deployment Env
+## 10. Deployment Env
 
 When deploying, set these environment variables in the hosting platform:
 
@@ -196,6 +235,14 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 RESEND_API_KEY=
 MAIL_FROM=MilliyPrep <no-reply@milliyprep.xyz>
+PAYMENT_MODE=sandbox
+CLICK_MERCHANT_ID=
+CLICK_SERVICE_ID=
+CLICK_SECRET_KEY=
+CLICK_CHECKOUT_URL=https://my.click.uz/services/pay
+PAYME_MERCHANT_ID=
+PAYME_KEY=
+PAYME_CHECKOUT_URL=https://test.paycom.uz
 ESKIZ_TOKEN=
 ESKIZ_FROM=4546
 OPENAI_API_KEY=
@@ -209,7 +256,7 @@ Local `.env`ni tekshirish:
 npm run check:env
 ```
 
-## 10. What Is Already Done In Code
+## 11. What Is Already Done In Code
 
 - Supabase/Postgres adapter for users and OTP verification records.
 - Local JSON fallback for dev.
@@ -218,4 +265,5 @@ npm run check:env
 - Google OAuth server callback.
 - Telegram registration bot integration.
 - Email OTP via Resend and SMS OTP via Eskiz token.
+- Click and Payme sandbox payment callbacks.
 - AI tutor streaming API and dashboard chat UI.

@@ -211,7 +211,7 @@ export default function BlogPage() {
                 href="/onboarding"
                 className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-ink-900 transition hover:bg-ink-100"
               >
-                Bepul reja olish
+                Reja olish
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

@@ -11,6 +11,7 @@
 - Auth routes have basic rate limiting.
 - Google OAuth callback uses normalized `APP_URL`.
 - AI tutor streaming API and dashboard chat UI added.
+- Click and Payme sandbox payment callbacks added.
 - Setup guide written in `docs/production-setup.md`.
 
 ## You Need To Provide
@@ -19,6 +20,8 @@
 - Google OAuth client ID and client secret.
 - Resend API key and verified sending domain.
 - Eskiz SMS token / sender setup, if phone OTP must work in production.
+- Click merchant id, service id, secret key, and callback approval.
+- Payme merchant id and sandbox TEST_KEY.
 - Telegram bot token from BotFather.
 - Production domain and hosting env values.
 - OpenAI API key if AI tutor will be enabled.
@@ -28,4 +31,4 @@
 - Replace dashboard demo data with Supabase-backed study plan/progress tables.
 - Build practice/test question bank schema.
 - Add admin tools for questions and content.
-- Add payment/subscription gating.
+- Add subscription entitlement gating after provider sandbox approval.
