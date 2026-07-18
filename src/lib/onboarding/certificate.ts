@@ -1,21 +1,12 @@
-export type CertificateSubjectId =
-  | "english"
-  | "russian"
-  | "german"
-  | "french"
-  | "arabic"
-  | "turkish"
-  | "uzbek"
-  | "literature"
-  | "math"
-  | "physics"
-  | "chemistry"
-  | "biology"
-  | "history"
-  | "geography"
-  | "law";
+import {
+  CURRICULUM_SUBJECTS,
+  curriculumSubjectById,
+  type CurriculumSubjectId,
+  type CurriculumSubjectKind,
+} from "../../content/curriculum.ts";
 
-export type CertificateSubjectKind = "language" | "general";
+export type CertificateSubjectId = CurriculumSubjectId;
+export type CertificateSubjectKind = CurriculumSubjectKind;
 
 export interface CertificateSubject {
   id: CertificateSubjectId;
@@ -24,6 +15,7 @@ export interface CertificateSubject {
   kind: CertificateSubjectKind;
   caption: string;
   assessment: string;
+  availability: "live" | "planned";
 }
 
 export interface GradeBand {
@@ -42,131 +34,33 @@ export const GRADE_BANDS: GradeBand[] = [
   { label: "Tayyor emas", min: 0, max: 30, caption: "asosiy tayyorgarlik kerak" },
 ];
 
-export const CERTIFICATE_SUBJECTS: CertificateSubject[] = [
-  {
-    id: "english",
-    label: "Ingliz tili",
-    shortLabel: "Ingliz",
-    kind: "language",
-    caption: "Listening, Reading, Writing va Speaking",
-    assessment: "CEFR ko'nikmalari va 100 ballik umumiy natija",
-  },
-  {
-    id: "russian",
-    label: "Rus tili",
-    shortLabel: "Rus",
-    kind: "language",
-    caption: "Til ko'nikmalari va grammatik aniqlik",
-    assessment: "CEFR ko'nikmalari va 100 ballik umumiy natija",
-  },
-  {
-    id: "german",
-    label: "Nemis tili",
-    shortLabel: "Nemis",
-    kind: "language",
-    caption: "CEFR formatidagi til ko'nikmalari",
-    assessment: "CEFR ko'nikmalari va 100 ballik umumiy natija",
-  },
-  {
-    id: "french",
-    label: "Fransuz tili",
-    shortLabel: "Fransuz",
-    kind: "language",
-    caption: "CEFR formatidagi til ko'nikmalari",
-    assessment: "CEFR ko'nikmalari va 100 ballik umumiy natija",
-  },
-  {
-    id: "arabic",
-    label: "Arab tili",
-    shortLabel: "Arab",
-    kind: "language",
-    caption: "Matn, lug'at va nutq ko'nikmalari",
-    assessment: "CEFR ko'nikmalari va 100 ballik umumiy natija",
-  },
-  {
-    id: "turkish",
-    label: "Turk tili",
-    shortLabel: "Turk",
-    kind: "language",
-    caption: "CEFR formatidagi til ko'nikmalari",
-    assessment: "CEFR ko'nikmalari va 100 ballik umumiy natija",
-  },
-  {
-    id: "uzbek",
-    label: "Ona tili",
-    shortLabel: "Ona tili",
-    kind: "general",
-    caption: "Imlo, uslub, matn va til qoidalari",
-    assessment: "100 ballik fan natijasi",
-  },
-  {
-    id: "literature",
-    label: "Adabiyot",
-    shortLabel: "Adabiyot",
-    kind: "general",
-    caption: "Asar tahlili, nazariya va mualliflar",
-    assessment: "100 ballik fan natijasi",
-  },
-  {
-    id: "math",
-    label: "Matematika",
-    shortLabel: "Matematika",
-    kind: "general",
-    caption: "Algebra, geometriya va mantiqiy masalalar",
-    assessment: "100 ballik fan natijasi",
-  },
-  {
-    id: "physics",
-    label: "Fizika",
-    shortLabel: "Fizika",
-    kind: "general",
-    caption: "Nazariya, formulalar va amaliy masalalar",
-    assessment: "100 ballik fan natijasi",
-  },
-  {
-    id: "chemistry",
-    label: "Kimyo",
-    shortLabel: "Kimyo",
-    kind: "general",
-    caption: "Reaksiyalar, hisoblash va nazariya",
-    assessment: "100 ballik fan natijasi",
-  },
-  {
-    id: "biology",
-    label: "Biologiya",
-    shortLabel: "Biologiya",
-    kind: "general",
-    caption: "Botanika, zoologiya, odam anatomiyasi",
-    assessment: "100 ballik fan natijasi",
-  },
-  {
-    id: "history",
-    label: "Tarix",
-    shortLabel: "Tarix",
-    kind: "general",
-    caption: "O'zbekiston va jahon tarixi",
-    assessment: "100 ballik fan natijasi",
-  },
-  {
-    id: "geography",
-    label: "Geografiya",
-    shortLabel: "Geografiya",
-    kind: "general",
-    caption: "Tabiiy va iqtisodiy geografiya",
-    assessment: "100 ballik fan natijasi",
-  },
-  {
-    id: "law",
-    label: "Huquq",
-    shortLabel: "Huquq",
-    kind: "general",
-    caption: "Konstitutsiya, huquq tarmoqlari va amaliy holatlar",
-    assessment: "100 ballik fan natijasi",
-  },
-];
+export const CERTIFICATE_SUBJECTS: CertificateSubject[] =
+  CURRICULUM_SUBJECTS.map((subject) => ({
+    id: subject.id,
+    label: subject.label,
+    shortLabel: subject.shortLabel,
+    kind: subject.kind,
+    caption: subject.caption,
+    assessment: subject.assessment,
+    availability: subject.availability,
+  }));
+
+export const AVAILABLE_CERTIFICATE_SUBJECTS = CERTIFICATE_SUBJECTS.filter(
+  (subject) => subject.availability === "live"
+);
 
 export function subjectById(id?: string): CertificateSubject | undefined {
-  return CERTIFICATE_SUBJECTS.find((subject) => subject.id === id);
+  const subject = curriculumSubjectById(id);
+  if (!subject) return undefined;
+  return {
+    id: subject.id,
+    label: subject.label,
+    shortLabel: subject.shortLabel,
+    kind: subject.kind,
+    caption: subject.caption,
+    assessment: subject.assessment,
+    availability: subject.availability,
+  };
 }
 
 export function gradeForScore(score?: number): GradeBand | undefined {
@@ -180,6 +74,7 @@ export function clampScore(score: number): number {
 
 export function projectedScore(currentScore?: number, targetScore?: number): number {
   const start = typeof currentScore === "number" ? currentScore : 38;
-  const target = typeof targetScore === "number" ? targetScore : Math.max(71, start + 18);
+  const target =
+    typeof targetScore === "number" ? targetScore : Math.max(71, start + 18);
   return clampScore(Math.max(start + 12, Math.min(100, target)));
 }

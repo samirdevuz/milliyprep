@@ -7,7 +7,7 @@ import type {
 } from "./types";
 
 const PRACTICE_QUESTION_LIMIT = 5;
-const MOCK_QUESTION_LIMIT = 10;
+const MOCK_QUESTION_LIMIT = 45;
 
 export class PracticeInputError extends Error {
   constructor(message: string) {
@@ -26,17 +26,34 @@ export interface AttemptSubmissionInput {
 export interface ValidatedAttemptSubmission {
   questions: Question[];
   topic?: Topic;
-  submitted: Map<string, number>;
+  submitted: Map<string, SubmittedAnswer>;
 }
 
 function mockQuestions(bank: AdminQuestionBank): Question[] {
   return bank.questions
+    .filter((question) => question.reviewStatus === "published")
     .slice()
-    .sort((a, b) => {
-      if (a.subjectId === b.subjectId) return a.id.localeCompare(b.id);
-      return a.subjectId.localeCompare(b.subjectId);
-    })
+    .sort((a, b) => a.position - b.position)
     .slice(0, MOCK_QUESTION_LIMIT);
+}
+
+function normalizeShortAnswer(value: string): string {
+  return value
+    .trim()
+    .toLocaleLowerCase("uz")
+    .replaceAll("−", "-")
+    .replaceAll("·", "*")
+    .replace(/\s+/g, " ");
+}
+
+export function isAcceptedShortAnswer(
+  submitted: string,
+  acceptedAnswers: string[]
+): boolean {
+  const normalized = normalizeShortAnswer(submitted);
+  return acceptedAnswers.some(
+    (answer) => normalizeShortAnswer(answer) === normalized
+  );
 }
 
 export function validateAttemptSubmission(
@@ -82,15 +99,34 @@ export function validateAttemptSubmission(
   }
 
   const submitted = new Map(
-    input.answers.map((answer) => [answer.questionId, answer.selectedIndex])
+    input.answers.map((answer) => [answer.questionId, answer])
   );
   for (const question of questions) {
-    const selectedIndex = submitted.get(question.id);
+    const answer = submitted.get(question.id);
+    if (!answer) {
+      throw new PracticeInputError("Har bir savol uchun javob yuboring.");
+    }
+
+    if (question.type === "short_answer") {
+      if (
+        !Array.isArray(answer.textAnswers) ||
+        answer.textAnswers.length !== question.parts?.length ||
+        answer.textAnswers.some((value) => typeof value !== "string") ||
+        (input.mode === "practice" &&
+          answer.textAnswers.some((value) => !value.trim()))
+      ) {
+        throw new PracticeInputError(
+          "Ochiq savolning har bir bandiga javob kiriting."
+        );
+      }
+      continue;
+    }
+
     if (
-      typeof selectedIndex !== "number" ||
-      !Number.isInteger(selectedIndex) ||
-      selectedIndex < 0 ||
-      selectedIndex >= question.options.length
+      typeof answer.selectedIndex !== "number" ||
+      !Number.isInteger(answer.selectedIndex) ||
+      answer.selectedIndex < (input.mode === "mock_test" ? -1 : 0) ||
+      answer.selectedIndex >= question.options.length
     ) {
       throw new PracticeInputError("Javob varianti noto'g'ri yuborildi.");
     }

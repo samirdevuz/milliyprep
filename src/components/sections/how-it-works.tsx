@@ -9,7 +9,7 @@ const STEPS = [
     tone: "brand" as const,
     title: "Profil yarating",
     description:
-      "Fan, hozirgi natija, maqsad ball va haftalik vaqtingizni 2 daqiqada kiriting.",
+      "Matematika bo'yicha hozirgi natija, maqsad ball va haftalik vaqtingizni kiriting.",
   },
   {
     n: "02",
@@ -25,7 +25,7 @@ const STEPS = [
     tone: "violet" as const,
     title: "Natijani ko'ring",
     description:
-      "Mashq qiling, mock testlardan o'ting va har hafta ballingiz qanday o'sayotganini kuzatib boring.",
+      "Mashq qiling, pilot sinovlardan o'ting va har hafta natijangiz qanday o'zgarayotganini kuzating.",
   },
 ];
 

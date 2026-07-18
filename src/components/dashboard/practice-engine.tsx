@@ -1,14 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
   CheckCircle2,
   ClipboardList,
+  Clock3,
   RotateCcw,
   Send,
+  ShieldCheck,
   XCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -27,17 +29,26 @@ interface PracticeEngineProps {
   questionsByTopic?: Record<string, PublicQuestion[]>;
   mockQuestions?: PublicQuestion[];
   initialTopicId?: string;
+  mockReadiness?: number;
 }
 
-type Answers = Record<string, number>;
+interface AnswerValue {
+  selectedIndex?: number;
+  textAnswers?: string[];
+}
+
+type Answers = Record<string, AnswerValue>;
+
+const FULL_MOCK_QUESTION_COUNT = 45;
+const FULL_MOCK_SECONDS = 150 * 60;
 
 function modeCopy(mode: PracticeMode) {
   if (mode === "mock_test") {
     return {
-      title: "Milliy Sertifikat mini-test",
-      eyebrow: "Real test rejimi",
+      title: "Matematika to‘liq sinovi",
+      eyebrow: "45 topshiriq · 150 daqiqa",
       description:
-        "Ko'nikmalar aralash keladi. Yakunda natija saqlanadi va dashboard progressiga qo'shiladi.",
+        "Y-1, Y-2 va ikki qismli ochiq savollar rasmiy blueprint tartibida keladi.",
       icon: ClipboardList,
       tone: "violet" as const,
       button: "Testni yakunlash",
@@ -45,10 +56,10 @@ function modeCopy(mode: PracticeMode) {
   }
 
   return {
-    title: "Mavzu bo'yicha mashg'ulot",
-    eyebrow: "Practice engine",
+    title: "Mavzu bo'yicha mashq",
+    eyebrow: "Matematika · Milliy Sertifikat",
     description:
-      "Mavzuni tanlang, savollarga javob bering va darhol izohli natijani ko'ring.",
+      "Spetsifikatsiyadagi ko'nikmani tanlang, savollarni yeching va izohli natijani ko'ring.",
     icon: BookOpen,
     tone: "brand" as const,
     button: "Mashg'ulotni tekshirish",
@@ -72,6 +83,7 @@ export function PracticeEngine({
   questionsByTopic = {},
   mockQuestions = [],
   initialTopicId,
+  mockReadiness = mockQuestions.length,
 }: PracticeEngineProps) {
   const copy = modeCopy(mode);
   const Icon = copy.icon;
@@ -83,6 +95,7 @@ export function PracticeEngine({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<AttemptResult | null>(null);
+  const [secondsLeft, setSecondsLeft] = useState(FULL_MOCK_SECONDS);
 
   const questions = useMemo(() => {
     if (mode === "mock_test") return mockQuestions;
@@ -90,10 +103,22 @@ export function PracticeEngine({
   }, [activeTopic, mockQuestions, mode, questionsByTopic]);
 
   const activeQuestion = questions[index];
-  const answeredCount = questions.filter((question) =>
-    Number.isInteger(answers[question.id])
-  ).length;
+  const answeredCount = questions.filter((question) => {
+    const answer = answers[question.id];
+    if (question.type === "short_answer") {
+      return Boolean(
+        question.parts?.length &&
+          answer?.textAnswers?.length === question.parts.length &&
+          answer.textAnswers.every((value) => value.trim())
+      );
+    }
+    return Number.isInteger(answer?.selectedIndex);
+  }).length;
   const allAnswered = questions.length > 0 && answeredCount === questions.length;
+  const mockReady =
+    mode !== "mock_test" || mockReadiness === FULL_MOCK_QUESTION_COUNT;
+  const canSubmit =
+    questions.length > 0 && (mode === "mock_test" || allAnswered);
   const resultByQuestion = useMemo(
     () =>
       new Map(
@@ -110,10 +135,19 @@ export function PracticeEngine({
     setSubmitting(false);
     setError("");
     setResult(null);
+    setSecondsLeft(FULL_MOCK_SECONDS);
   };
 
+  useEffect(() => {
+    if (mode !== "mock_test" || result || !mockReady) return;
+    const timer = window.setInterval(() => {
+      setSecondsLeft((current) => Math.max(0, current - 1));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [mockReady, mode, result]);
+
   const submit = async () => {
-    if (!allAnswered || submitting) return;
+    if (!canSubmit || submitting) return;
     setSubmitting(true);
     setError("");
 
@@ -125,10 +159,21 @@ export function PracticeEngine({
           mode,
           topicId: mode === "practice" ? activeTopic : undefined,
           questionIds: questions.map((question) => question.id),
-          answers: questions.map((question) => ({
-            questionId: question.id,
-            selectedIndex: answers[question.id],
-          })),
+          answers: questions.map((question) =>
+            question.type === "short_answer"
+              ? {
+                  questionId: question.id,
+                  textAnswers:
+                    answers[question.id]?.textAnswers ??
+                    question.parts?.map(() => "") ??
+                    [],
+                }
+              : {
+                  questionId: question.id,
+                  selectedIndex:
+                    answers[question.id]?.selectedIndex ?? -1,
+                }
+          ),
           startedAt,
         }),
       });
@@ -170,29 +215,16 @@ export function PracticeEngine({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 sm:min-w-72">
-            <div className="rounded-xl bg-ink-50 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-ink-500">
-                Savollar
+          <div className="flex items-center gap-3 rounded-xl border border-ink-100 bg-ink-50 px-4 py-3 text-sm">
+            <ShieldCheck className="h-5 w-5 text-accent-600" />
+            <div>
+              <p className="font-semibold text-ink-800">
+                UZBMB spetsifikatsiyasiga mos
               </p>
-              <p className="mt-1 text-xl font-extrabold text-ink-900">
-                {questions.length}
-              </p>
-            </div>
-            <div className="rounded-xl bg-brand-50 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-brand-700">
-                Javob
-              </p>
-              <p className="mt-1 text-xl font-extrabold text-brand-800">
-                {answeredCount}
-              </p>
-            </div>
-            <div className="rounded-xl bg-accent-50 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-accent-700">
-                Natija
-              </p>
-              <p className="mt-1 text-xl font-extrabold text-accent-800">
-                {result ? `${result.score}%` : "-"}
+              <p className="text-xs text-ink-500">
+                {mode === "mock_test"
+                  ? `${mockReadiness}/45 topshiriq ekspert tasdiqlagan`
+                  : `Original bank · ${questions.length} ta savol`}
               </p>
             </div>
           </div>
@@ -226,7 +258,7 @@ export function PracticeEngine({
                   <div>
                     <p className="text-sm font-bold text-ink-900">{topic.name}</p>
                     <p className="mt-0.5 text-xs text-ink-500">
-                      {topic.subjectName} · {topic.estimatedMinutes} min
+                      {topic.questionCount ?? 0} savol · {topic.estimatedMinutes} min
                     </p>
                   </div>
                   <span
@@ -247,6 +279,39 @@ export function PracticeEngine({
         </div>
       )}
 
+      {mode === "mock_test" && !mockReady && (
+        <div className="rounded-2xl bg-white p-6 shadow-soft ring-1 ring-ink-100">
+          <div className="flex items-start gap-4">
+            <IconChip tone="amber" size="lg">
+              <ShieldCheck strokeWidth={2.2} />
+            </IconChip>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
+                Ekspert tekshiruvi davom etmoqda
+              </p>
+              <h2 className="mt-1 text-xl font-extrabold text-ink-900">
+                To‘liq sinov hali nashrga tayyor emas
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-ink-600">
+                {mockReadiness} ta topshiriq tasdiqlangan. 45 ta topshiriqning
+                barchasi tekshirilgach, 150 daqiqalik sinov shu sahifada ochiladi.
+              </p>
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-ink-100">
+                <span
+                  className="block h-full rounded-full bg-brand-500"
+                  style={{
+                    width: `${Math.round(
+                      (mockReadiness / FULL_MOCK_QUESTION_COUNT) * 100
+                    )}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {mockReady && (
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
         <div className="rounded-2xl bg-white p-5 shadow-soft ring-1 ring-ink-100 sm:p-6">
           {activeQuestion ? (
@@ -256,7 +321,11 @@ export function PracticeEngine({
                   Savol {index + 1}/{questions.length}
                 </span>
                 <span className="text-xs font-medium text-ink-500">
-                  {activeQuestion.difficulty === "easy"
+                  {activeQuestion.type === "matching"
+                    ? "Y-2 · Moslashtirish"
+                    : activeQuestion.type === "short_answer"
+                      ? "O · Ochiq savol"
+                      : activeQuestion.difficulty === "easy"
                     ? "Oson"
                     : activeQuestion.difficulty === "medium"
                       ? "O'rta"
@@ -264,13 +333,77 @@ export function PracticeEngine({
                 </span>
               </div>
 
+              {activeQuestion.context && (
+                <div className="mt-4 rounded-xl border border-ink-100 bg-ink-50 p-4 text-sm leading-6 text-ink-700">
+                  {activeQuestion.context}
+                </div>
+              )}
+
+              <p className="mt-3 flex items-center gap-1.5 text-xs font-medium text-ink-500">
+                <ShieldCheck className="h-3.5 w-3.5 text-accent-600" />
+                UZBMB 2024 spetsifikatsiyasiga mos original savol
+              </p>
+
               <h2 className="mt-5 text-xl font-extrabold leading-8 text-ink-900">
                 {activeQuestion.prompt}
               </h2>
 
+              {activeQuestion.type === "short_answer" ? (
+                <div className="mt-5 space-y-4">
+                  {activeQuestion.parts?.map((part, partIndex) => {
+                    const partResult = resultByQuestion
+                      .get(activeQuestion.id)
+                      ?.partResults?.find((item) => item.id === part.id);
+                    return (
+                      <label key={part.id} className="block rounded-xl border border-ink-100 p-4">
+                        <span className="text-sm font-bold text-ink-900">
+                          {part.id}) {part.prompt}
+                        </span>
+                        <input
+                          value={
+                            answers[activeQuestion.id]?.textAnswers?.[
+                              partIndex
+                            ] ?? ""
+                          }
+                          disabled={Boolean(result)}
+                          onChange={(event) =>
+                            setAnswers((current) => {
+                              const next = [
+                                ...(current[activeQuestion.id]?.textAnswers ??
+                                  activeQuestion.parts?.map(() => "") ??
+                                  []),
+                              ];
+                              next[partIndex] = event.target.value;
+                              return {
+                                ...current,
+                                [activeQuestion.id]: { textAnswers: next },
+                              };
+                            })
+                          }
+                          className="mt-3 block w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm text-ink-900 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30 disabled:bg-ink-50"
+                          placeholder="Qisqa javobni kiriting"
+                        />
+                        {partResult && (
+                          <p
+                            className={cn(
+                              "mt-3 text-sm font-medium",
+                              partResult.isCorrect
+                                ? "text-accent-700"
+                                : "text-rose-700"
+                            )}
+                          >
+                            To‘g‘ri javob: {partResult.correctAnswer} · {partResult.explanation}
+                          </p>
+                        )}
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : (
               <div className="mt-5 space-y-3">
                       {activeQuestion.options.map((option, optionIndex) => {
-                  const checked = answers[activeQuestion.id] === optionIndex;
+                  const checked =
+                    answers[activeQuestion.id]?.selectedIndex === optionIndex;
                   const answerResult = resultByQuestion.get(activeQuestion.id);
                   const showCorrect =
                     result && answerResult?.correctIndex === optionIndex;
@@ -285,7 +418,7 @@ export function PracticeEngine({
                       onClick={() =>
                         setAnswers((prev) => ({
                           ...prev,
-                          [activeQuestion.id]: optionIndex,
+                          [activeQuestion.id]: { selectedIndex: optionIndex },
                         }))
                       }
                       className={cn(
@@ -323,6 +456,7 @@ export function PracticeEngine({
                   );
                 })}
               </div>
+              )}
 
               {result && (
                 <div className="mt-5 rounded-xl bg-ink-50 p-4 ring-1 ring-ink-100">
@@ -378,7 +512,7 @@ export function PracticeEngine({
                   <Button
                     type="button"
                     loading={submitting}
-                    disabled={!allAnswered}
+                    disabled={!canSubmit}
                     leadingIcon={<Send className="h-4 w-4" />}
                     onClick={submit}
                   >
@@ -407,7 +541,7 @@ export function PracticeEngine({
             </p>
             <div className="mt-4 h-2 overflow-hidden rounded-full bg-ink-100">
               <span
-                className="block h-full rounded-full bg-gradient-to-r from-brand-500 to-accent-500"
+                className="block h-full rounded-full bg-brand-500"
                 style={{
                   width: questions.length
                     ? `${Math.round((answeredCount / questions.length) * 100)}%`
@@ -418,20 +552,27 @@ export function PracticeEngine({
             <p className="mt-2 text-sm text-ink-600">
               {answeredCount}/{questions.length} savol belgilandi.
             </p>
+            {mode === "mock_test" && (
+              <div className="mt-4 flex items-center gap-2 border-t border-ink-100 pt-4 text-sm font-bold text-ink-800">
+                <Clock3 className="h-4 w-4 text-brand-600" />
+                {String(Math.floor(secondsLeft / 60)).padStart(2, "0")}:
+                {String(secondsLeft % 60).padStart(2, "0")}
+              </div>
+            )}
           </div>
 
           {result && (
-            <div className="rounded-2xl bg-gradient-to-br from-brand-600 to-accent-600 p-5 text-white shadow-soft">
+            <div className="rounded-2xl bg-brand-600 p-5 text-white shadow-soft">
               <p className="text-xs font-semibold uppercase tracking-wider text-white/70">
                 Yakuniy natija
               </p>
               <p className="mt-2 text-4xl font-extrabold">{result.score}%</p>
               <p className="mt-1 text-sm font-medium text-white/85">
-                {formatScore(result)} to&apos;g&apos;ri javob
+                {result.rawScore}/{result.maxScore} xom ball · {formatScore(result)} to&apos;g&apos;ri
               </p>
               <p className="mt-4 text-xs leading-5 text-white/75">
-                Natija saqlandi. Dashboard, statistika va reja shu urinishdan
-                foydalanadi.
+                Bu mashq natijasi. Haqiqiy sertifikat bali Agentlikning Rash
+                modeli bilan hisoblanadi.
               </p>
             </div>
           )}
@@ -453,7 +594,12 @@ export function PracticeEngine({
                       questionIndex === index
                         ? "bg-brand-600 text-white"
                         : "bg-ink-100 text-ink-600 hover:bg-ink-200",
-                      Number.isInteger(answers[question.id]) &&
+                      (Number.isInteger(answers[question.id]?.selectedIndex) ||
+                        Boolean(
+                          answers[question.id]?.textAnswers?.some((value) =>
+                            value.trim()
+                          )
+                        )) &&
                         !result &&
                         "bg-brand-100 text-brand-700",
                       result &&
@@ -473,6 +619,7 @@ export function PracticeEngine({
           </div>
         </aside>
       </div>
+      )}
     </div>
   );
 }

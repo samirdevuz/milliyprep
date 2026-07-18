@@ -17,6 +17,7 @@ import {
 } from "@/lib/practice/question-bank";
 import {
   PracticeInputError,
+  isAcceptedShortAnswer,
   validateAttemptSubmission,
 } from "@/lib/practice/attempt-validation";
 import type {
@@ -41,15 +42,21 @@ interface AttemptRecord {
   subjectId?: string;
   topicId?: string;
   score: number;
+  rawScore: number;
+  maxScore: number;
   total: number;
   correctCount: number;
   startedAt: string;
   completedAt: string;
   answers: {
     questionId: string;
-    selectedIndex: number;
-    correctIndex: number;
+    selectedIndex?: number;
+    textAnswers?: string[];
+    correctIndex?: number;
     isCorrect: boolean;
+    earnedPoints: number;
+    maxPoints: number;
+    partResults?: AttemptResult["answers"][number]["partResults"];
   }[];
 }
 
@@ -60,6 +67,8 @@ interface PracticeAttemptRow {
   subject_id: string | null;
   topic_id: string | null;
   score: number;
+  raw_score?: number | null;
+  max_score?: number | null;
   total: number;
   correct_count: number;
   started_at: string;
@@ -68,9 +77,13 @@ interface PracticeAttemptRow {
 
 interface PracticeAnswerRow {
   question_id: string;
-  selected_index: number;
-  correct_index: number;
+  selected_index: number | null;
+  text_answers?: string[] | null;
+  correct_index: number | null;
   is_correct: boolean;
+  earned_points?: number | null;
+  max_points?: number | null;
+  part_results?: AttemptResult["answers"][number]["partResults"] | null;
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -125,15 +138,30 @@ async function writeLocalAttempts(attempts: AttemptRecord[]): Promise<void> {
   await fs.writeFile(ATTEMPTS_FILE, JSON.stringify(attempts, null, 2), "utf8");
 }
 
-async function readLocalQuestions(): Promise<Question[]> {
+async function readLocalQuestions(includeUnpublished = false): Promise<Question[]> {
   requireLocalDataFallback("Local question bank");
   await fs.mkdir(DATA_DIR, { recursive: true });
   try {
     const raw = await fs.readFile(QUESTION_BANK_FILE, "utf8");
     const parsed = JSON.parse(raw) as Question[];
-    return Array.isArray(parsed) && parsed.length ? parsed : QUESTIONS;
+    const topicIds = new Set(TOPICS.map((topic) => topic.id));
+    const subjectIds = new Set(SUBJECTS.map((subject) => subject.id));
+    const active = Array.isArray(parsed)
+      ? parsed.filter(
+          (question) =>
+            topicIds.has(question.topicId) &&
+            subjectIds.has(question.subjectId) &&
+            question.reviewStatus !== "archived"
+        )
+      : [];
+    const questions = active.length ? active : QUESTIONS;
+    return includeUnpublished
+      ? questions
+      : questions.filter((question) => question.reviewStatus === "published");
   } catch {
-    return QUESTIONS;
+    return includeUnpublished
+      ? QUESTIONS
+      : QUESTIONS.filter((question) => question.reviewStatus === "published");
   }
 }
 
@@ -292,27 +320,48 @@ function normalizeAttempt(row: PracticeAttemptRow, answers: PracticeAnswerRow[])
     subjectId: row.subject_id ?? undefined,
     topicId: row.topic_id ?? undefined,
     score: row.score,
+    rawScore: Number(row.raw_score ?? row.score),
+    maxScore: Number(row.max_score ?? 100),
     total: row.total,
     correctCount: row.correct_count,
     startedAt: row.started_at,
     completedAt: row.completed_at,
     answers: answers.map((answer) => ({
       questionId: answer.question_id,
-      selectedIndex: answer.selected_index,
-      correctIndex: answer.correct_index,
+      selectedIndex: answer.selected_index ?? undefined,
+      textAnswers: answer.text_answers ?? undefined,
+      correctIndex: answer.correct_index ?? undefined,
       isCorrect: answer.is_correct,
+      earnedPoints: Number(answer.earned_points ?? (answer.is_correct ? 1 : 0)),
+      maxPoints: Number(answer.max_points ?? 1),
+      partResults: answer.part_results ?? undefined,
     })),
   } satisfies AttemptRecord;
 }
 
-async function getSupabaseBank(): Promise<AdminQuestionBank | null> {
+async function getSupabaseBank(
+  includeUnpublished = false
+): Promise<AdminQuestionBank | null> {
   const supabase = getSupabaseAdmin();
   if (!supabase) return null;
 
+  const subjectsQuery = supabase
+    .from("subjects")
+    .select("*")
+    .eq("status", "published")
+    .order("position");
+  const topicsQuery = supabase
+    .from("topics")
+    .select("*")
+    .eq("status", "published")
+    .order("position");
+  const questionsQuery = supabase.from("questions").select("*").order("position");
   const [subjectsResult, topicsResult, questionsResult] = await Promise.all([
-    supabase.from("subjects").select("*").order("position"),
-    supabase.from("topics").select("*").order("position"),
-    supabase.from("questions").select("*").order("position"),
+    subjectsQuery,
+    topicsQuery,
+    includeUnpublished
+      ? questionsQuery.eq("subject_id", "math").neq("status", "archived")
+      : questionsQuery.eq("status", "published"),
   ]);
 
   const error =
@@ -343,6 +392,8 @@ async function getSupabaseBank(): Promise<AdminQuestionBank | null> {
     description: row.description,
     level: row.level,
     estimatedMinutes: row.estimated_minutes,
+    examShare: row.exam_share ?? undefined,
+    sourceId: row.source_id ?? undefined,
     position: row.position,
   })) as Topic[];
 
@@ -352,9 +403,20 @@ async function getSupabaseBank(): Promise<AdminQuestionBank | null> {
     topicId: row.topic_id,
     prompt: row.prompt,
     options: row.options,
+    type: row.question_type ?? "single_choice",
+    position: row.blueprint_position ?? row.position,
+    points: Number(row.points ?? 1),
+    context: row.context ?? undefined,
+    groupId: row.group_id ?? undefined,
     correctIndex: row.correct_index,
     explanation: row.explanation,
     difficulty: row.difficulty,
+    sourceId: row.source_id ?? undefined,
+    origin: row.origin ?? undefined,
+    reviewStatus: row.status ?? "draft",
+    reviewNote: row.review_note ?? undefined,
+    contentVersion: row.content_version ?? undefined,
+    parts: row.parts ?? undefined,
   })) as Question[];
 
   return subjects.length && topics.length && questions.length
@@ -364,10 +426,20 @@ async function getSupabaseBank(): Promise<AdminQuestionBank | null> {
 
 async function getBank() {
   return (
-    (await getSupabaseBank()) ?? {
+    (await getSupabaseBank(false)) ?? {
       subjects: SUBJECTS,
       topics: TOPICS,
       questions: await readLocalQuestions(),
+    }
+  );
+}
+
+async function getAdminBankData() {
+  return (
+    (await getSupabaseBank(true)) ?? {
+      subjects: SUBJECTS,
+      topics: TOPICS,
+      questions: await readLocalQuestions(true),
     }
   );
 }
@@ -376,6 +448,9 @@ function cleanQuestionDraft(
   input: QuestionDraft,
   bank: AdminQuestionBank
 ): Question {
+  const current = input.id
+    ? bank.questions.find((question) => question.id === input.id)
+    : undefined;
   const topic = bank.topics.find((item) => item.id === input.topicId);
   const subject = bank.subjects.find((item) => item.id === input.subjectId);
   if (!topic || !subject || topic.subjectId !== subject.id) {
@@ -399,14 +474,27 @@ function cleanQuestionDraft(
     topicId: topic.id,
     prompt: input.prompt.trim(),
     options,
+    type: current?.type ?? "single_choice",
+    position:
+      current?.position ??
+      Math.max(0, ...bank.questions.map((question) => question.position)) + 1,
+    points: current?.points ?? 2.2,
+    context: current?.context,
+    groupId: current?.groupId,
     correctIndex: input.correctIndex,
     explanation: input.explanation.trim(),
     difficulty: input.difficulty,
+    sourceId: "uzbmb-math-spec-2024",
+    origin: "original",
+    reviewStatus: input.reviewStatus ?? "draft",
+    reviewNote: input.reviewNote?.trim() || undefined,
+    contentVersion: current?.contentVersion ?? "2026.07.2",
+    parts: current?.parts,
   };
 }
 
 async function upsertLocalQuestion(question: Question): Promise<Question> {
-  const questions = await readLocalQuestions();
+  const questions = await readLocalQuestions(true);
   const index = questions.findIndex((item) => item.id === question.id);
   if (index === -1) {
     questions.push(question);
@@ -418,7 +506,7 @@ async function upsertLocalQuestion(question: Question): Promise<Question> {
 }
 
 async function deleteLocalQuestion(questionId: string): Promise<void> {
-  const questions = await readLocalQuestions();
+  const questions = await readLocalQuestions(true);
   await writeLocalQuestions(questions.filter((question) => question.id !== questionId));
 }
 
@@ -452,7 +540,7 @@ async function getAttempts(userId: string): Promise<AttemptRecord[]> {
   const ids = attempts.map((attempt) => attempt.id);
   const answersResult = await supabase
     .from("practice_attempt_answers")
-    .select("attempt_id, question_id, selected_index, correct_index, is_correct")
+    .select("attempt_id, question_id, selected_index, text_answers, correct_index, is_correct, earned_points, max_points, part_results")
     .in("attempt_id", ids);
 
   if (answersResult.error) {
@@ -494,6 +582,8 @@ async function saveAttempt(attempt: AttemptRecord): Promise<void> {
     subject_id: attempt.subjectId ?? null,
     topic_id: attempt.topicId ?? null,
     score: attempt.score,
+    raw_score: attempt.rawScore,
+    max_score: attempt.maxScore,
     total: attempt.total,
     correct_count: attempt.correctCount,
     started_at: attempt.startedAt,
@@ -517,9 +607,13 @@ async function saveAttempt(attempt: AttemptRecord): Promise<void> {
     id: randomUUID(),
     attempt_id: attempt.id,
     question_id: answer.questionId,
-    selected_index: answer.selectedIndex,
-    correct_index: answer.correctIndex,
+    selected_index: answer.selectedIndex ?? null,
+    text_answers: answer.textAnswers ?? null,
+    correct_index: answer.correctIndex ?? null,
     is_correct: answer.isCorrect,
+    earned_points: answer.earnedPoints,
+    max_points: answer.maxPoints,
+    part_results: answer.partResults ?? null,
     position: index + 1,
   }));
 
@@ -548,11 +642,11 @@ async function saveAttempt(attempt: AttemptRecord): Promise<void> {
 
 export const practiceStore = {
   async getAdminBank(): Promise<AdminQuestionBank> {
-    return getBank();
+    return getAdminBankData();
   },
 
   async upsertQuestion(input: QuestionDraft): Promise<Question> {
-    const bank = await getBank();
+    const bank = await getAdminBankData();
     const question = cleanQuestionDraft(input, bank);
     const supabase = getSupabaseAdmin();
 
@@ -563,9 +657,23 @@ export const practiceStore = {
         topic_id: question.topicId,
         prompt: question.prompt,
         options: question.options,
+        question_type: question.type,
+        blueprint_position:
+          question.position >= 1 && question.position <= 45
+            ? question.position
+            : null,
+        points: question.points,
+        context: question.context ?? null,
+        group_id: question.groupId ?? null,
         correct_index: question.correctIndex,
         explanation: question.explanation,
         difficulty: question.difficulty,
+        source_id: question.sourceId ?? null,
+        origin: question.origin ?? "original",
+        status: question.reviewStatus ?? "published",
+        review_note: question.reviewNote ?? null,
+        content_version: question.contentVersion ?? null,
+        parts: question.parts ?? null,
         position: 999,
       });
 
@@ -575,6 +683,63 @@ export const practiceStore = {
           !isSupabaseConnectionError(error.message)
         ) {
           throw formatSupabaseError("upsert question", error.message);
+        }
+      } else {
+        return question;
+      }
+    }
+
+    return upsertLocalQuestion(question);
+  },
+
+  async reviewQuestion(input: {
+    questionId: string;
+    status: "draft" | "review" | "published" | "archived";
+    reviewNote?: string;
+    reviewerId: string;
+  }): Promise<Question> {
+    const bank = await getAdminBankData();
+    const existing = bank.questions.find(
+      (question) => question.id === input.questionId
+    );
+    if (!existing) throw new Error("Savol topilmadi.");
+    if (
+      input.status === "published" &&
+      (existing.position < 1 || existing.position > 45)
+    ) {
+      throw new Error(
+        "Savolni nashr qilish uchun 1–45 oralig‘idagi blueprint pozitsiyasi kerak."
+      );
+    }
+
+    const question: Question = {
+      ...existing,
+      reviewStatus: input.status,
+      reviewNote: input.reviewNote?.trim() || undefined,
+    };
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { error } = await supabase
+        .from("questions")
+        .update({
+          status: input.status,
+          review_note: question.reviewNote ?? null,
+          reviewed_by:
+            input.status === "published" || input.status === "archived"
+              ? input.reviewerId
+              : null,
+          reviewed_at:
+            input.status === "published" || input.status === "archived"
+              ? new Date().toISOString()
+              : null,
+        })
+        .eq("id", input.questionId);
+      if (error) {
+        if (
+          !isMissingPracticeSchema(error.message) &&
+          !isSupabaseConnectionError(error.message)
+        ) {
+          throw formatSupabaseError("review question", error.message);
         }
       } else {
         return question;
@@ -611,11 +776,17 @@ export const practiceStore = {
   async getCatalog(userId: string): Promise<PracticeCatalog> {
     const [bank, attempts] = await Promise.all([getBank(), getAttempts(userId)]);
     const progress = buildProgress(attempts, bank.subjects, bank.topics);
+    const topics = progress.topicProgress.map((topic) => ({
+      ...topic,
+      questionCount: bank.questions.filter(
+        (question) => question.topicId === topic.id
+      ).length,
+    }));
 
     return {
       subjects: bank.subjects,
-      topics: progress.topicProgress,
-      progress,
+      topics,
+      progress: { ...progress, topicProgress: topics },
     };
   },
 
@@ -645,14 +816,11 @@ export const practiceStore = {
     );
   },
 
-  async getMockTestQuestions(limit = 10) {
+  async getMockTestQuestions(limit = 45) {
     const bank = await getBank();
     const ordered = bank.questions
       .slice()
-      .sort((a, b) => {
-        if (a.subjectId === b.subjectId) return a.id.localeCompare(b.id);
-        return a.subjectId.localeCompare(b.subjectId);
-      });
+      .sort((a, b) => a.position - b.position);
     return ordered.slice(0, limit).map(publicQuestion);
   },
 
@@ -668,22 +836,66 @@ export const practiceStore = {
     const { questions, topic, submitted } = validateAttemptSubmission(bank, input);
 
     const subjectId =
-      input.mode === "mock_test" ? undefined : topic?.subjectId;
+      input.mode === "mock_test" ? questions[0]?.subjectId : topic?.subjectId;
     const completedAt = new Date().toISOString();
     const answers = questions.map((question) => {
-      const selectedIndex = submitted.get(question.id);
-      const safeSelected = selectedIndex as number;
+      const submission = submitted.get(question.id);
+      if (question.type === "short_answer") {
+        const textAnswers = submission?.textAnswers ?? [];
+        const partResults = (question.parts ?? []).map((part, partIndex) => {
+          const submittedText = textAnswers[partIndex] ?? "";
+          const isCorrect = isAcceptedShortAnswer(
+            submittedText,
+            part.acceptedAnswers
+          );
+          return {
+            id: part.id,
+            submitted: submittedText,
+            correctAnswer: part.correctAnswer,
+            isCorrect,
+            earnedPoints: isCorrect ? part.points : 0,
+            maxPoints: part.points,
+            explanation: part.explanation,
+          };
+        });
+        const earnedPoints = partResults.reduce(
+          (sum, part) => sum + part.earnedPoints,
+          0
+        );
+        return {
+          questionId: question.id,
+          textAnswers,
+          isCorrect: partResults.every((part) => part.isCorrect),
+          explanation: question.explanation,
+          earnedPoints,
+          maxPoints: question.points,
+          partResults,
+        };
+      }
+
+      const selectedIndex = submission?.selectedIndex as number;
+      const isCorrect = selectedIndex === question.correctIndex;
       return {
         questionId: question.id,
-        selectedIndex: safeSelected,
+        selectedIndex,
         correctIndex: question.correctIndex,
-        isCorrect: safeSelected === question.correctIndex,
+        isCorrect,
         explanation: question.explanation,
+        earnedPoints: isCorrect ? question.points : 0,
+        maxPoints: question.points,
       };
     });
     const correctCount = answers.filter((answer) => answer.isCorrect).length;
     const total = questions.length;
-    const score = Math.round((correctCount / total) * 100);
+    const rawScore = Number(
+      answers
+        .reduce((sum, answer) => sum + answer.earnedPoints, 0)
+        .toFixed(1)
+    );
+    const maxScore = Number(
+      answers.reduce((sum, answer) => sum + answer.maxPoints, 0).toFixed(1)
+    );
+    const score = Math.round((rawScore / maxScore) * 100);
 
     const attempt: AttemptRecord = {
       id: randomUUID(),
@@ -692,6 +904,8 @@ export const practiceStore = {
       subjectId,
       topicId: input.mode === "practice" ? input.topicId : undefined,
       score,
+      rawScore,
+      maxScore,
       total,
       correctCount,
       startedAt: input.startedAt ?? completedAt,
@@ -699,8 +913,12 @@ export const practiceStore = {
       answers: answers.map((answer) => ({
         questionId: answer.questionId,
         selectedIndex: answer.selectedIndex,
+        textAnswers: answer.textAnswers,
         correctIndex: answer.correctIndex,
         isCorrect: answer.isCorrect,
+        earnedPoints: answer.earnedPoints,
+        maxPoints: answer.maxPoints,
+        partResults: answer.partResults,
       })),
     };
 
@@ -712,6 +930,8 @@ export const practiceStore = {
       subjectId: attempt.subjectId,
       topicId: attempt.topicId,
       score,
+      rawScore,
+      maxScore,
       total,
       correctCount,
       completedAt,

@@ -3,44 +3,31 @@ import { ArrowRight, Play } from "lucide-react";
 import { IconChip } from "@/components/ui/icon-chip";
 
 interface Lesson {
-  subject: string;
+  id: string;
   title: string;
   minutes: number;
-  progress: number;
-  tone: "brand" | "accent" | "amber" | "violet";
+  accuracy: number;
+  questionCount?: number;
 }
 
-const LESSONS: Lesson[] = [
-  {
-    subject: "Listening",
-    title: "Asosiy fikrni ajratish",
-    minutes: 15,
-    progress: 0,
-    tone: "brand",
-  },
-  {
-    subject: "Reading",
-    title: "Dalil va detalni topish",
-    minutes: 20,
-    progress: 0,
-    tone: "accent",
-  },
-  {
-    subject: "Writing",
-    title: "Bog'lovchilar va izchillik",
-    minutes: 15,
-    progress: 0,
-    tone: "amber",
-  },
-];
+interface UpcomingLessonsProps {
+  lessons: Lesson[];
+}
 
-export function UpcomingLessons() {
+const TONES = ["brand", "accent", "amber"] as const;
+
+export function UpcomingLessons({ lessons }: UpcomingLessonsProps) {
   return (
     <div className="rounded-2xl bg-white p-5 shadow-soft ring-1 ring-ink-100 sm:p-6">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
-          Keyingi mashg&apos;ulotlar
-        </p>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
+            Keyingi mavzular
+          </p>
+          <p className="mt-1 text-sm text-ink-600">
+            Rasmiy spetsifikatsiya bo&apos;yicha tavsiya etilgan ketma-ketlik.
+          </p>
+        </div>
         <Link
           href="/dashboard/practice"
           className="inline-flex items-center gap-1 text-xs font-semibold text-brand-600 hover:underline"
@@ -50,24 +37,28 @@ export function UpcomingLessons() {
         </Link>
       </div>
 
-      <ul className="mt-4 grid gap-3 sm:grid-cols-3">
-        {LESSONS.map((l) => (
-          <li
-            key={l.title}
-            className="group rounded-xl border border-ink-100 p-4 transition hover:border-brand-200 hover:shadow-soft"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-ink-400">
-                {l.subject}
-              </span>
-              <IconChip tone={l.tone} size="sm">
-                <Play strokeWidth={2.5} className="fill-current" />
+      <ul className="mt-4 divide-y divide-ink-100 border-y border-ink-100">
+        {lessons.map((lesson, index) => (
+          <li key={lesson.id}>
+            <Link
+              href={`/dashboard/practice?topic=${encodeURIComponent(lesson.id)}`}
+              className="group flex items-center gap-4 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+            >
+              <IconChip tone={TONES[index % TONES.length]} size="sm">
+                <Play strokeWidth={2.4} className="fill-current" />
               </IconChip>
-            </div>
-            <p className="mt-3 text-sm font-semibold text-ink-900">{l.title}</p>
-            <p className="mt-1 text-xs text-ink-500">
-              {l.minutes} min · {l.progress}%
-            </p>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-semibold text-ink-900 group-hover:text-brand-700">
+                  {lesson.title}
+                </span>
+                <span className="mt-0.5 block text-xs text-ink-500">
+                  {lesson.questionCount ?? 0} ta savol · {lesson.minutes} daqiqa
+                </span>
+              </span>
+              <span className="text-xs font-semibold text-ink-500">
+                {lesson.accuracy ? `${lesson.accuracy}%` : "Yangi"}
+              </span>
+            </Link>
           </li>
         ))}
       </ul>

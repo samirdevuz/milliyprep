@@ -28,6 +28,7 @@ import { StepProgress } from "@/components/ui/step-progress";
 import { OnboardingSidePanel } from "@/components/onboarding/side-panel";
 import { cn } from "@/lib/cn";
 import {
+  AVAILABLE_CERTIFICATE_SUBJECTS,
   CERTIFICATE_SUBJECTS,
   clampScore,
   gradeForScore,
@@ -204,6 +205,7 @@ function ChoiceCard({
   caption,
   icon,
   tone = "brand",
+  disabled = false,
 }: {
   selected: boolean;
   onSelect: () => void;
@@ -211,19 +213,24 @@ function ChoiceCard({
   caption?: string;
   icon?: ReactNode;
   tone?: Tone;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
       role="radio"
       aria-checked={selected}
+      aria-disabled={disabled}
+      disabled={disabled}
       onClick={onSelect}
       className={cn(
         "group flex min-h-[92px] w-full items-start gap-4 rounded-2xl border bg-white p-4 text-left transition-all",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+        disabled && "cursor-not-allowed border-ink-100 bg-ink-50/70 opacity-70",
         selected
           ? "border-brand-400 bg-brand-50/70 shadow-soft ring-2 ring-brand-200"
-          : "border-ink-100 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-soft"
+          : !disabled &&
+              "border-ink-100 hover:-translate-y-0.5 hover:border-brand-200 hover:shadow-soft"
       )}
     >
       {icon && (
@@ -358,8 +365,8 @@ function StepBody({
   if (step === 1) {
     return (
       <div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {CERTIFICATE_SUBJECTS.map((item) => (
+        <div className="grid max-w-xl gap-3 sm:grid-cols-2">
+          {AVAILABLE_CERTIFICATE_SUBJECTS.map((item) => (
             <ChoiceCard
               key={item.id}
               selected={state.subjectId === item.id}
@@ -370,6 +377,20 @@ function StepBody({
               caption={`${item.caption}. ${item.assessment}.`}
             />
           ))}
+        </div>
+        <div className="mt-4 max-w-xl rounded-2xl border border-ink-100 bg-ink-50 p-4">
+          <p className="text-sm font-semibold text-ink-800">
+            Hozircha matematika ochiq
+          </p>
+          <p className="mt-1 text-xs leading-5 text-ink-600">
+            {CERTIFICATE_SUBJECTS.filter(
+              (item) => item.availability === "planned"
+            )
+              .slice(0, 6)
+              .map((item) => item.shortLabel)
+              .join(", ")}{" "}
+            va boshqa fanlar ekspert tekshiruvidan keyin qo&apos;shiladi.
+          </p>
         </div>
         <FieldError>{errors.subjectId}</FieldError>
       </div>

@@ -8,7 +8,7 @@ import { Reveal } from "@/components/motion/reveal";
 const FAQS = [
   {
     q: "MilliyPrep qaysi imtihonlarga tayyorlaydi?",
-    a: "Platforma faqat Milliy Sertifikat tayyorgarligiga qaratilgan. Fan va mavzular bo'yicha mashqlar, savol bankidan shakllanadigan mock testlar va natija tahlili mavjud.",
+    a: "Platforma faqat Milliy Sertifikat tayyorgarligiga qaratilgan. Hozir Matematika bo'yicha mavzuli mashqlar, pilot sinovlar va natija tahlili mavjud; qolgan fanlar ekspert tekshiruvidan keyin qo'shiladi.",
   },
   {
     q: "Boshlash uchun nima kerak?",
@@ -20,7 +20,7 @@ const FAQS = [
   },
   {
     q: "Pro tarifda nimalar bor?",
-    a: "Pro tarifda mock testlar, profil kontekstidagi AI tutor, mavzuli savol banki, natijalar tarixi va kuchli-zaif mavzular tahlili mavjud.",
+    a: "Pro tarifda matematika pilot sinovlari, profil kontekstidagi AI ustoz, mavzuli savol banki, natijalar tarixi va kuchli-zaif mavzular tahlili mavjud.",
   },
   {
     q: "Qanday tillarda ishlaydi?",

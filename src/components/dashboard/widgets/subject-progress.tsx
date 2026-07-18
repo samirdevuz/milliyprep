@@ -1,13 +1,13 @@
 import { ProgressRing } from "@/components/dashboard/widgets/progress-ring";
 
-interface Subject {
+interface SkillProgress {
   name: string;
   value: number;
   color: string;
 }
 
 interface SubjectProgressProps {
-  subjects: Subject[];
+  subjects: SkillProgress[];
   overall: number;
   weeklyDelta: number;
 }
@@ -22,7 +22,7 @@ export function SubjectProgress({
       <div className="grid gap-6 sm:grid-cols-[1.4fr_1fr] sm:items-center">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
-            Fanlar bo&apos;yicha natijalar
+            Matematika ko&apos;nikmalari
           </p>
           <ul className="mt-4 space-y-3">
             {subjects.map((s) => (
@@ -46,12 +46,12 @@ export function SubjectProgress({
           <ProgressRing
             value={overall}
             label={`${overall}%`}
-            sublabel="Umumiy"
+            sublabel="Aniqlik"
           />
           <p className="mt-3 text-xs text-ink-500">
-            O&apos;tgan hafta:{" "}
+            Haftalik urinish:{" "}
             <span className="font-semibold text-accent-600">
-              +{weeklyDelta}%
+              {weeklyDelta} ta
             </span>
           </p>
         </div>

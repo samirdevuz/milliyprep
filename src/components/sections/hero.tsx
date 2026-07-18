@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, PlayCircle, Sparkles } from "lucide-react";
+import { ArrowRight, PlayCircle, ShieldCheck } from "lucide-react";
 import { DashboardPreview } from "@/components/sections/dashboard-preview";
 import { Reveal } from "@/components/motion/reveal";
 
@@ -16,8 +16,8 @@ export function Hero() {
         <div className="space-y-7">
           <Reveal>
             <span className="pill">
-              <Sparkles className="h-3.5 w-3.5" />
-              Milliy Sertifikat uchun yagona profil
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Matematika · UZBMB spetsifikatsiyasiga mos
             </span>
           </Reveal>
 
@@ -29,16 +29,16 @@ export function Hero() {
 
           <Reveal delay={160}>
             <p className="max-w-xl text-base text-ink-600 sm:text-lg">
-              MilliyPrep maqsad ball, mavzuli mashqlar, mock testlar va natija
-              tahlili orqali tayyorgarlikni tizimli qiladi.
+              MilliyPrep maqsad ball, original mavzuli mashqlar, pilot sinovlar
+              va natija tahlili orqali tayyorgarlikni tizimli qiladi.
             </p>
           </Reveal>
 
           <Reveal delay={200}>
             <p className="max-w-2xl text-sm leading-6 text-ink-500">
-              Faningizni onboardingda tanlang. Dastlabki mashq katalogi
-              bosqichma-bosqich ekspert tekshiruvi bilan kengaytiriladi;
-              progress va AI tutor bitta profilda ishlaydi.
+              Matematika katalogi rasmiy spetsifikatsiyadagi ko&apos;nikmalar
+              bo&apos;yicha tuzilgan. Har bir savol original, izohli va manbasi
+              ko&apos;rsatilgan; progress hamda AI ustoz bitta profilda ishlaydi.
             </p>
           </Reveal>
 

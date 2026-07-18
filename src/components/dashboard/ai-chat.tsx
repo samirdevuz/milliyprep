@@ -9,9 +9,9 @@ import type { ChatMessage } from "@/lib/ai/types";
 type UiMessage = ChatMessage & { id: string };
 
 const STARTER_PROMPTS = [
-  "Writing javobimni qanday yaxshilayman?",
-  "B2 rejamni qanday tuzaman?",
-  "Reading uchun vaqtni qanday taqsimlayman?",
+  "Kvadrat tenglamani qadam-baqadam tushuntir.",
+  "Geometriyada qaysi mavzudan boshlashim kerak?",
+  "Bugungi matematika rejamni tuzib ber.",
 ];
 
 function newId(): string {

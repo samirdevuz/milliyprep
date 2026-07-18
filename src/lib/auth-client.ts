@@ -1,4 +1,5 @@
 import { ONBOARDING_STORAGE_KEY } from "@/lib/onboarding/types";
+import { subjectById } from "@/lib/onboarding/certificate";
 
 interface AuthResult {
   ok: boolean;
@@ -13,7 +14,12 @@ interface OtpResult extends AuthResult {
 function readOnboarding(): Record<string, unknown> | undefined {
   try {
     const raw = window.localStorage.getItem(ONBOARDING_STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Record<string, unknown>) : undefined;
+    if (!raw) return undefined;
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    const subject = subjectById(
+      typeof parsed.subjectId === "string" ? parsed.subjectId : undefined
+    );
+    return subject?.availability === "live" ? parsed : undefined;
   } catch {
     return undefined;
   }

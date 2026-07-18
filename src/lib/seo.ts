@@ -4,10 +4,10 @@ export const SITE_URL = "https://milliyprep.xyz";
 export const SITE_NAME = "MilliyPrep";
 
 export const SITE_DESCRIPTION =
-  "MilliyPrep orqali Milliy Sertifikat imtihonlariga samarali tayyorlaning. Matematika, ona tili, tarix, huquq, ingliz tili va boshqa fanlar bo'yicha testlar, mavzular, natija tahlili va shaxsiy tayyorgarlik rejasi.";
+  "MilliyPrep orqali Matematika Milliy Sertifikat imtihoniga tayyorlaning: spetsifikatsiyaga mos original savollar, mavzuli mashq, natija tahlili va shaxsiy reja.";
 
 export const SITE_POSITIONING =
-  "MilliyPrep - Milliy Sertifikat imtihonlariga tayyorlanish uchun zamonaviy online platforma. Matematika, ona tili, tarix, huquq, ingliz tili va boshqa fanlar bo'yicha testlar, mavzulashtirilgan mashqlar, mock imtihonlar va progress tracking mavjud.";
+  "MilliyPrep — Matematika Milliy Sertifikatiga tayyorlanish uchun mavzuli mashqlar, pilot sinovlar, natija tahlili va AI ustozni birlashtirgan platforma. Qolgan fanlar ekspert tekshiruvidan keyin qo'shiladi.";
 
 export const SEO_KEYWORDS = [
   "MilliyPrep",
@@ -107,8 +107,6 @@ export const SEO_KEYWORDS = [
 export const ROUTES = [
   "",
   "/milliy-sertifikatga-tayyorlash",
-  "/milliy-sertifikat-ingliz-tili",
-  "/cefr-tayyorlov",
   "/about",
   "/blog",
   "/privacy",
@@ -184,15 +182,8 @@ export const courseJsonLd = {
   },
   teaches: [
     "Matematika",
-    "Ona tili",
-    "Tarix",
-    "Huquq",
-    "Ingliz tili",
-    "Biologiya",
-    "Kimyo",
-    "Fizika",
-    "Geografiya",
-    "Mock imtihonlar",
+    "Mavzuli mashqlar",
+    "Pilot sinovlar",
     "Natija tahlili",
   ],
   inLanguage: "uz-Latn",
@@ -207,7 +198,7 @@ export const faqJsonLd = {
       name: "MilliyPrep qaysi imtihonga tayyorlaydi?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "MilliyPrep Milliy Sertifikat imtihonlariga tayyorlaydi. Matematika, ona tili, tarix, huquq, ingliz tili va boshqa asosiy fanlar bo'yicha testlar, mavzular, mock imtihonlar va natija tahlili mavjud.",
+        text: "MilliyPrep hozir Matematika Milliy Sertifikatiga tayyorlaydi. Savollar UZBMB spetsifikatsiyasidagi ko'nikmalarga mos original pilot bankdan olinadi; qolgan fanlar bosqichma-bosqich qo'shiladi.",
       },
     },
     {
@@ -215,7 +206,7 @@ export const faqJsonLd = {
       name: "Milliy Sertifikatga online tayyorlansa bo'ladimi?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Ha. Platformada shaxsiy o'quv reja, mini-testlar, mock testlar, natija tahlili va AI tutor yordamida online tayyorlanish mumkin.",
+        text: "Ha. Platformada shaxsiy o'quv reja, mavzuli mashqlar, pilot sinovlar, natija tahlili va AI ustoz yordamida online tayyorlanish mumkin.",
       },
     },
     {
@@ -223,7 +214,7 @@ export const faqJsonLd = {
       name: "Qaysi fanlar qo'llab-quvvatlanadi?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Platformada Matematika, Ona tili, Tarix, Huquq, Ingliz tili, Biologiya, Kimyo, Fizika va Geografiya kabi asosiy Milliy Sertifikat fanlari yo'nalish sifatida ko'rsatilgan.",
+        text: "Hozir Matematika to'liq ochiq. Ona tili va adabiyot, fizika, kimyo, biologiya, tarix, geografiya, huquq va til fanlari ekspert tekshiruvidan keyin qo'shiladi.",
       },
     },
   ],

@@ -28,7 +28,14 @@ export function OnboardingProfileSummary({
   const subject = subjectById(data?.subjectId);
   const plan = PLANS.find((item) => item.id === planId);
 
-  if (!hydrated || !data || Object.keys(data).length === 0) return null;
+  if (
+    !hydrated ||
+    !data ||
+    Object.keys(data).length === 0 ||
+    subject?.availability !== "live"
+  ) {
+    return null;
+  }
 
   const rows = [
     {

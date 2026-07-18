@@ -29,11 +29,11 @@ interface NavItem {
 
 const MAIN: NavItem[] = [
   { href: "/dashboard", label: "Bosh sahifa", icon: Home },
-  { href: "/dashboard/plan", label: "Mening rejam", icon: Route },
-  { href: "/dashboard/practice", label: "Mashg'ulotlar", icon: BookOpen },
-  { href: "/dashboard/tests", label: "Testlar", icon: ClipboardList },
-  { href: "/dashboard/stats", label: "Statistika", icon: LineChart },
-  { href: "/dashboard/chat", label: "Chat AI", icon: MessageCircle, badge: "YANGI" },
+  { href: "/dashboard/plan", label: "O'quv yo'li", icon: Route },
+  { href: "/dashboard/practice", label: "Mashq", icon: BookOpen },
+  { href: "/dashboard/tests", label: "Sinovlar", icon: ClipboardList },
+  { href: "/dashboard/stats", label: "Natijalar", icon: LineChart },
+  { href: "/dashboard/chat", label: "AI ustoz", icon: MessageCircle },
 ];
 
 const SECONDARY: NavItem[] = [

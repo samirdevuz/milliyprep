@@ -16,17 +16,17 @@ import { IconChip } from "@/components/ui/icon-chip";
 
 const SIDEBAR_ITEMS = [
   { icon: Home, label: "Bosh sahifa", active: true },
-  { icon: GraduationCap, label: "Mening rejam" },
-  { icon: BookOpen, label: "Mashg'ulotlar" },
-  { icon: ClipboardList, label: "Testlar" },
-  { icon: LineChart, label: "Statistika" },
-  { icon: MessageCircle, label: "Chat AI", badge: "YANGI" },
+  { icon: GraduationCap, label: "O'quv yo'li" },
+  { icon: BookOpen, label: "Mashq" },
+  { icon: ClipboardList, label: "Sinovlar" },
+  { icon: LineChart, label: "Natijalar" },
+  { icon: MessageCircle, label: "AI ustoz" },
 ];
 
 const SUBJECTS = [
-  { name: "Listening", value: 72, color: "bg-brand-500" },
-  { name: "Reading", value: 55, color: "bg-accent-500" },
-  { name: "Writing", value: 31, color: "bg-amber-400" },
+  { name: "Algebra", value: 72, color: "bg-brand-500" },
+  { name: "Funksiyalar", value: 55, color: "bg-accent-500" },
+  { name: "Geometriya", value: 31, color: "bg-amber-400" },
 ];
 
 const DAYS = ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"];
@@ -40,7 +40,7 @@ export function DashboardPreview() {
     <div className="relative">
       <div
         aria-hidden="true"
-        className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-gradient-to-br from-brand-200/50 via-white to-accent-200/40 blur-2xl"
+        className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-brand-50/70"
       />
 
       <div className="overflow-hidden rounded-3xl bg-white shadow-soft ring-1 ring-ink-100">
@@ -53,7 +53,7 @@ export function DashboardPreview() {
               </span>
             </div>
             <ul className="space-y-1">
-              {SIDEBAR_ITEMS.map(({ icon: Icon, label, active, badge }) => (
+              {SIDEBAR_ITEMS.map(({ icon: Icon, label, active }) => (
                 <li key={label}>
                   <span
                     className={[
@@ -65,11 +65,6 @@ export function DashboardPreview() {
                   >
                     <Icon className="h-3.5 w-3.5" />
                     <span className="truncate">{label}</span>
-                    {badge && (
-                      <span className="ml-auto rounded-full bg-accent-100 px-1.5 py-0.5 text-[8px] font-bold text-accent-700">
-                        {badge}
-                      </span>
-                    )}
                   </span>
                 </li>
               ))}
@@ -93,21 +88,21 @@ export function DashboardPreview() {
               </button>
             </div>
 
-            <div className="rounded-xl bg-gradient-to-br from-brand-600 to-brand-800 p-3 text-white">
+            <div className="rounded-xl bg-brand-700 p-3 text-white">
               <p className="text-[9px] font-semibold uppercase tracking-wider text-white/70">
-                Bugungi reja · 28-may
+                Bugungi reja · 13-iyul
               </p>
               <p className="mt-1 text-sm font-bold text-white sm:text-base">
-                25 min · Reading
+                20 min · Matematika
               </p>
               <div className="mt-2 flex items-center gap-2 rounded-lg bg-white/15 p-2">
                 <PlayCircle className="h-5 w-5" />
                 <div className="flex-1 text-[10px]">
-                  <p className="font-semibold">Davom etish</p>
-                  <p className="opacity-80">Dalil va detal</p>
+                  <p className="font-semibold">Mashqni boshlash</p>
+                  <p className="opacity-80">Tenglamalar va funksiyalar</p>
                 </div>
                 <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[9px] font-medium">
-                  15 min
+                  5 savol
                 </span>
               </div>
             </div>
@@ -115,7 +110,7 @@ export function DashboardPreview() {
             <div className="grid grid-cols-5 gap-3">
               <div className="col-span-3 rounded-xl border border-ink-100 p-3">
                 <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-500">
-                  Fanlar bo&apos;yicha
+                  Ko&apos;nikmalar bo&apos;yicha
                 </p>
                 <ul className="mt-2 space-y-2">
                   {SUBJECTS.map((s) => (
@@ -136,7 +131,7 @@ export function DashboardPreview() {
               </div>
 
               <div className="col-span-2 space-y-3">
-                <div className="rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 p-3 text-white">
+                <div className="rounded-xl bg-brand-600 p-3 text-white">
                   <p className="text-[9px] font-semibold uppercase tracking-wider text-white/70">
                     Imtihonga
                   </p>
@@ -186,12 +181,12 @@ export function DashboardPreview() {
             <Sparkles strokeWidth={2.25} />
           </IconChip>
           <div>
-            <p className="text-xs font-bold text-ink-900">AI yordamching</p>
-            <p className="text-[10px] text-ink-500">Savollaringiz bormi?</p>
+            <p className="text-xs font-bold text-ink-900">AI ustoz</p>
+            <p className="text-[10px] text-ink-500">Yechim tushunarsizmi?</p>
           </div>
         </div>
         <p className="mt-2 text-[11px] text-ink-600">
-          AI tutor savollaringizni tushuntiradi
+          Yechimni qadam-baqadam tushuntiradi
         </p>
         <button
           type="button"

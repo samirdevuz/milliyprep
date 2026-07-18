@@ -44,8 +44,10 @@ function cleanAnswers(value: unknown): SubmittedAnswer[] {
       const answer = item as Partial<SubmittedAnswer>;
       return (
         typeof answer.questionId === "string" &&
-        typeof answer.selectedIndex === "number" &&
-        Number.isInteger(answer.selectedIndex)
+        ((typeof answer.selectedIndex === "number" &&
+          Number.isInteger(answer.selectedIndex)) ||
+          (Array.isArray(answer.textAnswers) &&
+            answer.textAnswers.every((value) => typeof value === "string")))
       );
     })
     .slice(0, 50);

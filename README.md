@@ -1,7 +1,9 @@
 # MilliyPrep
 
 Milliy Sertifikatga tayyorlanish platformasi. Shaxsiy profil, mavzuli
-mashqlar, mock testlar, progress tahlili va AI tutor — bir joyda.
+Matematika Milliy Sertifikati uchun spetsifikatsiyaga mos original mashqlar,
+pilot sinovlar, progress tahlili va AI ustoz — bir joyda. Qolgan fanlar ekspert
+tekshiruvidan keyin bosqichma-bosqich qo'shiladi.
 
 ## Texnologiyalar
 
@@ -60,10 +62,11 @@ src/
 ## Yo'l xaritasi
 
 - [x] Landing, onboarding, auth va dashboard oqimlari
-- [x] Server baholaydigan mashqlar, mock testlar va progress
+- [x] 45-topshiriqli, 150-daqiqalik mock runner va 100 xom ballik hisob
+- [x] Qoralama → ekspert tekshiruvi → nashr savol lifecycle’i
 - [x] AI tutor UI/API va onboarding konteksti
 - [x] Click/Payme orderlari va Pro entitlement lifecycle
-- [ ] Real Milliy Sertifikat kontentini ekspert tekshiruvidan o'tkazish
+- [ ] Review navbatidagi 25 ta Matematika topshirig‘ini tashqi ekspert tasdiqlashi
 - [ ] E2E testlar, distributed rate limit va observability
 - [ ] Production provider tasdiqlari, backup drill va launch QA
 

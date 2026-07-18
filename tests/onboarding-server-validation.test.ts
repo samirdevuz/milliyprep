@@ -9,7 +9,7 @@ test("valid onboarding is normalized and unknown keys are removed", () => {
   assert.deepEqual(
     sanitizeOnboarding({
       fullName: "  Ali Valiyev  ",
-      subjectId: "english",
+      subjectId: "math",
       resultStatus: "has-score",
       currentScore: 55,
       targetScore: 71,
@@ -21,7 +21,7 @@ test("valid onboarding is normalized and unknown keys are removed", () => {
     }),
     {
       fullName: "Ali Valiyev",
-      subjectId: "english",
+      subjectId: "math",
       resultStatus: "has-score",
       currentScore: 55,
       targetScore: 71,
@@ -36,6 +36,13 @@ test("valid onboarding is normalized and unknown keys are removed", () => {
 test("invalid subject is rejected", () => {
   assert.throws(
     () => sanitizeOnboarding({ subjectId: "dtm" }),
+    OnboardingInputError
+  );
+});
+
+test("planned subject cannot create an unusable learner profile", () => {
+  assert.throws(
+    () => sanitizeOnboarding({ subjectId: "english" }),
     OnboardingInputError
   );
 });

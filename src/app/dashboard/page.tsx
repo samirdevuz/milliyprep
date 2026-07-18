@@ -10,6 +10,13 @@ import { getSession } from "@/lib/server/auth";
 import { userStore } from "@/lib/server/db";
 import { practiceStore } from "@/lib/server/practice";
 
+const SKILL_COLORS = [
+  "bg-brand-500",
+  "bg-accent-500",
+  "bg-amber-400",
+  "bg-sky-500",
+];
+
 function firstNameOf(value?: string): string {
   const name = value?.trim();
   if (!name) return "o'quvchi";
@@ -83,25 +90,39 @@ export default async function DashboardHome() {
         <div className="space-y-5 lg:col-span-2">
           <TodayPlan
             date={today}
-            subject={nextTopic?.subjectName ?? "Ingliz tili"}
+            subject={nextTopic?.subjectName ?? "Matematika"}
             minutes={nextTopic?.estimatedMinutes ?? 15}
-            topic={nextTopic?.name ?? "Listening: asosiy fikr"}
+            topic={nextTopic?.name ?? "Sonlar va algebraik ifodalar"}
+            questionCount={nextTopic?.questionCount ?? 5}
             doneTasks={progress?.completedToday ?? 0}
             totalTasks={2}
             href="/dashboard/practice"
           />
           <SubjectProgress
             subjects={
-              progress?.subjectProgress.map((subject) => ({
-                name: subject.name,
-                value: subject.value,
-                color: subject.colorClass,
+              progress?.topicProgress.map((topic, index) => ({
+                name: topic.name,
+                value: topic.accuracy,
+                color: SKILL_COLORS[index % SKILL_COLORS.length],
               })) ?? []
             }
             overall={progress?.averageScore ?? 0}
             weeklyDelta={progress?.weeklyCompleted ?? 0}
           />
-          <UpcomingLessons />
+          <UpcomingLessons
+            lessons={
+              catalog?.topics
+                .filter((topic) => topic.id !== nextTopic?.id)
+                .slice(0, 3)
+                .map((topic) => ({
+                  id: topic.id,
+                  title: topic.name,
+                  minutes: topic.estimatedMinutes,
+                  accuracy: topic.accuracy,
+                  questionCount: topic.questionCount,
+                })) ?? []
+            }
+          />
         </div>
 
         {/* Side column */}
@@ -135,12 +156,16 @@ export default async function DashboardHome() {
                 label: targetScore
                   ? `${targetScore}+ ball maqsadiga xizmat qiladigan mashq ishlash`
                   : "Maqsad ballingizni onboardingda belgilang",
-                done: Boolean(progress && progress.averageScore >= 70),
+                done: Boolean(
+                  progress &&
+                    targetScore &&
+                    progress.averageScore >= targetScore
+                ),
               },
             ]}
           />
 
-          <div className="flex items-start gap-3 rounded-2xl bg-gradient-to-br from-brand-50 to-accent-50 p-5 ring-1 ring-brand-100">
+          <div className="flex items-start gap-3 rounded-2xl bg-brand-50 p-5 ring-1 ring-brand-100">
             <IconChip tone="brand" size="sm">
               <Target strokeWidth={2.25} />
             </IconChip>
@@ -178,7 +203,7 @@ export default async function DashboardHome() {
         <div className="flex flex-1 items-center gap-3 sm:justify-end">
           <div className="h-2 w-full max-w-xs overflow-hidden rounded-full bg-ink-100">
             <span
-              className="block h-full rounded-full bg-gradient-to-r from-brand-500 to-accent-500"
+              className="block h-full rounded-full bg-brand-500"
               style={{ width: `${weeklyPercent}%` }}
             />
           </div>

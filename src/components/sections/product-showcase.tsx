@@ -43,9 +43,9 @@ export function ProductShowcase() {
 
         <ShowcaseRow
           flip
-          eyebrow="Mock testlar"
-          title="Fanlar aralashmasidan tuzilgan mock testlar"
-          description="Savol bankidagi faol fan va mavzulardan test shakllanadi. Javoblar serverda tekshiriladi, natija tarixga yoziladi va har bir savol uchun izoh ko'rsatiladi."
+          eyebrow="Pilot sinovlar"
+          title="Matematika mavzularidan tuzilgan mini-sinovlar"
+          description="Nashr qilingan matematika savollaridan sinov shakllanadi. Javoblar serverda tekshiriladi, natija tarixga yoziladi va har bir savol uchun izoh ko'rsatiladi."
           bullets={[
             "Vaqt hisoblagichi va test navigatsiyasi",
             "Avtomatik baholash, batafsil sharh",
@@ -59,7 +59,7 @@ export function ProductShowcase() {
           title="Mavzular bo'yicha tartiblangan savol banki"
           description="Savollar fan va mavzu bo'yicha guruhlanadi. Har bir urinishdan keyin mavzu aniqligi yangilanib, qaysi bo'limga qaytish kerakligi ko'rinadi."
           bullets={[
-            "Fan va mavzu bo'yicha katalog",
+            "Spetsifikatsiya bo'yicha mavzu katalogi",
             "Urinishlar soni va aniqlik foizi",
             "Admin orqali savol qo'shish va tahrirlash",
           ]}
@@ -154,13 +154,13 @@ function PlanVisual() {
         {[
           {
             icon: Waypoints,
-            label: "Razminka · Lug'at va grammatika",
+            label: "Razminka · Sonlar va algebra",
             time: "10 min",
             tone: "brand" as const,
           },
           {
             icon: Repeat2,
-            label: "Asosiy · Reading · matn tahlili",
+            label: "Asosiy · Tenglamalar va funksiyalar",
             time: "25 min",
             tone: "violet" as const,
           },
@@ -194,7 +194,7 @@ function MockVisual() {
     <div className="card relative space-y-3 p-5 sm:p-6">
       <div className="flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
-          Milliy Sertifikat Mock · Fanlar aralashmasi · 10 savol
+          Matematika mini-sinovi · 10 savol
         </p>
         <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs font-semibold text-brand-700">
           <Timer className="h-3 w-3" />
@@ -204,15 +204,15 @@ function MockVisual() {
       <div className="rounded-xl border border-ink-100 p-4 text-sm text-ink-800">
         <p className="font-semibold">12-savol</p>
         <p className="mt-2">
-          The word &quot;however&quot; in the passage usually signals what relationship?
+          9ˣ = 27 tenglamani yeching.
         </p>
         <ul className="mt-3 space-y-1.5 text-sm">
-          {["A) Cause", "B) Contrast", "C) Example", "D) Sequence"].map((opt, i) => (
+          {["A) 1/2", "B) 1", "C) 3/2", "D) 3"].map((opt, i) => (
             <li
               key={opt}
               className={[
                 "flex items-center gap-2 rounded-lg border px-3 py-2",
-                i === 1
+                i === 2
                   ? "border-brand-300 bg-brand-50 font-semibold text-brand-700"
                   : "border-ink-100 hover:bg-ink-50",
               ].join(" ")}
@@ -242,10 +242,10 @@ function MockVisual() {
 
 function QuestionBankVisual() {
   const items = [
-    { topic: "Listening · asosiy fikr", missed: 8, total: 12, color: "bg-rose-500" },
-    { topic: "Reading · dalil va detal", missed: 5, total: 14, color: "bg-amber-500" },
-    { topic: "Writing · bog'lovchilar", missed: 3, total: 18, color: "bg-brand-500" },
-    { topic: "Speaking · javob tuzish", missed: 1, total: 22, color: "bg-accent-500" },
+    { topic: "Sonlar va algebra", missed: 8, total: 12, color: "bg-rose-500" },
+    { topic: "Tenglamalar va funksiyalar", missed: 5, total: 14, color: "bg-amber-500" },
+    { topic: "Geometriya", missed: 3, total: 18, color: "bg-brand-500" },
+    { topic: "Ehtimollik va ma'lumotlar", missed: 1, total: 22, color: "bg-accent-500" },
   ];
   return (
     <div className="card p-5 sm:p-6">

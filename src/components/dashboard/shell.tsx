@@ -21,7 +21,7 @@ export function DashboardShell({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-ink-50/40">
+    <div className="min-h-screen bg-ink-50/60">
       <Sidebar open={open} onClose={() => setOpen(false)} user={user} />
       <div className="lg:pl-64">
         <Topbar onMenu={() => setOpen(true)} />

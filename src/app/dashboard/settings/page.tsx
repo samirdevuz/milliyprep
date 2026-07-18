@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { IconChip } from "@/components/ui/icon-chip";
 import {
+  AVAILABLE_CERTIFICATE_SUBJECTS,
   CERTIFICATE_SUBJECTS,
   gradeForScore,
   subjectById,
@@ -79,7 +80,7 @@ async function updateSettings(formData: FormData) {
   const weeklyHours = parseSmallNumber(formData, "weeklyHours", 60);
   const studyDays = parseSmallNumber(formData, "studyDays", 7);
 
-  const safeSubject = CERTIFICATE_SUBJECTS.some(
+  const safeSubject = AVAILABLE_CERTIFICATE_SUBJECTS.some(
     (subject) => subject.id === subjectId
   )
     ? subjectId
@@ -203,8 +204,13 @@ export default async function SettingsPage({
               >
                 <option value="">Fanni tanlang</option>
                 {CERTIFICATE_SUBJECTS.map((subject) => (
-                  <option key={subject.id} value={subject.id}>
+                  <option
+                    key={subject.id}
+                    value={subject.id}
+                    disabled={subject.availability !== "live"}
+                  >
                     {subject.label}
+                    {subject.availability !== "live" ? " — tez orada" : ""}
                   </option>
                 ))}
               </select>

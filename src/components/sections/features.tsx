@@ -51,7 +51,7 @@ const FEATURES: Feature[] = [
     icon: GraduationCap,
     title: "Milliy Sertifikat formatiga mos",
     description:
-      "Platforma fan, mavzu, mock test va 100 ballik natija tahliliga moslashtirilgan.",
+      "Matematika mavzulari, pilot sinov va 100 ballik natija tahlili bir tizimda ishlaydi.",
     tone: "violet",
   },
   {
@@ -64,8 +64,8 @@ const FEATURES: Feature[] = [
 ];
 
 const STATS = [
-  { value: 15, suffix: "", label: "Fan yo'nalishi" },
-  { value: 100, suffix: " ball", label: "Maqsad shkalasi" },
+  { value: 20, suffix: "", label: "Original pilot savol" },
+  { value: 4, suffix: "", label: "Asosiy ko'nikma" },
   { value: 2, suffix: "", label: "Mashq rejimi" },
   { value: 1, suffix: "", label: "AI tutor" },
 ];

@@ -1,6 +1,8 @@
-import { CERTIFICATE_SUBJECTS } from "./certificate.ts";
+import { AVAILABLE_CERTIFICATE_SUBJECTS } from "./certificate.ts";
 
-const SUBJECT_IDS = new Set(CERTIFICATE_SUBJECTS.map((subject) => subject.id));
+const SUBJECT_IDS = new Set(
+  AVAILABLE_CERTIFICATE_SUBJECTS.map((subject) => subject.id)
+);
 const RESULT_STATUSES = new Set(["has-score", "not-taken", "unknown"]);
 const EXAM_PURPOSES = new Set(["university", "work", "teacher", "self", "other"]);
 const REFERRAL_SOURCES = new Set([

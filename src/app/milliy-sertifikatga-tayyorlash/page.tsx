@@ -4,9 +4,9 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { courseJsonLd, pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Milliy Sertifikatga tayyorlash - online reja va mock testlar",
+  title: "Matematika Milliy Sertifikatiga tayyorlash",
   description:
-    "Milliy Sertifikatga tayyorlash uchun MilliyPrep: CEFR B1, B2, C1 maqsadlari, shaxsiy o'quv reja, to'rt ko'nikma mashqlari, mock testlar va AI tutor.",
+    "Matematika Milliy Sertifikatiga tayyorlash: rasmiy spetsifikatsiyaga mos original savollar, shaxsiy reja, pilot sinovlar va AI ustoz.",
   path: "/milliy-sertifikatga-tayyorlash",
   keywords: ["milliy sertifikatga tayyorlash", "milliy sertifikat tayyorlov"],
 });
@@ -16,13 +16,13 @@ export default function MilliySertifikatgaTayyorlashPage() {
     <>
       <SeoLanding
         eyebrow="Milliy Sertifikat"
-        title="Milliy Sertifikatga tayyorlash uchun shaxsiy online platforma"
-        description="MilliyPrep sizning hozirgi CEFR darajangiz, maqsadli natijangiz va imtihon sanangizga qarab haftalik reja tuzadi. Listening, reading, writing va speaking bo'yicha mashqlar, mini-testlar va real formatga yaqin mock testlar bir joyda jamlanadi."
+        title="Matematika Milliy Sertifikatiga tayyorlash uchun shaxsiy platforma"
+        description="MilliyPrep hozirgi ballingiz, maqsadli natijangiz va haftalik vaqtingizga qarab matematika mashqlarini ustuvorlashtiradi. Savollar UZBMB spetsifikatsiyasidagi ko'nikmalarga mos original pilot bankdan olinadi."
         bullets={[
-          "CEFR B1, B2 va C1 maqsadlari uchun moslashuvchan tayyorlov rejasi.",
-          "Har bir xato skill, mavzu va savol turi bo'yicha tahlil qilinadi.",
-          "AI tutor yozish, gapirish, grammatika va lug'at bo'yicha tushuntirish beradi.",
-          "Progress dashboard orqali haftalik o'sish va zaif joylar ko'rinadi.",
+          "Algebra, tenglamalar, funksiyalar, geometriya va ehtimollik bo'yicha reja.",
+          "Har bir xato mavzu va savol turi bo'yicha tahlil qilinadi.",
+          "AI ustoz matematik yechimni qadam-baqadam tushuntiradi.",
+          "Dashboard haftalik progress va zaif ko'nikmalarni ko'rsatadi.",
         ]}
       />
       <JsonLd data={courseJsonLd} />

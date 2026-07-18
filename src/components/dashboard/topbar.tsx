@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { Bell, Menu, Search, Sparkles } from "lucide-react";
+import { Bell, ClipboardCheck, Menu, Search } from "lucide-react";
 
 interface TopbarProps {
   onMenu: () => void;
@@ -39,7 +39,7 @@ export function Topbar({ onMenu }: TopbarProps) {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Mavzu, test yoki savol qidiring…"
+            placeholder="Matematika mavzusini qidiring…"
             className="w-full rounded-full border border-ink-200 bg-white py-2 pl-9 pr-4 text-sm placeholder:text-ink-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           />
         </form>
@@ -48,10 +48,10 @@ export function Topbar({ onMenu }: TopbarProps) {
       <div className="ml-auto flex items-center gap-2">
         <Link
           href="/dashboard/tests"
-          className="hidden items-center gap-1.5 rounded-full bg-brand-50 px-3 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-100 sm:inline-flex"
+          className="hidden items-center gap-1.5 rounded-lg bg-brand-50 px-3 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-100 sm:inline-flex"
         >
-          <Sparkles className="h-4 w-4" />
-          Seriya testini yechish
+          <ClipboardCheck className="h-4 w-4" />
+          Sinov rejimi
         </Link>
         <button
           type="button"

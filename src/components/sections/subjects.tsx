@@ -12,24 +12,49 @@ import {
 import { Reveal } from "@/components/motion/reveal";
 import { IconChip } from "@/components/ui/icon-chip";
 import { cn } from "@/lib/cn";
+import {
+  CURRICULUM_SUBJECTS,
+  type CurriculumSubjectId,
+} from "@/content/curriculum";
 
 interface Subject {
+  id: CurriculumSubjectId;
   name: string;
   icon: LucideIcon;
   tone: "brand" | "accent" | "amber" | "rose" | "violet" | "sky" | "emerald";
   available: boolean;
 }
 
-const SUBJECTS: Subject[] = [
-  { name: "Matematika", icon: Calculator, tone: "brand", available: true },
-  { name: "Fizika", icon: Atom, tone: "violet", available: false },
-  { name: "Kimyo", icon: FlaskConical, tone: "rose", available: false },
-  { name: "Biologiya", icon: Leaf, tone: "accent", available: false },
-  { name: "Ona tili va adabiyot", icon: BookText, tone: "sky", available: false },
-  { name: "Tarix", icon: Scroll, tone: "amber", available: false },
-  { name: "Geografiya", icon: Globe2, tone: "emerald", available: false },
-  { name: "Ingliz tili", icon: Languages, tone: "brand", available: false },
-];
+const SUBJECT_VISUALS: Partial<
+  Record<
+    CurriculumSubjectId,
+    Pick<Subject, "icon" | "tone">
+  >
+> = {
+  math: { icon: Calculator, tone: "brand" },
+  physics: { icon: Atom, tone: "violet" },
+  chemistry: { icon: FlaskConical, tone: "rose" },
+  biology: { icon: Leaf, tone: "accent" },
+  uzbek: { icon: BookText, tone: "sky" },
+  history: { icon: Scroll, tone: "amber" },
+  geography: { icon: Globe2, tone: "emerald" },
+  english: { icon: Languages, tone: "brand" },
+};
+
+const SUBJECTS: Subject[] = CURRICULUM_SUBJECTS.flatMap((subject) => {
+  const visual = SUBJECT_VISUALS[subject.id];
+  return visual
+    ? [
+        {
+          id: subject.id,
+          name: subject.label,
+          icon: visual.icon,
+          tone: visual.tone,
+          available: subject.availability === "live",
+        },
+      ]
+    : [];
+});
 
 export function Subjects() {
   return (

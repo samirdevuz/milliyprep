@@ -11,10 +11,10 @@ interface Goal {
 }
 
 const INITIAL: Goal[] = [
-  { id: "1", label: "Reading mashg'ulotini yakunlash", done: false },
-  { id: "2", label: "15 ta test savol yechish", done: true },
-  { id: "3", label: "Yangi so'zlarni o'rganish (10 ta)", done: true },
-  { id: "4", label: "AI chatda 1 ta savol berish", done: false },
+  { id: "1", label: "Matematika mashqini yakunlash", done: false },
+  { id: "2", label: "Kamida 10 ta savol yechish", done: true },
+  { id: "3", label: "Bitta xato yechimini tahlil qilish", done: true },
+  { id: "4", label: "AI ustozga 1 ta savol berish", done: false },
 ];
 
 export function DailyGoals({ initialGoals = INITIAL }: { initialGoals?: Goal[] }) {

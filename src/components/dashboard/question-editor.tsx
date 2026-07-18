@@ -7,7 +7,10 @@ import {
   ClipboardList,
   Plus,
   Save,
+  Send,
+  ShieldCheck,
   Trash2,
+  Undo2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IconChip } from "@/components/ui/icon-chip";
@@ -34,6 +37,8 @@ interface FormState {
   correctIndex: number;
   explanation: string;
   difficulty: QuestionDraft["difficulty"];
+  reviewStatus: Question["reviewStatus"];
+  reviewNote: string;
 }
 
 function emptyForm(bank: AdminQuestionBank): FormState {
@@ -51,6 +56,8 @@ function emptyForm(bank: AdminQuestionBank): FormState {
     correctIndex: 0,
     explanation: "",
     difficulty: "easy",
+    reviewStatus: "draft",
+    reviewNote: "",
   };
 }
 
@@ -64,6 +71,8 @@ function formFromQuestion(question: Question): FormState {
     correctIndex: question.correctIndex,
     explanation: question.explanation,
     difficulty: question.difficulty,
+    reviewStatus: question.reviewStatus,
+    reviewNote: question.reviewNote ?? "",
   };
 }
 
@@ -79,6 +88,7 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
   const [activeId, setActiveId] = useState<string | undefined>();
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
 
@@ -93,6 +103,25 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
         form.topicId ? question.topicId === form.topicId : true
       ),
     [bank.questions, form.topicId]
+  );
+  const activeQuestion = useMemo(
+    () => bank.questions.find((question) => question.id === activeId),
+    [activeId, bank.questions]
+  );
+  const structuredQuestion = Boolean(
+    activeQuestion && activeQuestion.type !== "single_choice"
+  );
+  const readiness = useMemo(
+    () => ({
+      published: bank.questions.filter(
+        (question) => question.reviewStatus === "published"
+      ).length,
+      review: bank.questions.filter(
+        (question) => question.reviewStatus === "review"
+      ).length,
+      total: bank.questions.length,
+    }),
+    [bank.questions]
   );
 
   const subjectOptions = bank.subjects.map((subject) => ({
@@ -146,7 +175,7 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
       const response = await fetch("/api/practice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, reviewStatus: "draft" }),
       });
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error ?? "Savol saqlanmadi.");
@@ -154,7 +183,7 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
       setBank(payload.bank as AdminQuestionBank);
       setForm(formFromQuestion(payload.question as Question));
       setActiveId((payload.question as Question).id);
-      setStatus("Savol saqlandi.");
+      setStatus("Savol qoralama sifatida saqlandi.");
     } catch (saveError) {
       setError(
         saveError instanceof Error
@@ -195,6 +224,51 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
     }
   };
 
+  const setReviewStatus = async (
+    reviewStatus: Question["reviewStatus"]
+  ) => {
+    if (!activeId || reviewing) return;
+    setReviewing(true);
+    setError("");
+    setStatus("");
+    try {
+      const response = await fetch("/api/practice", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionId: activeId,
+          status: reviewStatus,
+          reviewNote: form.reviewNote,
+        }),
+      });
+      const payload = await response.json();
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Tekshiruv holati saqlanmadi.");
+      }
+      const nextBank = payload.bank as AdminQuestionBank;
+      const nextQuestion = payload.question as Question;
+      setBank(nextBank);
+      setForm(formFromQuestion(nextQuestion));
+      setStatus(
+        reviewStatus === "published"
+          ? "Savol ekspert tomonidan tasdiqlandi va nashr qilindi."
+          : reviewStatus === "review"
+            ? "Savol ekspert tekshiruviga yuborildi."
+            : reviewStatus === "draft"
+              ? "Savol tahrirga qaytarildi."
+              : "Savol arxivlandi."
+      );
+    } catch (reviewError) {
+      setError(
+        reviewError instanceof Error
+          ? reviewError.message
+          : "Tekshiruv holatini saqlashda muammo bo‘ldi."
+      );
+    } finally {
+      setReviewing(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-6xl space-y-5">
       <div className="rounded-2xl bg-white p-5 shadow-soft ring-1 ring-ink-100 sm:p-6">
@@ -211,19 +285,27 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
                 Savol banki
               </h1>
               <p className="mt-1 max-w-2xl text-sm leading-6 text-ink-600">
-                Mavjud fan va mavzular uchun test savollarini boshqaring.
-                Saqlangan savollar darhol practice/test engine ichida ishlaydi.
+                Savollar avval qoralama, keyin ekspert tekshiruvi va faqat
+                tasdiqdan so‘ng sinovga chiqadi.
               </p>
             </div>
           </div>
-          <Button
-            type="button"
-            variant="subtle"
-            leadingIcon={<Plus className="h-4 w-4" />}
-            onClick={startNew}
-          >
-            Yangi savol
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-accent-50 px-3 py-1.5 text-xs font-bold text-accent-700 ring-1 ring-accent-100">
+              {readiness.published}/45 tasdiqlangan
+            </span>
+            <span className="rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 ring-1 ring-amber-100">
+              {readiness.review} tekshiruvda
+            </span>
+            <Button
+              type="button"
+              variant="subtle"
+              leadingIcon={<Plus className="h-4 w-4" />}
+              onClick={startNew}
+            >
+              Yangi savol
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -281,12 +363,23 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
                         {question.prompt}
                       </p>
                       <p className="mt-1 text-xs text-ink-500">
-                        {question.options.length} variant ·{" "}
+                        {question.type === "short_answer"
+                          ? `${question.parts?.length ?? 0} band`
+                          : question.type === "matching"
+                            ? "Moslashtirish"
+                            : `${question.options.length} variant`} ·{" "}
                         {question.difficulty === "easy"
                           ? "oson"
                           : question.difficulty === "medium"
                             ? "o'rta"
-                            : "qiyin"}
+                            : "qiyin"} ·{" "}
+                        {question.reviewStatus === "published"
+                          ? "nashrda"
+                          : question.reviewStatus === "review"
+                            ? "tekshiruvda"
+                            : question.reviewStatus === "draft"
+                              ? "qoralama"
+                              : "arxiv"}
                       </p>
                     </div>
                   </div>
@@ -331,6 +424,7 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
                 setForm((current) => ({ ...current, prompt: event.target.value }))
               }
               rows={4}
+              disabled={structuredQuestion}
               className="block w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm text-ink-900 transition placeholder:text-ink-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
               placeholder="Masalan: 3x + 7 = 22 tenglamani yeching."
             />
@@ -343,9 +437,11 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
                   label={`${String.fromCharCode(65 + index)} varianti`}
                   value={option}
                   onChange={(event) => updateOption(index, event.target.value)}
+                  disabled={structuredQuestion}
                 />
                 <button
                   type="button"
+                  disabled={structuredQuestion}
                   onClick={() =>
                     setForm((current) => ({ ...current, correctIndex: index }))
                   }
@@ -396,8 +492,35 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
               rows={3}
               className="block w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm text-ink-900 transition placeholder:text-ink-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
               placeholder="Javob nima uchun to'g'ri ekanini qisqa tushuntiring."
+              disabled={structuredQuestion}
             />
           </label>
+
+          <label className="mt-4 block space-y-1.5">
+            <span className="text-sm font-medium text-ink-800">
+              Ekspert izohi
+            </span>
+            <textarea
+              value={form.reviewNote}
+              onChange={(event) =>
+                setForm((current) => ({
+                  ...current,
+                  reviewNote: event.target.value,
+                }))
+              }
+              rows={3}
+              className="block w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-sm text-ink-900 transition placeholder:text-ink-400 focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+              placeholder="Xato, manba yoki tahrir bo‘yicha izoh yozing."
+            />
+          </label>
+
+          {structuredQuestion && (
+            <p className="mt-4 rounded-xl bg-ink-50 px-4 py-3 text-sm leading-6 text-ink-600 ring-1 ring-ink-100">
+              Bu {activeQuestion?.type === "matching" ? "Y-2" : "ochiq"}
+              {" "}savol blueprintdan boshqariladi. Bu yerda mazmunni buzmasdan
+              tekshirish, izoh yozish va nashr holatini o‘zgartirish mumkin.
+            </p>
+          )}
 
           {(status || error) && (
             <p
@@ -413,15 +536,51 @@ export function QuestionEditor({ initialBank }: QuestionEditorProps) {
           )}
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-between">
-            <Button
-              type="button"
-              variant="primary"
-              loading={saving}
-              leadingIcon={<Save className="h-4 w-4" />}
-              onClick={save}
-            >
-              Saqlash
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="primary"
+                loading={saving}
+                disabled={structuredQuestion}
+                leadingIcon={<Save className="h-4 w-4" />}
+                onClick={save}
+              >
+                Qoralamani saqlash
+              </Button>
+              {activeId && form.reviewStatus !== "review" && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  loading={reviewing}
+                  leadingIcon={<Send className="h-4 w-4" />}
+                  onClick={() => setReviewStatus("review")}
+                >
+                  Tekshiruvga yuborish
+                </Button>
+              )}
+              {activeId && form.reviewStatus === "review" && (
+                <Button
+                  type="button"
+                  variant="subtle"
+                  loading={reviewing}
+                  leadingIcon={<ShieldCheck className="h-4 w-4" />}
+                  onClick={() => setReviewStatus("published")}
+                >
+                  Tasdiqlash va nashr qilish
+                </Button>
+              )}
+              {activeId && form.reviewStatus !== "draft" && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  loading={reviewing}
+                  leadingIcon={<Undo2 className="h-4 w-4" />}
+                  onClick={() => setReviewStatus("draft")}
+                >
+                  Tahrirga qaytarish
+                </Button>
+              )}
+            </div>
             <Button
               type="button"
               variant="outline"

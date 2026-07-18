@@ -7,7 +7,7 @@ export default async function TestsPage() {
   const userId = session?.userId ?? "";
   const [catalog, mockQuestions] = await Promise.all([
     practiceStore.getCatalog(userId),
-    practiceStore.getMockTestQuestions(10),
+    practiceStore.getMockTestQuestions(45),
   ]);
 
   return (
@@ -15,6 +15,7 @@ export default async function TestsPage() {
       mode="mock_test"
       catalog={catalog}
       mockQuestions={mockQuestions}
+      mockReadiness={mockQuestions.length}
     />
   );
 }
